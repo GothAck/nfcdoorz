@@ -1,0 +1,42 @@
+picc:
+  key:
+    key: [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
+    type: aes
+
+apps:
+  - aid: 0x00a812
+    settings:
+      accesskey: 0
+      frozen: False
+      req_auth_fileops: True
+      req_auth_dir: True
+      allow_master_key_chg: True
+    keys:
+      - id: 0
+        name: master
+        type: aes
+        diversify: True
+        key: [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
+      - id: 1
+        name: read_uid
+        type: aes
+        diversify: False
+        key: [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
+      - id: 2
+        name: read_acl
+        type: aes
+        diversify: True
+        key: []
+      - id: 3
+        name: write_acl
+        type: aes
+        diversify: True
+        key: []
+    files:
+      - name: acl
+        type: MDCM_ENCIPHERED
+        access_rights:
+          read: 2
+          write: 2
+          read_write: 0
+          change_access_rights: 0

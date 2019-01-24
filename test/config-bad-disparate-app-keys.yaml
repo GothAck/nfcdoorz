@@ -1,0 +1,51 @@
+picc:
+  key:
+    data: [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
+    type: aes
+    diversify: True
+  settings:
+    picc_master_key_changeable: False
+    free_listing_apps_and_key_settings: True
+    free_create_delete_application: True
+    picc_master_key_settings_changeable: True
+apps:
+  - name: testapp
+    aid: [0x00, 0x00, 0x00]
+    settings:
+      accesskey: 0
+      frozen: False
+      req_auth_fileops: True
+      req_auth_dir: True
+      allow_master_key_chg: True
+    keys:
+      - id: 0
+        name: master
+        type: aes
+        diversify: True
+        data: [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
+      - id: 1
+        name: read_uid
+        type: des
+        diversify: False
+        data: [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
+      - id: 2
+        name: read_acl
+        type: aes
+        diversify: True
+        data: [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
+      - id: 3
+        name: write_acl
+        type: aes
+        diversify: True
+        data: [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
+    files:
+      - id: 0
+        name: door_acl
+        type: std_data
+        size: 4 # 4 * 8 == 32 permissions
+        communication_settings: enciphered
+        access_rights:
+          read: 2
+          write: 3
+          read_write: 0
+          change_access_rights: 0
