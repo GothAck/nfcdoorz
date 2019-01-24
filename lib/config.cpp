@@ -53,27 +53,14 @@ namespace nfcdoorz::config {
   bool File::CyclicRecord::create(nfc::DESFireTagInterface &card, File &file) { return true; }
   bool File::Value::create(nfc::DESFireTagInterface &card, File &file) { return true; }
 
-  Key::operator MifareDESFireKey() {
-    return visit([](auto &key){ return key.operator MifareDESFireKey(); }, key);
-  }
 
   App::operator MifareDESFireAID() {
     return mifare_desfire_aid_new(aid[0] | (aid[1] << 8) | (aid[2] << 16));
   }
 
-  ostream &operator <<(ostream &os, Key &m) {
-    os
-      << "Key" << endl;
-      out.indent(2);
+  ostream &operator <<(ostream &os, KeyDES &m) {
     os
       << "id: " << (int) m.id << endl;
-
-    visit([&os](auto &c){ os << c; }, m.key);
-
-    out.indent(-2);
-    return os;
-  }
-  ostream &operator <<(ostream &os, Key::KeyDES &m) {
     os
       << "type: " << m.type << endl
       << "size: " << (int) m.size << endl
@@ -88,7 +75,7 @@ namespace nfcdoorz::config {
     os << dec << endl;
     return os;
   }
-  ostream &operator <<(ostream &os, Key::Key3DES &m) {
+  ostream &operator <<(ostream &os, Key3DES &m) {
     os
       << "type: " << m.type << endl
       << "size: " << (int) m.size << endl
@@ -103,7 +90,7 @@ namespace nfcdoorz::config {
     os << dec << endl;
     return os;
   }
-  ostream &operator <<(ostream &os, Key::Key3k3DES &m) {
+  ostream &operator <<(ostream &os, Key3k3DES &m) {
     os
       << "type: " << m.type << endl
       << "size: " << (int) m.size << endl
@@ -118,7 +105,7 @@ namespace nfcdoorz::config {
     os << dec << endl;
     return os;
   }
-  ostream &operator <<(ostream &os, Key::KeyAES &m) {
+  ostream &operator <<(ostream &os, KeyAES &m) {
     os
       << "type: " << m.type << endl
       << "size: " << (int) m.size << endl
@@ -137,7 +124,8 @@ namespace nfcdoorz::config {
     os
       << "key:" << endl;
     out.indent(2);
-    os << m.key;
+
+    visit([&os](auto &c){ os << c; }, m.key);
     out.indent(-2);
       // << "settings:" << endl << m.settings
     return os;
@@ -214,7 +202,7 @@ namespace nfcdoorz::config {
     os
       << "keys:" << endl;
     out.indent(2);
-    for(auto &f: m.keys) os << f;
+    for(auto &f: m.keys) visit([&os](auto &c){ os << c; }, f);
     out.indent(-4);
     return os;
   }

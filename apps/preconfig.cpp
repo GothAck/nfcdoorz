@@ -239,14 +239,14 @@ int main(int argc, char *argv[]) {
           cout << "Setting new master key" << endl;
           visit([&adapter](auto &key){
             CHECK_BOOL(adapter.changeKey(0, key, null_key_des), "Failed to change master key");
-          }, config.picc.key.key);
+          }, config.picc.key);
         }
       }
 
       cout << "Authenticating with master key" << endl;
       visit([&adapter](auto &key){
         CHECK_BOOL(adapter.authenticatePICC(key), "Failed to auth with master key");
-      }, config.picc.key.key);
+      }, config.picc.key);
     }
 
     auto apps = adapter.tag.get_application_ids();
@@ -290,17 +290,17 @@ int main(int argc, char *argv[]) {
       AppID_t aid = app.aid;
       visit([&adapter, &aid](auto &key){
         CHECK_BOOL(adapter.authenticateAppByID(aid, key), "Failed to authenticate app");
-      }, app.keys[0].key);
+      }, app.keys[0]);
     } else {
       AppID_t aid = app.aid;
       CHECK_BOOL(adapter.authenticateAppByID(aid, null_key_aes), "Failed to authenticate app with default key");
       for (auto it = app.keys.rbegin(); it != app.keys.rend(); it++) {
-        cout << "Key id: " << it->id << endl;
-        cout << "Key name: " << it->name << endl;
-        cout << "Key diversify: " << it->diversify << endl;
         visit([&adapter, &aid, it](auto &key){
-          CHECK_BOOL(adapter.changeKey(it->id, key, null_key_aes), "Failed to change key");
-        }, it->key);
+          cout << "Key id: " << key.id << endl;
+          cout << "Key name: " << key.name << endl;
+          cout << "Key diversify: " << key.diversify << endl;
+          CHECK_BOOL(adapter.changeKey(key.id, key, null_key_aes), "Failed to change key");
+        }, *it);
       }
 
     }
@@ -311,7 +311,7 @@ int main(int argc, char *argv[]) {
       AppID_t aid = app.aid;
       visit([&adapter, &aid](auto &key){
         CHECK_BOOL(adapter.authenticateAppByID(aid, key), "Failed to authenticate app with master key");
-      }, app.keys[0].key);
+      }, app.keys[0]);
       // if (master_key.diversify) {
       //   cout << "Diversifying " << endl;
       //   CHECK_BOOL(key.diversify(app.aid, tag_uid, salt), "Diversify key failed");

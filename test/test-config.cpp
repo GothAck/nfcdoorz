@@ -43,7 +43,7 @@ TEST_CASE("Parse basic config") {
     )
   );
 
-  REQUIRE(holds_alternative<config::Key::KeyAES>(config.picc.key.key));
+  REQUIRE(holds_alternative<config::KeyAES>(config.picc.key));
 }
 
 TEST_CASE("Key is iterable") {
@@ -61,11 +61,11 @@ TEST_CASE("Key is iterable") {
     for (auto &c: key.data) {
       sb << hex << c << endl;
     }
-  }, config.picc.key.key);
+  }, config.picc.key);
 
   REQUIRE(sb.str().length() > 0);
 
-  REQUIRE(holds_alternative<config::Key::KeyAES>(config.picc.key.key));
+  REQUIRE(holds_alternative<config::KeyAES>(config.picc.key));
 }
 
 TEST_CASE("Config bad picc key") {
@@ -85,7 +85,7 @@ TEST_CASE("Config bad picc key") {
   REQUIRE(
     config::decodePath ==
     vector<string> {
-      "config", "picc", "key", "(aes)", "data"
+      "config", "picc", "key", "aes", "data"
     }
   );
 }

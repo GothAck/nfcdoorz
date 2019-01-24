@@ -71,6 +71,7 @@ namespace nfcdoorz::nfc {
 
   struct Key {
     virtual operator MifareDESFireKey();
+    bool diversify = false;
   };
 
   struct KeyDES : public Key {

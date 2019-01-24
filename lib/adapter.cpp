@@ -28,7 +28,7 @@ namespace nfcdoorz {
         *_overriddenMasterKey
       );
     } else {
-      auto key = get<config::Key::KeyAES>(config.picc.key.key);
+      auto key = get<config::KeyAES>(config.picc.key);
       return authenticateAppByID(
         aid,
         key
@@ -48,8 +48,8 @@ namespace nfcdoorz {
     for (auto &app: config.apps) {
       if (app.name == app_name) {
         for (auto &key: app.keys) {
-          if (key.name == key_name) {
-            auto key_type = get<config::Key::KeyAES>(key.key);
+          if (visit([](auto &key) -> string { return key.name; }, key) == key_name) {
+            auto key_type = get<config::KeyAES>(key);
             if (authenticateAppByID(app.aid, key_type)) {
               _app = &app;
               return true;

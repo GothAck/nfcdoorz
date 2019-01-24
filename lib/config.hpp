@@ -30,6 +30,16 @@ namespace nfcdoorz::config {
   decodePath.push_back(NODE); \
   DEST = node[NODE].as<std::ITERTYPE<TYPE>>(); \
   decodePath.pop_back();
+#define CONVERT_ITER_VARIANT(DEST, NODE) \
+  decodePath.push_back(NODE); \
+  if (!node[NODE].IsSequence()) throw ValidationException("Expected a sequence"); \
+  DEST.resize(node[NODE].size()); \
+  std::transform( \
+    node[NODE].begin(), node[NODE].end(), \
+    DEST.begin(), \
+    [](const YAML::Node &node) -> auto { return GetVariant<decltype(DEST)::value_type>::convertNodeByTypeString(node); }); \
+  decodePath.pop_back();
+
 
 extern std::vector<std::string> decodePath;
 const std::string printDecodePath();
@@ -48,95 +58,96 @@ struct Node {
   virtual void decode(const YAML::Node &) = 0;
 };
 
-struct Key : Node {
-  constexpr static const char *node_name = "key";
-
   struct KeyType : Node {
+    constexpr static const char *node_name = "key";
     virtual uint8_t* begin() = 0;
     virtual uint8_t* end() = 0;
+    uint8_t id = 0;
+    std::string name;
   };
   struct KeyDES : KeyType, nfc::KeyDES {
-    constexpr static const char *node_name = "(des)";
     uint8_t* begin() override { return data.begin(); };
     uint8_t* end() override { return data.end(); };
     void decode(const YAML::Node &node) {
+      nfcdoorz::config::decodePath.push_back(type.data());
+      if (node["id"]) CONVERT_NODE(id, int);
+      if (node["name"]) CONVERT_NODE(name);
+      CONVERT_NODE(diversify);
       nfcdoorz::config::decodePath.push_back("data");
       auto _data = node["data"].as<std::vector<int>>();
       if (_data.size() != data.size())
         throw ValidationException("data array length incorrect", std::to_string(data.size()));
       std::transform(_data.begin(), _data.end(), data.begin(), [](int c) -> uint8_t { return c; });
       nfcdoorz::config::decodePath.pop_back();
+      nfcdoorz::config::decodePath.pop_back();
     }
   };
   struct Key3DES : KeyType, nfc::Key3DES {
-    constexpr static const char *node_name = "(3des)";
     uint8_t* begin() override { return data.begin(); };
     uint8_t* end() override { return data.end(); };
     void decode(const YAML::Node &node) {
+      nfcdoorz::config::decodePath.push_back(type.data());
+      if (node["id"]) CONVERT_NODE(id, int);
+      if (node["name"]) CONVERT_NODE(name);
+      CONVERT_NODE(diversify);
       nfcdoorz::config::decodePath.push_back("data");
       auto _data = node["data"].as<std::vector<int>>();
       if (_data.size() != data.size())
         throw ValidationException("data array length incorrect", std::to_string(data.size()));
       std::transform(_data.begin(), _data.end(), data.begin(), [](int c) -> uint8_t { return c; });
+      nfcdoorz::config::decodePath.pop_back();
       nfcdoorz::config::decodePath.pop_back();
     }
   };
 
   struct Key3k3DES : KeyType, nfc::Key3k3DES {
-    constexpr static const char *node_name = "(3k3des)";
     uint8_t* begin() override { return data.begin(); };
     uint8_t* end() override { return data.end(); };
     void decode(const YAML::Node &node) {
+      nfcdoorz::config::decodePath.push_back(type.data());
+      if (node["id"]) CONVERT_NODE(id, int);
+      if (node["name"]) CONVERT_NODE(name);
+      CONVERT_NODE(diversify);
       nfcdoorz::config::decodePath.push_back("data");
       auto _data = node["data"].as<std::vector<int>>();
       if (_data.size() != data.size())
         throw ValidationException("data array length incorrect", std::to_string(data.size()));
       std::transform(_data.begin(), _data.end(), data.begin(), [](int c) -> uint8_t { return c; });
+      nfcdoorz::config::decodePath.pop_back();
       nfcdoorz::config::decodePath.pop_back();
     }
   };
 
   struct KeyAES : KeyType, nfc::KeyAES {
-    constexpr static const char *node_name = "(aes)";
     uint8_t* begin() override { return data.begin(); };
     uint8_t* end() override { return data.end(); };
     void decode(const YAML::Node &node) {
+      nfcdoorz::config::decodePath.push_back(type.data());
+      if (node["id"]) CONVERT_NODE(id, int);
+      if (node["name"]) CONVERT_NODE(name);
+      CONVERT_NODE(diversify);
       nfcdoorz::config::decodePath.push_back("data");
       auto _data = node["data"].as<std::vector<int>>();
       if (_data.size() != data.size())
         throw ValidationException("data array length incorrect", std::to_string(data.size()));
       std::transform(_data.begin(), _data.end(), data.begin(), [](int c) -> uint8_t { return c; });
       nfcdoorz::config::decodePath.pop_back();
+      nfcdoorz::config::decodePath.pop_back();
     }
   };
 
-  void decode(const YAML::Node &node) {
-    if (node["id"]) CONVERT_NODE(id, int);
-    if (node["name"]) CONVERT_NODE(name);
-    auto type = node["type"].as<std::string>();
-    key = GetVariant<decltype(key)>::convertNode(node, type);
-    CONVERT_NODE(diversify);
-  }
-  uint8_t id = 0;
-  std::string name;
-  bool diversify = false;
-  typedef std::variant<KeyDES, Key3DES, Key3k3DES, KeyAES> KeyType_t;
-  KeyType_t key;
-
-  operator MifareDESFireKey();
-};
-OSTREAM(Key);
-OSTREAM(Key::KeyDES);
-OSTREAM(Key::Key3DES);
-OSTREAM(Key::Key3k3DES);
-OSTREAM(Key::KeyAES);
+typedef std::variant<KeyDES, Key3DES, Key3k3DES, KeyAES> KeyType_t;
+OSTREAM(KeyDES);
+OSTREAM(Key3DES);
+OSTREAM(Key3k3DES);
+OSTREAM(KeyAES);
 
 struct PICC : Node {
   constexpr static const char *node_name = "picc";
   void decode(const YAML::Node &node) {
-    CONVERT_NODE(key);
+    key = GetVariant<decltype(key)>::convertNodeByTypeString(node["key"]);
   }
-  Key key;
+  KeyType_t key;
 };
 OSTREAM(PICC);
 
@@ -300,10 +311,10 @@ struct App : Node {
     decodePath.pop_back();
     CONVERT_NODE(name);
     CONVERT_NODE(settings);
-    CONVERT_ITER_NFC(keys, "keys", vector, Key);
+    CONVERT_ITER_VARIANT(keys, "keys")
     if (keys.size()) {
-      auto key0 = keys[0].key.index();
-      if (!all_of(keys.begin(), keys.end(), [key0](Key key){ return key.key.index(); })) {
+      auto key0 = keys[0].index();
+      if (!all_of(keys.begin(), keys.end(), [key0](KeyType_t &key){ return key.index() == key0; })) {
         throw ValidationException("All keys in an application must have same type");
       }
     }
@@ -313,15 +324,15 @@ struct App : Node {
   AppID_t aid = {0, 0, 0};
   std::string name;
   AppSettings settings;
-  std::vector<Key> keys;
+  std::vector<KeyType_t> keys;
   std::vector<File> files;
 };
 OSTREAM(App);
 
 struct Config : Node {
   void decode(const YAML::Node &node) {
-     CONVERT_NODE(picc);
-     CONVERT_ITER_NFC(apps, "apps", vector, App);
+    CONVERT_NODE(picc);
+    CONVERT_ITER_NFC(apps, "apps", vector, App);
   }
   constexpr static const char *node_name = "config";
   PICC picc;
@@ -350,11 +361,10 @@ namespace YAML {
   Y_CONVERT(File::LinearRecord);
   Y_CONVERT(File::CyclicRecord);
   Y_CONVERT(File);
-  Y_CONVERT(Key);
-  Y_CONVERT(Key::KeyDES);
-  Y_CONVERT(Key::Key3DES);
-  Y_CONVERT(Key::Key3k3DES);
-  Y_CONVERT(Key::KeyAES);
+  Y_CONVERT(KeyDES);
+  Y_CONVERT(Key3DES);
+  Y_CONVERT(Key3k3DES);
+  Y_CONVERT(KeyAES);
   Y_CONVERT(PICC);
   Y_CONVERT(AppSettings);
   Y_CONVERT(App);
