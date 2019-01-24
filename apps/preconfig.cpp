@@ -7,7 +7,7 @@
 
 #include <docopt/docopt.h>
 #include <yaml-cpp/yaml.h>
-#include <nfc/nfc.hpp>
+#include <nfc/nfc.h>
 #include <freefare.h>
 
 #include "lib/config.hpp"

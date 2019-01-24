@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <nfc/nfc.hpp>
+#include <nfc/nfc.h>
 #include <nfc/nfc-types.h>
 #include <freefare.h>
 #include <yaml-cpp/yaml.h>
