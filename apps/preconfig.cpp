@@ -323,7 +323,9 @@ int main(int argc, char *argv[]) {
 
     {
       for (auto &config_file: app.files) {
-        cout << config_file << endl;
+        visit([](auto &file){
+          cout << file << endl;
+        }, config_file);
         // visit([&card, &config_file](auto &config){config.create(card, config_file);}, config_file.config);
       }
     }

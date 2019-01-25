@@ -45,14 +45,13 @@ namespace nfcdoorz::config {
     }
   }
 
-  bool File::StdData::create(nfc::DESFireTagInterface &card, File &file) {
-    return card.create_std_data_file(file.id, static_cast<uint8_t>(file.communication_settings), file.access_rights.get_lib_value(), std::get<File::StdData>(file.config).size);
+  bool FileStdData::create(nfc::DESFireTagInterface &card, FileStdData &file) {
+    return card.create_std_data_file(file.id, static_cast<uint8_t>(file.communication_settings), file.access_rights.get_lib_value(), file.size);
   }
-  bool File::BackupData::create(nfc::DESFireTagInterface &card, File &file) { return true; }
-  bool File::LinearRecord::create(nfc::DESFireTagInterface &card, File &file) { return true; }
-  bool File::CyclicRecord::create(nfc::DESFireTagInterface &card, File &file) { return true; }
-  bool File::Value::create(nfc::DESFireTagInterface &card, File &file) { return true; }
-
+  bool FileBackupData::create(nfc::DESFireTagInterface &card, FileBackupData &file) { return true; }
+  bool FileLinearRecord::create(nfc::DESFireTagInterface &card, FileLinearRecord &file) { return true; }
+  bool FileCyclicRecord::create(nfc::DESFireTagInterface &card, FileCyclicRecord &file) { return true; }
+  bool FileValue::create(nfc::DESFireTagInterface &card, FileValue &file) { return true; }
 
   App::operator MifareDESFireAID() {
     return mifare_desfire_aid_new(aid[0] | (aid[1] << 8) | (aid[2] << 16));
@@ -151,38 +150,36 @@ namespace nfcdoorz::config {
     //   << "picc_master_key_settings_changeable" << m.picc_master_key_settings_changeable << endl;
   }
   ostream &operator <<(ostream &os, File &m) {
-    os << "File" << endl;
     out.indent(2);
     os
       << "id: " << (int) m.id << endl
       << "name: " << m.name << endl;
-    visit([&os](auto &c){ os << c; }, m.config);
     out.indent(-2);
     return os;
   }
-  ostream &operator <<(ostream &os, File::StdData &m) {
+  ostream &operator <<(ostream &os, FileStdData &m) {
     return os
       << "type: " << m.type << endl
       << "size: " << (int) m.size << endl;
   }
-  ostream &operator <<(ostream &os, File::BackupData &m) {
+  ostream &operator <<(ostream &os, FileBackupData &m) {
     return os
       << "type: " << m.type << endl
       << "size: " << (int) m.size << endl;
   }
-  ostream &operator <<(ostream &os, File::LinearRecord &m) {
+  ostream &operator <<(ostream &os, FileLinearRecord &m) {
     return os
       << "type: " << m.type << endl
       << "record_size: " << m.record_size << endl
       << "max_number_of_records: " << m.max_number_of_records << endl;
   }
-  ostream &operator <<(ostream &os, File::CyclicRecord &m) {
+  ostream &operator <<(ostream &os, FileCyclicRecord &m) {
     return os
       << "type: " << m.type << endl
       << "record_size: " << m.record_size << endl
       << "max_number_of_records: " << m.max_number_of_records << endl;
   }
-  ostream &operator <<(ostream &os, File::Value &m) {
+  ostream &operator <<(ostream &os, FileValue &m) {
     return os
       << "type: " << m.type << endl
       << "lower_limit: " << m.lower_limit << endl
@@ -197,7 +194,7 @@ namespace nfcdoorz::config {
     os
       << "files:" << endl;
     out.indent(2);
-    for(auto &f: m.files) os << f;
+    for(auto &f: m.files) visit([&os](auto &c){ os << c; }, f);
     out.indent(-2);
     os
       << "keys:" << endl;

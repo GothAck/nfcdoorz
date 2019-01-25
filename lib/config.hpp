@@ -202,87 +202,17 @@ OSTREAM(AccessRights);
 
 struct File : Node {
   constexpr static const char *node_name = "file";
-  struct FileType : Node {
-    virtual bool create(nfcdoorz::nfc::DESFireTagInterface &card, File &file) = 0;
-  };
-  struct StdData : FileType {
-    constexpr static const char *node_name = "(std_data)";
-    constexpr static const std::string_view type = "std_data";
-    void decode(const YAML::Node &node) {
-      CONVERT_NODE(size, int);
-    }
-    uint8_t size = 0;
-    bool create(nfcdoorz::nfc::DESFireTagInterface &card, File &file) override;
-  };
-  struct Value : FileType {
-    constexpr static const char *node_name = "(value)";
-    constexpr static const std::string_view type = "value";
-    void decode(const YAML::Node &node) {
-      CONVERT_NODE(lower_limit);
-      CONVERT_NODE(upper_limit);
-      CONVERT_NODE(value);
-      CONVERT_NODE(limited_credit_enable);
-    }
-    uint32_t lower_limit;
-    uint32_t upper_limit;
-    uint32_t value;
-    uint32_t limited_credit_enable;
-    bool create(nfcdoorz::nfc::DESFireTagInterface &card, File &file) override;
-  };
-  struct LinearRecord : FileType {
-    constexpr static const char *node_name = "(linear_record)";
-    constexpr static const std::string_view type = "linear_record";
-    void decode(const YAML::Node &node) {
-      CONVERT_NODE(record_size, int);
-      CONVERT_NODE(max_number_of_records, int);
-    }
-    uint32_t record_size;
-    uint32_t max_number_of_records;
-    bool create(nfcdoorz::nfc::DESFireTagInterface &card, File &file) override;
-  };
-  struct CyclicRecord : FileType {
-    constexpr static const char *node_name = "(cyclic_record)";
-    constexpr static const std::string_view type = "cyclic_record";
-    void decode(const YAML::Node &node) {
-      CONVERT_NODE(record_size, int);
-      CONVERT_NODE(max_number_of_records, int);
-    }
-    uint32_t record_size;
-    uint32_t max_number_of_records;
-    bool create(nfcdoorz::nfc::DESFireTagInterface &card, File &file) override;
-  };
-  struct BackupData : FileType {
-    constexpr static const char *node_name = "(backup_data)";
-    constexpr static const std::string_view type = "backup_data";
-    void decode(const YAML::Node &node) {
-      CONVERT_NODE(size, int);
-    }
-    uint32_t size;
-    bool create(nfcdoorz::nfc::DESFireTagInterface &card, File &file) override;
-  };
-
   enum class FileCommSettings : uint8_t {
     PLAIN = MDCM_PLAIN,
     MACED = MDCM_MACED,
     ENCIPHERED = MDCM_ENCIPHERED,
   };
 
-  void decode(const YAML::Node &node) {
-    CONVERT_NODE(id, int);
-    CONVERT_NODE(name);
-    auto type = node["type"].as<std::string>();
-    config = GetVariant<decltype(config)>::convertNode(node, type);
-    communication_settings = typeStrToFileCommSettings(node["communication_settings"].as<std::string>());
-    if (node["access_rights"]) {
-      CONVERT_NODE(access_rights);
-    }
-  }
+
   uint8_t id;
   std::string name;
   FileCommSettings communication_settings = FileCommSettings::PLAIN;
   AccessRights access_rights;
-  typedef std::variant<StdData, Value, LinearRecord, CyclicRecord, BackupData> FileConfig_t;
-  FileConfig_t config;
 
   static FileCommSettings typeStrToFileCommSettings(std::string type) {
     transform (type.begin(), type.end(), type.begin(), ::tolower);
@@ -294,13 +224,93 @@ struct File : Node {
       return FileCommSettings::ENCIPHERED;
     return FileCommSettings::PLAIN;
   };
+
+  void decode(const YAML::Node &node) {
+    CONVERT_NODE(id, int);
+    CONVERT_NODE(name);
+
+    communication_settings = typeStrToFileCommSettings(node["communication_settings"].as<std::string>());
+    if (node["access_rights"]) CONVERT_NODE(access_rights);
+  }
 };
-OSTREAM(File);
-OSTREAM(File::StdData);
-OSTREAM(File::BackupData);
-OSTREAM(File::LinearRecord);
-OSTREAM(File::CyclicRecord);
-OSTREAM(File::Value);
+
+struct FileStdData : File {
+  constexpr static const std::string_view type = "std_data";
+  uint8_t size = 0;
+
+  void decode(const YAML::Node &node) {
+    File::decode(node);
+    CONVERT_NODE(size, int);
+  }
+
+  bool create(nfcdoorz::nfc::DESFireTagInterface &card, FileStdData &file);
+};
+
+struct FileValue : File {
+  constexpr static const std::string_view type = "value";
+  uint32_t lower_limit;
+  uint32_t upper_limit;
+  uint32_t value;
+  uint32_t limited_credit_enable;
+
+  void decode(const YAML::Node &node) {
+    File::decode(node);
+    CONVERT_NODE(lower_limit);
+    CONVERT_NODE(upper_limit);
+    CONVERT_NODE(value);
+    CONVERT_NODE(limited_credit_enable);
+  }
+
+  bool create(nfcdoorz::nfc::DESFireTagInterface &card, FileValue &file);
+};
+
+struct FileLinearRecord : File {
+  constexpr static const std::string_view type = "linear_record";
+  uint32_t record_size;
+  uint32_t max_number_of_records;
+
+  void decode(const YAML::Node &node) {
+    File::decode(node);
+    CONVERT_NODE(record_size, int);
+    CONVERT_NODE(max_number_of_records, int);
+  }
+
+  bool create(nfcdoorz::nfc::DESFireTagInterface &card, FileLinearRecord &file);
+};
+
+struct FileCyclicRecord : File {
+  constexpr static const std::string_view type = "cyclic_record";
+  uint32_t record_size;
+  uint32_t max_number_of_records;
+
+  void decode(const YAML::Node &node) {
+    File::decode(node);
+    CONVERT_NODE(record_size, int);
+    CONVERT_NODE(max_number_of_records, int);
+  }
+  bool create(nfcdoorz::nfc::DESFireTagInterface &card, FileCyclicRecord &file);
+};
+
+struct FileBackupData : File {
+  constexpr static const std::string_view type = "backup_data";
+  uint32_t size;
+
+  void decode(const YAML::Node &node) {
+    File::decode(node);
+    CONVERT_NODE(size, int);
+  }
+  bool create(nfcdoorz::nfc::DESFireTagInterface &card, FileBackupData &file);
+};
+
+typedef std::variant<
+  FileStdData, FileValue, FileLinearRecord, FileCyclicRecord, FileBackupData
+> FileType_t;
+
+OSTREAM(FileStdData);
+OSTREAM(FileBackupData);
+OSTREAM(FileLinearRecord);
+OSTREAM(FileCyclicRecord);
+OSTREAM(FileValue);
 
 struct App : Node {
   constexpr static const char *node_name = "app";
@@ -318,14 +328,14 @@ struct App : Node {
         throw ValidationException("All keys in an application must have same type");
       }
     }
-    CONVERT_ITER_NFC(files, "files", vector, File);
+    CONVERT_ITER_VARIANT(files, "files");
   }
   operator MifareDESFireAID();
   AppID_t aid = {0, 0, 0};
   std::string name;
   AppSettings settings;
   std::vector<KeyType_t> keys;
-  std::vector<File> files;
+  std::vector<FileType_t> files;
 };
 OSTREAM(App);
 
@@ -355,11 +365,11 @@ namespace YAML {
       } \
     }
   Y_CONVERT(AccessRights);
-  Y_CONVERT(File::StdData);
-  Y_CONVERT(File::BackupData);
-  Y_CONVERT(File::Value);
-  Y_CONVERT(File::LinearRecord);
-  Y_CONVERT(File::CyclicRecord);
+  Y_CONVERT(FileStdData);
+  Y_CONVERT(FileBackupData);
+  Y_CONVERT(FileValue);
+  Y_CONVERT(FileLinearRecord);
+  Y_CONVERT(FileCyclicRecord);
   Y_CONVERT(File);
   Y_CONVERT(KeyDES);
   Y_CONVERT(Key3DES);
