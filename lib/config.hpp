@@ -58,83 +58,86 @@ struct Node {
   virtual void decode(const YAML::Node &) = 0;
 };
 
-  struct KeyType : Node {
-    constexpr static const char *node_name = "key";
-    virtual uint8_t* begin() = 0;
-    virtual uint8_t* end() = 0;
-    uint8_t id = 0;
-    std::string name;
-  };
-  struct KeyDES : KeyType, nfc::KeyDES {
-    uint8_t* begin() override { return data.begin(); };
-    uint8_t* end() override { return data.end(); };
-    void decode(const YAML::Node &node) {
-      nfcdoorz::config::decodePath.push_back(type.data());
-      if (node["id"]) CONVERT_NODE(id, int);
-      if (node["name"]) CONVERT_NODE(name);
-      CONVERT_NODE(diversify);
-      nfcdoorz::config::decodePath.push_back("data");
-      auto _data = node["data"].as<std::vector<int>>();
-      if (_data.size() != data.size())
-        throw ValidationException("data array length incorrect", std::to_string(data.size()));
-      std::transform(_data.begin(), _data.end(), data.begin(), [](int c) -> uint8_t { return c; });
-      nfcdoorz::config::decodePath.pop_back();
-      nfcdoorz::config::decodePath.pop_back();
-    }
-  };
-  struct Key3DES : KeyType, nfc::Key3DES {
-    uint8_t* begin() override { return data.begin(); };
-    uint8_t* end() override { return data.end(); };
-    void decode(const YAML::Node &node) {
-      nfcdoorz::config::decodePath.push_back(type.data());
-      if (node["id"]) CONVERT_NODE(id, int);
-      if (node["name"]) CONVERT_NODE(name);
-      CONVERT_NODE(diversify);
-      nfcdoorz::config::decodePath.push_back("data");
-      auto _data = node["data"].as<std::vector<int>>();
-      if (_data.size() != data.size())
-        throw ValidationException("data array length incorrect", std::to_string(data.size()));
-      std::transform(_data.begin(), _data.end(), data.begin(), [](int c) -> uint8_t { return c; });
-      nfcdoorz::config::decodePath.pop_back();
-      nfcdoorz::config::decodePath.pop_back();
-    }
-  };
+struct Key : Node {
+  constexpr static const char *node_name = "key";
+  uint8_t id = 0;
+  std::string name;
 
-  struct Key3k3DES : KeyType, nfc::Key3k3DES {
-    uint8_t* begin() override { return data.begin(); };
-    uint8_t* end() override { return data.end(); };
-    void decode(const YAML::Node &node) {
-      nfcdoorz::config::decodePath.push_back(type.data());
-      if (node["id"]) CONVERT_NODE(id, int);
-      if (node["name"]) CONVERT_NODE(name);
-      CONVERT_NODE(diversify);
-      nfcdoorz::config::decodePath.push_back("data");
-      auto _data = node["data"].as<std::vector<int>>();
-      if (_data.size() != data.size())
-        throw ValidationException("data array length incorrect", std::to_string(data.size()));
-      std::transform(_data.begin(), _data.end(), data.begin(), [](int c) -> uint8_t { return c; });
-      nfcdoorz::config::decodePath.pop_back();
-      nfcdoorz::config::decodePath.pop_back();
-    }
-  };
+  virtual uint8_t* begin() = 0;
+  virtual uint8_t* end() = 0;
+  void decode(const YAML::Node &node) {
+    if (node["id"]) CONVERT_NODE(id, int);
+    if (node["name"]) CONVERT_NODE(name);
+  }
+};
 
-  struct KeyAES : KeyType, nfc::KeyAES {
-    uint8_t* begin() override { return data.begin(); };
-    uint8_t* end() override { return data.end(); };
-    void decode(const YAML::Node &node) {
-      nfcdoorz::config::decodePath.push_back(type.data());
-      if (node["id"]) CONVERT_NODE(id, int);
-      if (node["name"]) CONVERT_NODE(name);
-      CONVERT_NODE(diversify);
-      nfcdoorz::config::decodePath.push_back("data");
-      auto _data = node["data"].as<std::vector<int>>();
-      if (_data.size() != data.size())
-        throw ValidationException("data array length incorrect", std::to_string(data.size()));
-      std::transform(_data.begin(), _data.end(), data.begin(), [](int c) -> uint8_t { return c; });
-      nfcdoorz::config::decodePath.pop_back();
-      nfcdoorz::config::decodePath.pop_back();
-    }
-  };
+struct KeyDES : Key, nfc::KeyDES {
+  uint8_t* begin() override { return data.begin(); };
+  uint8_t* end() override { return data.end(); };
+  void decode(const YAML::Node &node) {
+    CONVERT_NODE(diversify);
+    nfcdoorz::config::decodePath.push_back(type.data());
+    Key::decode(node);
+    nfcdoorz::config::decodePath.push_back("data");
+    auto _data = node["data"].as<std::vector<int>>();
+    if (_data.size() != data.size())
+      throw ValidationException("data array length incorrect", std::to_string(data.size()));
+    std::transform(_data.begin(), _data.end(), data.begin(), [](int c) -> uint8_t { return c; });
+    nfcdoorz::config::decodePath.pop_back();
+    nfcdoorz::config::decodePath.pop_back();
+  }
+};
+
+struct Key3DES : Key, nfc::Key3DES {
+  uint8_t* begin() override { return data.begin(); };
+  uint8_t* end() override { return data.end(); };
+  void decode(const YAML::Node &node) {
+    CONVERT_NODE(diversify);
+    nfcdoorz::config::decodePath.push_back(type.data());
+    Key::decode(node);
+    nfcdoorz::config::decodePath.push_back("data");
+    auto _data = node["data"].as<std::vector<int>>();
+    if (_data.size() != data.size())
+      throw ValidationException("data array length incorrect", std::to_string(data.size()));
+    std::transform(_data.begin(), _data.end(), data.begin(), [](int c) -> uint8_t { return c; });
+    nfcdoorz::config::decodePath.pop_back();
+    nfcdoorz::config::decodePath.pop_back();
+  }
+};
+
+struct Key3k3DES : Key, nfc::Key3k3DES {
+  uint8_t* begin() override { return data.begin(); };
+  uint8_t* end() override { return data.end(); };
+  void decode(const YAML::Node &node) {
+    CONVERT_NODE(diversify);
+    nfcdoorz::config::decodePath.push_back(type.data());
+    Key::decode(node);
+    nfcdoorz::config::decodePath.push_back("data");
+    auto _data = node["data"].as<std::vector<int>>();
+    if (_data.size() != data.size())
+      throw ValidationException("data array length incorrect", std::to_string(data.size()));
+    std::transform(_data.begin(), _data.end(), data.begin(), [](int c) -> uint8_t { return c; });
+    nfcdoorz::config::decodePath.pop_back();
+    nfcdoorz::config::decodePath.pop_back();
+  }
+};
+
+struct KeyAES : Key, nfc::KeyAES {
+  uint8_t* begin() override { return data.begin(); };
+  uint8_t* end() override { return data.end(); };
+  void decode(const YAML::Node &node) {
+    CONVERT_NODE(diversify);
+    nfcdoorz::config::decodePath.push_back(type.data());
+    Key::decode(node);
+    nfcdoorz::config::decodePath.push_back("data");
+    auto _data = node["data"].as<std::vector<int>>();
+    if (_data.size() != data.size())
+      throw ValidationException("data array length incorrect", std::to_string(data.size()));
+    std::transform(_data.begin(), _data.end(), data.begin(), [](int c) -> uint8_t { return c; });
+    nfcdoorz::config::decodePath.pop_back();
+    nfcdoorz::config::decodePath.pop_back();
+  }
+};
 
 typedef std::variant<KeyDES, Key3DES, Key3k3DES, KeyAES> KeyType_t;
 OSTREAM(KeyDES);
