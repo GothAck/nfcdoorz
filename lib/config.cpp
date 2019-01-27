@@ -29,7 +29,10 @@ namespace nfcdoorz::config {
     try {
       YAML::Node config = YAML::LoadFile(filename);
       return config.as<Config>();
-    } catch (YAML::RepresentationException e) {
+    } catch (YAML::Exception e) {
+      string path = printDecodePath();
+      throw ValidationException(e.what(), path);
+    } catch (ValidationException e) {
       string path = printDecodePath();
       throw ValidationException(e.what(), path);
     }
