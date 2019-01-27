@@ -1,4 +1,4 @@
-#include <exception>
+#include <iostream>
 
 #include "nfc.hpp"
 
@@ -55,11 +55,9 @@ namespace nfcdoorz::nfc {
   Device::~Device() {
     if (_tags) {
       freefare_free_tags(_tags);
-      free(_tags);
     }
     if (_device) {
       nfc_close(_device);
-      free(_device);
     }
   }
 
@@ -75,7 +73,7 @@ namespace nfcdoorz::nfc {
     if (_tags) free(_tags);
     _tags = freefare_get_tags(_device);
     if (!_tags) return ret;
-    for(size_t i = 0; _tags[i]; i++) {
+    for(size_t i = 0; _tags[i] && i < 32; i++) {
       ret.emplace_back(*this, _tags[i]);
     }
     return ret;
@@ -97,23 +95,62 @@ namespace nfcdoorz::nfc {
   }
 
   Key::operator MifareDESFireKey() {
-    throw exception();
+    return nullptr;
+  }
+
+  MifareDESFireKey Key::deriveKeyImpl(
+    Tag &tag,
+    MifareKeyType key_type,
+    MifareDESFireAID aid
+  ) {
+    MifareDESFireKey derived = nullptr;
+    CLEAN_KEY MifareDESFireKey master_key = *this;
+    CLEAN_DERIVER MifareKeyDeriver deriver =
+      mifare_key_deriver_new_an10922(master_key, key_type);
+    if (!deriver) return nullptr;
+    if (mifare_key_deriver_begin(deriver) < 0) return nullptr;
+    FreefareTag tag2 = tag;
+    if (mifare_key_deriver_update_uid(deriver, tag2) < 0) return nullptr;
+    if (aid)
+      if (mifare_key_deriver_update_aid(deriver, aid) < 0) return nullptr;
+
+    return mifare_key_deriver_end(deriver);
+  }
+
+  MifareDESFireKey Key::deriveKey(Tag &tag, MifareDESFireAID aid) {
+    return nullptr;
   }
 
   KeyDES::operator MifareDESFireKey() {
     return mifare_desfire_des_key_new(data.data());
   }
 
+  MifareDESFireKey KeyDES::deriveKey(Tag &tag, MifareDESFireAID aid) {
+    return Key::deriveKeyImpl(tag, key_type, aid);
+  }
+
   Key3DES::operator MifareDESFireKey() {
     return mifare_desfire_3des_key_new(data.data());
+  }
+
+  MifareDESFireKey Key3DES::deriveKey(Tag &tag, MifareDESFireAID aid) {
+    return Key::deriveKeyImpl(tag, key_type, aid);
   }
 
   Key3k3DES::operator MifareDESFireKey() {
     return mifare_desfire_3k3des_key_new(data.data());
   }
 
+  MifareDESFireKey Key3k3DES::deriveKey(Tag &tag, MifareDESFireAID aid) {
+    return Key::deriveKeyImpl(tag, key_type, aid);
+  }
+
   KeyAES::operator MifareDESFireKey() {
     return mifare_desfire_aes_key_new(data.data());
+  }
+
+  MifareDESFireKey KeyAES::deriveKey(Tag &tag, MifareDESFireAID aid) {
+    return Key::deriveKeyImpl(tag, key_type, aid);
   }
 
 }

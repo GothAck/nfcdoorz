@@ -70,40 +70,52 @@ namespace nfcdoorz::nfc {
   };
 
   struct Key {
-    virtual operator MifareDESFireKey();
     bool diversify = false;
+    virtual operator MifareDESFireKey();
+    virtual MifareDESFireKey deriveKey(Tag &tag, MifareDESFireAID aid);
+
+  protected:
+    MifareDESFireKey deriveKeyImpl(Tag &tag, MifareKeyType key_type, MifareDESFireAID aid);
   };
 
   struct KeyDES : public Key {
     constexpr static const std::string_view type = "des";
+    static const MifareKeyType key_type = MIFARE_KEY_DES;
     constexpr static const uint8_t size = 8;
     std::array<uint8_t, size> data;
     KeyDES() {};
     KeyDES(std::array<uint8_t, size> _data): data(_data) {};
     operator MifareDESFireKey() override;
+    MifareDESFireKey deriveKey(Tag &tag, MifareDESFireAID aid) override;
   };
   struct Key3DES : public Key {
     constexpr static const std::string_view type = "3des";
+    static const MifareKeyType key_type = MIFARE_KEY_2K3DES;
     constexpr static const uint8_t size = 16;
     std::array<uint8_t, size> data;
     Key3DES() {};
     Key3DES(std::array<uint8_t, size> _data): data(_data) {};
     operator MifareDESFireKey() override;
+    MifareDESFireKey deriveKey(Tag &tag, MifareDESFireAID aid) override;
   };
   struct Key3k3DES : public Key {
     constexpr static const std::string_view type = "3k3des";
+    static const MifareKeyType key_type = MIFARE_KEY_3K3DES;
     constexpr static const uint8_t size = 24;
     std::array<uint8_t, size> data;
     Key3k3DES() {};
     Key3k3DES(std::array<uint8_t, size> _data): data(_data) {};
     operator MifareDESFireKey() override;
+    MifareDESFireKey deriveKey(Tag &tag, MifareDESFireAID aid) override;
   };
   struct KeyAES : public Key {
     constexpr static const std::string_view type = "aes";
+    static const MifareKeyType key_type = MIFARE_KEY_AES128;
     constexpr static const uint8_t size = 16;
     std::array<uint8_t, size> data;
     KeyAES() {};
     KeyAES(std::array<uint8_t, size> _data): data(_data) {};
     operator MifareDESFireKey() override;
+    MifareDESFireKey deriveKey(Tag &tag, MifareDESFireAID aid) override;
   };
 }

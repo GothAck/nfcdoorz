@@ -3,7 +3,7 @@ SYM_FILES = $(P_NON_MAIN_OBJECTS:%=%.syms)
 
 SYM_SH = $(ROOT_PATH)/util/sym.sh
 
-HEADERS = /usr/include/nfc/nfc.h
+HEADERS = /usr/include/nfc/nfc.h /usr/include/freefare.h
 
 SOURCES = $(wildcard *.c) $(wildcard *.cpp)
 OBJECTS = $(foreach f,$(basename $(SOURCES)),$(ROOT_PATH)/build/test/stub/$(f).o)
