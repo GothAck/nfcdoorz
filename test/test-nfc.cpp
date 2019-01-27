@@ -199,7 +199,7 @@ TEST_CASE("KeyDES castable") {
   REQUIRE( mock_key == (void *)key );
 }
 
-TEST_CASE("KeyAES key deriver called correctly") {
+TEST_CASE("KeyAES key deriver not called when key.diversify == false") {
   enum freefare_tag_type tag_type = MIFARE_DESFIRE;
   void *mock_tags = gen_mock_tags();
   void *mock_key = malloc(128);
@@ -225,6 +225,49 @@ TEST_CASE("KeyAES key deriver called correctly") {
   nfc::Tag &tag = tags[0];
 
   nfc::KeyAES key;
+
+  key.diversify = false;
+
+  REQUIRE( all_of(key.data.begin(), key.data.end(), [](uint8_t c){ return c == 0; }) );
+
+  MifareDESFireKey retkey = key.deriveKey(tag, nullptr);
+  REQUIRE_FALSE( call_count.count("mifare_key_deriver_begin") );
+  REQUIRE_FALSE( call_count.count("mifare_key_deriver_update_uid") );
+  REQUIRE_FALSE( call_count.count("mifare_key_deriver_update_aid") );
+  REQUIRE_FALSE( call_count.count("mifare_key_deriver_end") );
+  REQUIRE_FALSE( call_count.count("mifare_key_deriver_free") );
+
+  REQUIRE_FALSE( retkey );
+}
+
+TEST_CASE("KeyAES key deriver called when diversify == true") {
+  enum freefare_tag_type tag_type = MIFARE_DESFIRE;
+  void *mock_tags = gen_mock_tags();
+  void *mock_key = malloc(128);
+  mock_return("freefare_get_tag_type", &tag_type);
+  mock_return("freefare_get_tags", &mock_tags);
+  mock_return("mifare_desfire_aes_key_new", &mock_key);
+
+  void *mock_deriver = malloc(128);
+  mock_return("mifare_key_deriver_new_an10922", &mock_deriver);
+  int success = 0;
+  mock_return("mifare_key_deriver_begin", &success);
+  mock_return("mifare_key_deriver_update_uid", &success);
+  mock_return("mifare_key_deriver_end", &mock_key);
+
+  nfc::Context context;
+  context.init();
+  optional<nfc::Device> device = context.getDeviceMatching("9999");
+  device->open();
+  vector<nfc::Tag> tags = device->getTags();
+  REQUIRE( call_count.count("freefare_get_tags") );
+  REQUIRE( call_count.at("freefare_get_tags") == 1 );
+  REQUIRE ( tags.size() );
+  nfc::Tag &tag = tags[0];
+
+  nfc::KeyAES key;
+
+  key.diversify = true;
 
   REQUIRE( all_of(key.data.begin(), key.data.end(), [](uint8_t c){ return c == 0; }) );
 

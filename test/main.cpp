@@ -53,7 +53,7 @@ void mock_was_called(const char *name, size_t num_args, ...) {
   mock_was_called_mutex.lock();
   key.clear();
   key.append(name);
-  cout << key << endl;
+  INFO("Mock called " << key);
   int count = 0;
   vector<vector<void *>> &fn_calls = get_or_add_calls(key);
 

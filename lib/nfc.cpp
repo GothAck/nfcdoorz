@@ -126,6 +126,7 @@ namespace nfcdoorz::nfc {
   }
 
   MifareDESFireKey KeyDES::deriveKey(Tag &tag, MifareDESFireAID aid) {
+    if (!diversify) return nullptr;
     return Key::deriveKeyImpl(tag, key_type, aid);
   }
 
@@ -134,6 +135,7 @@ namespace nfcdoorz::nfc {
   }
 
   MifareDESFireKey Key3DES::deriveKey(Tag &tag, MifareDESFireAID aid) {
+    if (!diversify) return nullptr;
     return Key::deriveKeyImpl(tag, key_type, aid);
   }
 
@@ -142,6 +144,7 @@ namespace nfcdoorz::nfc {
   }
 
   MifareDESFireKey Key3k3DES::deriveKey(Tag &tag, MifareDESFireAID aid) {
+    if (!diversify) return nullptr;
     return Key::deriveKeyImpl(tag, key_type, aid);
   }
 
@@ -150,6 +153,7 @@ namespace nfcdoorz::nfc {
   }
 
   MifareDESFireKey KeyAES::deriveKey(Tag &tag, MifareDESFireAID aid) {
+    if (!diversify) return nullptr;
     return Key::deriveKeyImpl(tag, key_type, aid);
   }
 
