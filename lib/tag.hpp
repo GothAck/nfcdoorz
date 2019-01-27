@@ -4,7 +4,7 @@
 #include <freefare.h>
 
 #include "keys.hpp"
-#include "types.h"
+#include "types.hpp"
 
 #pragma once
 

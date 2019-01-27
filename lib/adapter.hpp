@@ -1,7 +1,7 @@
 #include <string>
 #include <vector>
 #include <optional>
-#include "types.h"
+#include "types.hpp"
 #include "config.hpp"
 #include "tag.hpp"
 

@@ -15,7 +15,7 @@
 
 #include "keys.hpp"
 #include "tag.hpp"
-#include "types.h"
+#include "types.hpp"
 #include "nfc.hpp"
 
 namespace nfcdoorz::config {

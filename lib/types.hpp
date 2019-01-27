@@ -7,7 +7,17 @@
 
 #include <yaml-cpp/yaml.h>
 
+#include <freefare.h>
+
 #pragma once
+
+void freekey(MifareDESFireKey *key);
+
+void freederiver(MifareKeyDeriver *deriver);
+
+#define CLEAN_KEY __attribute__((cleanup(freekey)))
+#define CLEAN_DERIVER __attribute__((cleanup(freederiver)))
+#define CLEAN __attribute__((cleanup(free)))
 
 typedef std::array<uint8_t, 3> AppID_t;
 

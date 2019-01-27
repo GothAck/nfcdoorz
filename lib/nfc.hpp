@@ -11,7 +11,7 @@
 #include <freefare.h>
 
 #include "tag.hpp"
-#include "types.h"
+#include "types.hpp"
 
 #pragma once
 

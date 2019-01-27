@@ -2,8 +2,7 @@
 
 #include "config.hpp"
 #include "adapter.hpp"
-
-#define CLEAN __attribute__((cleanup(free)))
+#include "types.hpp"
 
 namespace nfcdoorz {
   using namespace std;
@@ -40,7 +39,7 @@ namespace nfcdoorz {
     CLEAN MifareDESFireAID api_aid = mifare_desfire_aid_new(aid[0] | (aid[1] << 8) | (aid[2] << 16));
     if (!tag.select_application(api_aid)) return false;
     _aid = aid;
-    CLEAN MifareDESFireKey api_key = key;
+    CLEAN_KEY MifareDESFireKey api_key = key;
     return tag.authenticate(0, api_key);
   }
 
@@ -65,9 +64,9 @@ namespace nfcdoorz {
   }
 
   bool Adapter::changeKey(uint8_t key_id, nfc::Key &new_key, nfc::Key &old_key) {
-    CLEAN MifareDESFireKey api_new_key = new_key;
-    CLEAN MifareDESFireKey api_old_key = old_key;
-    tag.change_key(key_id, api_new_key, api_old_key);
+    CLEAN_KEY MifareDESFireKey api_new_key = new_key;
+    CLEAN_KEY MifareDESFireKey api_old_key = old_key;
+    return tag.change_key(key_id, api_new_key, api_old_key);
   }
 
   bool Adapter::deleteApplication(AppID_t aid) {
