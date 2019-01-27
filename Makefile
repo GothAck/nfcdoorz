@@ -11,7 +11,7 @@ TEST_BIN = $(foreach f,$(basename $(wildcard test/test-*.cpp)),build/$(f))
 TEST_ASSETS = $(foreach f,$(wildcard test/*.yaml),build/$(f))
 
 SYS_LIBS = nfc freefare yaml-cpp docopt crypto
-TEST_LIBS =
+TEST_LIBS = dl
 
 INCDIRS = .
 LIBDIRS =
