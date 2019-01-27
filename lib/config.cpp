@@ -129,7 +129,6 @@ namespace nfcdoorz::config {
 
     visit([&os](auto &c){ os << c; }, m.key);
     out.indent(-2);
-      // << "settings:" << endl << m.settings
     return os;
   }
   ostream &operator <<(ostream &os, AppSettings &m) {
