@@ -174,7 +174,8 @@ TEST_CASE("KeyDES constuctable") {
 
   REQUIRE( all_of(key1.data.begin(), key1.data.end(), [](uint8_t c){ return c == 0; }) );
 
-  nfc::KeyDES key2({0, 1, 2, 3, 4, 5, 6, 7});
+  nfc::KeyDES::KeyArray_t keyarr = {0, 1, 2, 3, 4, 5, 6, 7};
+  nfc::KeyDES key2(keyarr);
 
   for (uint8_t i = 0; i < 8; i++)
     REQUIRE( key2.data[i] == i );
@@ -186,7 +187,9 @@ TEST_CASE("KeyDES castable") {
   void *mock_key = malloc(128);
   mock_return("mifare_desfire_des_key_new", &mock_key);
 
-  nfc::KeyDES key2({0, 1, 2, 3, 4, 5, 6, 7});
+  nfc::KeyDES::KeyArray_t keyarr = {0, 1, 2, 3, 4, 5, 6, 7};
+
+  nfc::KeyDES key2(keyarr);
 
   MifareDESFireKey key = key2;
 
@@ -230,7 +233,7 @@ TEST_CASE("KeyAES key deriver not called when key.diversify == false") {
 
   REQUIRE( all_of(key.data.begin(), key.data.end(), [](uint8_t c){ return c == 0; }) );
 
-  MifareDESFireKey retkey = key.deriveKey(tag, nullptr);
+  MifareDESFireKey retkey = key.deriveKey(tag);
   REQUIRE_FALSE( call_count.count("mifare_key_deriver_begin") );
   REQUIRE_FALSE( call_count.count("mifare_key_deriver_update_uid") );
   REQUIRE_FALSE( call_count.count("mifare_key_deriver_update_aid") );
@@ -271,7 +274,7 @@ TEST_CASE("KeyAES key deriver called when diversify == true") {
 
   REQUIRE( all_of(key.data.begin(), key.data.end(), [](uint8_t c){ return c == 0; }) );
 
-  MifareDESFireKey retkey = key.deriveKey(tag, nullptr);
+  MifareDESFireKey retkey = key.deriveKey(tag);
   REQUIRE( call_count.count("mifare_key_deriver_begin") );
   REQUIRE( call_count.at("mifare_key_deriver_begin") == 1 );
   REQUIRE( call_count.count("mifare_key_deriver_update_uid") );

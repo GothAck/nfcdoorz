@@ -21,8 +21,8 @@ namespace nfcdoorz::nfc {
     static const enum freefare_tag_type type = MIFARE_DESFIRE;
     DESFireTagInterface(Tag &tag);
 
-    void setStoredUID(std::vector<uint8_t> uid);
-    std::vector<uint8_t> getStoredUID();
+    void setStoredUID(UID_t uid);
+    UID_t getStoredUID();
 
     bool connect();
     bool authenticate(uint8_t key_id, MifareDESFireKey key);
@@ -47,7 +47,7 @@ namespace nfcdoorz::nfc {
   private:
     bool _connected = false;
     FreefareTag _tag = nullptr;
-    std::vector<uint8_t> _uid;
+    UID_t _uid;
   };
 
 }

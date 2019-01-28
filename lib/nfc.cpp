@@ -99,25 +99,32 @@ namespace nfcdoorz::nfc {
   }
 
   MifareDESFireKey Key::deriveKeyImpl(
-    Tag &tag,
     MifareKeyType key_type,
-    MifareDESFireAID aid
+    const UID_t &uid,
+    const AppID_t &aid
   ) {
     MifareDESFireKey derived = nullptr;
     CLEAN_KEY MifareDESFireKey master_key = *this;
     CLEAN_DERIVER MifareKeyDeriver deriver =
       mifare_key_deriver_new_an10922(master_key, key_type);
-    if (!deriver) return nullptr;
-    if (mifare_key_deriver_begin(deriver) < 0) return nullptr;
-    FreefareTag tag2 = tag;
-    if (mifare_key_deriver_update_uid(deriver, tag2) < 0) return nullptr;
-    if (aid)
-      if (mifare_key_deriver_update_aid(deriver, aid) < 0) return nullptr;
+    if (!deriver)
+      return nullptr;
+    if (mifare_key_deriver_begin(deriver) < 0)
+      return nullptr;
 
-    return mifare_key_deriver_end(deriver);
+    if (mifare_key_deriver_update_data(deriver, uid.data(), uid.size()) < 0)
+      return nullptr;
+    if (aid[0] || aid[1] || aid[2]) {
+      if (mifare_key_deriver_update_data(deriver, aid.data(), aid.size()) < 0)
+        return nullptr;
+    }
+
+    MifareDESFireKey derived_key = mifare_key_deriver_end(deriver);
+
+    return derived_key;
   }
 
-  MifareDESFireKey Key::deriveKey(Tag &tag, MifareDESFireAID aid) {
+  MifareDESFireKey Key::deriveKey(const UID_t &uid, const AppID_t &aid) {
     return nullptr;
   }
 
@@ -125,36 +132,36 @@ namespace nfcdoorz::nfc {
     return mifare_desfire_des_key_new(data.data());
   }
 
-  MifareDESFireKey KeyDES::deriveKey(Tag &tag, MifareDESFireAID aid) {
+  MifareDESFireKey KeyDES::deriveKey(const UID_t &uid, const AppID_t &aid) {
     if (!diversify) return nullptr;
-    return Key::deriveKeyImpl(tag, key_type, aid);
+    return Key::deriveKeyImpl(key_type, uid, aid);
   }
 
   Key3DES::operator MifareDESFireKey() {
     return mifare_desfire_3des_key_new(data.data());
   }
 
-  MifareDESFireKey Key3DES::deriveKey(Tag &tag, MifareDESFireAID aid) {
+  MifareDESFireKey Key3DES::deriveKey(const UID_t &uid, const AppID_t &aid) {
     if (!diversify) return nullptr;
-    return Key::deriveKeyImpl(tag, key_type, aid);
+    return Key::deriveKeyImpl(key_type, uid, aid);
   }
 
   Key3k3DES::operator MifareDESFireKey() {
     return mifare_desfire_3k3des_key_new(data.data());
   }
 
-  MifareDESFireKey Key3k3DES::deriveKey(Tag &tag, MifareDESFireAID aid) {
+  MifareDESFireKey Key3k3DES::deriveKey(const UID_t &uid, const AppID_t &aid) {
     if (!diversify) return nullptr;
-    return Key::deriveKeyImpl(tag, key_type, aid);
+    return Key::deriveKeyImpl(key_type, uid, aid);
   }
 
   KeyAES::operator MifareDESFireKey() {
     return mifare_desfire_aes_key_new(data.data());
   }
 
-  MifareDESFireKey KeyAES::deriveKey(Tag &tag, MifareDESFireAID aid) {
+  MifareDESFireKey KeyAES::deriveKey(const UID_t &uid, const AppID_t &aid) {
     if (!diversify) return nullptr;
-    return Key::deriveKeyImpl(tag, key_type, aid);
+    return Key::deriveKeyImpl(key_type, uid, aid);
   }
 
 }

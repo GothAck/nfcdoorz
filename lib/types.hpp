@@ -1,5 +1,6 @@
 #include <array>
 #include <variant>
+#include <type_traits>
 #include <tuple>
 #include <string>
 #include <stdexcept>
@@ -12,14 +13,15 @@
 #pragma once
 
 void freekey(MifareDESFireKey *key);
-
 void freederiver(MifareKeyDeriver *deriver);
+void freeaid(MifareDESFireAID *aid);
 
 #define CLEAN_KEY __attribute__((cleanup(freekey)))
 #define CLEAN_DERIVER __attribute__((cleanup(freederiver)))
-#define CLEAN __attribute__((cleanup(free)))
+#define CLEAN_AID __attribute__((cleanup(freeaid)))
 
 typedef std::array<uint8_t, 3> AppID_t;
+typedef std::array<uint8_t, 7> UID_t;
 
 class ConversionException : public std::runtime_error {
   constexpr static const char *prefix = "ConversionException: ";
@@ -85,4 +87,8 @@ struct GetVariant {
       return GetVariant<TVariant, I - 1>::make(type);
     }
   }
+
 };
+
+template<class... Ts> struct overloaded : Ts... { using Ts::operator()...; };
+template<class... Ts> overloaded(Ts...) -> overloaded<Ts...>;

@@ -201,7 +201,7 @@ int main(int argc, char *argv[]) {
 
       if (!options.dry_run) {
         cout << "Setting tag config" << endl;
-        CHECK_BOOL(adapter.tag.set_configuration(false, true), "Failed to set card config");
+        CHECK_BOOL(adapter.tagInterface.set_configuration(false, true), "Failed to set card config");
       }
     }
 
@@ -216,22 +216,7 @@ int main(int argc, char *argv[]) {
       if (options.overridden_picc_key) {
         cout << "Authenticating with existing key " << endl;
         CHECK_BOOL(adapter.authenticatePICC(), "Failed to autenticate");
-      // } else {
-      //   cout << "key: ";
-      //   for (uint8_t i = 0; i < 16; i++)
-      //     cout << hex << (int) key[i] << ":";
-      //   cout << endl;
-      //   cout << "Diversifying master key" << endl;
-      //   CHECK_BOOL(key.diversify(app_aid, tag_uid, salt), "Failed to diversify picc key");
-      //   cout << "key: ";
-      //   // for (uint8_t i = 0; i < 16; i++)
-      //   //   cout << hex << (int) ((uint8_t*)key)[i] << ":";
-      //   cout << endl;
-      //
-      //   cout << "New picc key = ";
-      //   for (uint8_t i = 0; i < 16; i++)
-      //     cout << hex << unsigned(key[i]) << ":";
-      //   cout << endl;
+        cout << "Authenticated" << endl;
       }
 
       if (!options.skip_picc_rekey) {
@@ -239,6 +224,7 @@ int main(int argc, char *argv[]) {
           cout << "Setting new master key" << endl;
           visit([&adapter](auto &key){
             CHECK_BOOL(adapter.changeKey(0, key, null_key_des), "Failed to change master key");
+            cout << "Set new master key" << endl;
           }, config.picc.key);
         }
       }
@@ -249,7 +235,7 @@ int main(int argc, char *argv[]) {
       }, config.picc.key);
     }
 
-    auto apps = adapter.tag.get_application_ids();
+    auto apps = adapter.tagInterface.get_application_ids();
     for (auto it = apps.begin(); it != apps.end(); it++) {
       // FIXME: actually print app ids
       cout << "app" << endl;
@@ -258,7 +244,7 @@ int main(int argc, char *argv[]) {
     if (!options.skip_app_rekey) {
       if (!options.dry_run) {
         cout << "Setting default app key" << endl;
-        CHECK_BOOL(adapter.tag.set_default_key(null_key_aes), "Failed to set default application key");
+        CHECK_BOOL(adapter.tagInterface.set_default_key(null_key_aes), "Failed to set default application key");
       }
     }
     if (options.dry_run) return 0;
@@ -296,7 +282,7 @@ int main(int argc, char *argv[]) {
       CHECK_BOOL(adapter.authenticateAppByID(aid, null_key_aes), "Failed to authenticate app with default key");
       for (auto it = app.keys.rbegin(); it != app.keys.rend(); it++) {
         visit([&adapter, &aid, it](auto &key){
-          cout << "Key id: " << key.id << endl;
+          cout << "Key id: " << (int) key.id << endl;
           cout << "Key name: " << key.name << endl;
           cout << "Key diversify: " << key.diversify << endl;
           CHECK_BOOL(adapter.changeKey(key.id, key, null_key_aes), "Failed to change key");

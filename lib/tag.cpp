@@ -17,10 +17,10 @@ DESFireTagInterface::DESFireTagInterface(Tag &tag) {
   _connected = false;
 }
 
-void DESFireTagInterface::setStoredUID(std::vector<uint8_t> uid) {
+void DESFireTagInterface::setStoredUID(UID_t uid) {
   _uid = uid;
 }
-std::vector<uint8_t> DESFireTagInterface::getStoredUID() {
+UID_t DESFireTagInterface::getStoredUID() {
   return _uid;
 }
 
@@ -40,10 +40,7 @@ bool DESFireTagInterface::authenticate(uint8_t key_id, MifareDESFireKey key) {
   cout
     << "Authenticate!" << endl
     << "key_id: " << (int) key_id << endl
-    << "key: ";
-  for (uint8_t i = 0; i < 16; i++)
-    cout << hex << (int) ((uint8_t*)key)[i] << ":";
-  cout << endl;
+    << "key: " << hex << key << endl;
   if (mifare_desfire_authenticate(_tag, key_id, key) < 0)
     return false;
   return true;
