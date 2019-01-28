@@ -1,4 +1,6 @@
+#include <algorithm>
 #include <iostream>
+#include <iomanip>
 #include <err.h>
 #include <errno.h>
 #include <stdlib.h>
@@ -96,24 +98,45 @@ int main(int argc, char *argv[]) {
     cout << "DRY RUN!" << endl;
 
   if (options.overridden_uid) {
-    if (options.overridden_uid->length() % 2)
+    string uid = *options.overridden_uid;
+    uid.erase(remove(
+      uid.begin(),
+      uid.end(),
+      ':'
+    ), uid.end());
+    if (uid.length() % 2)
       errx(9, "overridden uid should be an even number of hex characters e.g. 01020304");
-    if (all_of(options.overridden_uid->begin(), options.overridden_uid->end(), [](unsigned char c){ return isxdigit(c); }))
+    if (!all_of(uid.begin(), uid.end(), [](unsigned char c){ return isxdigit(c); }))
       errx(9, "overridden uid should be hex characters e.g. a1B2c3D4");
+    options.overridden_uid = uid;
   }
 
   if (options.overridden_picc_key) {
-    if (32 != options.overridden_picc_key->length())
-      errx(9, "overridden uid should be 32 hex characters e.g. 01020304");
-    if (all_of(options.overridden_picc_key->begin(), options.overridden_picc_key->end(), [](unsigned char c){ return isxdigit(c); }))
-      errx(9, "overridden uid should be 32 hex characters e.g. a1B2c3D4");
+    string picc_key = *options.overridden_picc_key;
+    picc_key.erase(remove(
+      picc_key.begin(),
+      picc_key.end(),
+      ':'
+    ), picc_key.end());
+    if (32 != picc_key.length())
+      errx(9, "overridden picc key should be 32 hex characters e.g. 01020304");
+    if (!all_of(picc_key.begin(), picc_key.end(), [](unsigned char c){ return isxdigit(c); }))
+      errx(9, "overridden picc key should be 32 hex characters e.g. a1B2c3D4");
+    options.overridden_picc_key = picc_key;
   }
 
   if (options.delete_apps) {
-    if (6 != options.delete_apps->length())
+    string delete_apps = *options.delete_apps;
+    delete_apps.erase(remove(
+      delete_apps.begin(),
+      delete_apps.end(),
+      ':'
+    ), delete_apps.end());
+    if (6 != delete_apps.length())
       errx(9, "delete app should be 6 hex characters e.g. 010203");
-    if (all_of(options.delete_apps->begin(), options.delete_apps->end(), [](unsigned char c){ return isxdigit(c); }))
+    if (!all_of(delete_apps.begin(), delete_apps.end(), [](unsigned char c){ return isxdigit(c); }))
       errx(9, "delete app should be 6 hex characters e.g. a1B2c3");
+    options.delete_apps = delete_apps;
   }
 
   config::Config config;
