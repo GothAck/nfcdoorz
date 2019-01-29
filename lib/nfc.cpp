@@ -105,6 +105,15 @@ namespace nfcdoorz::nfc {
   ) {
     MifareDESFireKey derived = nullptr;
     CLEAN_KEY MifareDESFireKey master_key = *this;
+    IF_LOG(plog::debug) {
+      stringbuf sbuf;
+      ostream os (&sbuf);
+      os << "master_key: ";
+      for (uint8_t i = 0; i < 24; i++) {
+        os << hex << (int) *(((uint8_t *)master_key) + i);
+      }
+      LOG_DEBUG << sbuf.str();
+    }
     CLEAN_DERIVER MifareKeyDeriver deriver =
       mifare_key_deriver_new_an10922(master_key, key_type);
     if (!deriver)
@@ -112,19 +121,41 @@ namespace nfcdoorz::nfc {
     if (mifare_key_deriver_begin(deriver) < 0)
       return nullptr;
 
+    IF_LOG(plog::debug) {
+      stringbuf sbuf;
+      ostream os (&sbuf);
+      os << "uid: ";
+      for (uint8_t i = 0; i < uid.size(); i++) {
+        os << hex << (int) *(((uint8_t *)uid.data()) + i);
+      }
+      LOG_DEBUG << sbuf.str();
+    }
+
     if (mifare_key_deriver_update_data(deriver, uid.data(), uid.size()) < 0)
       return nullptr;
     if (aid[0] || aid[1] || aid[2]) {
+      LOG_DEBUG << "AppID";
       if (mifare_key_deriver_update_data(deriver, aid.data(), aid.size()) < 0)
         return nullptr;
     }
 
     MifareDESFireKey derived_key = mifare_key_deriver_end(deriver);
 
+    IF_LOG(plog::debug) {
+      stringbuf sbuf;
+      ostream os (&sbuf);
+      os << "derived_key: ";
+      for (uint8_t i = 0; i < 24; i++) {
+        os << hex << (int) *(((uint8_t *)derived_key) + i);
+      }
+      LOG_DEBUG << sbuf.str();
+    }
+
     return derived_key;
   }
 
   MifareDESFireKey Key::deriveKey(const UID_t &uid, const AppID_t &aid) {
+    LOG_VERBOSE << "Key::deriveKey";
     return nullptr;
   }
 
@@ -133,6 +164,7 @@ namespace nfcdoorz::nfc {
   }
 
   MifareDESFireKey KeyDES::deriveKey(const UID_t &uid, const AppID_t &aid) {
+    LOG_VERBOSE << "KeyDES::deriveKey";
     if (!diversify) return nullptr;
     return Key::deriveKeyImpl(key_type, uid, aid);
   }
@@ -142,6 +174,7 @@ namespace nfcdoorz::nfc {
   }
 
   MifareDESFireKey Key3DES::deriveKey(const UID_t &uid, const AppID_t &aid) {
+    LOG_VERBOSE << "Key3DES::deriveKey";
     if (!diversify) return nullptr;
     return Key::deriveKeyImpl(key_type, uid, aid);
   }
@@ -151,6 +184,7 @@ namespace nfcdoorz::nfc {
   }
 
   MifareDESFireKey Key3k3DES::deriveKey(const UID_t &uid, const AppID_t &aid) {
+    LOG_VERBOSE << "Key3k3DES::deriveKey";
     if (!diversify) return nullptr;
     return Key::deriveKeyImpl(key_type, uid, aid);
   }
@@ -160,6 +194,7 @@ namespace nfcdoorz::nfc {
   }
 
   MifareDESFireKey KeyAES::deriveKey(const UID_t &uid, const AppID_t &aid) {
+    LOG_VERBOSE << "KeyAES::deriveKey";
     if (!diversify) return nullptr;
     return Key::deriveKeyImpl(key_type, uid, aid);
   }

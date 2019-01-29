@@ -7,6 +7,21 @@
 namespace nfcdoorz {
   using namespace std;
 
+  void printKey(MifareDESFireKey desfire_key) {
+    IF_LOG(plog::debug) {
+      stringbuf sbuf;
+      ostream os (&sbuf);
+      uint8_t *key = (uint8_t *)desfire_key;
+      os << "printKey: ";
+      for (uint8_t i = 0; i < 24; i++) {
+        if (i)
+          os << ":";
+        os << hex << (int) * (key + i);
+      }
+      LOG_DEBUG << sbuf.str();
+    }
+  }
+
   bool Adapter::connect() {
     return tagInterface.connect();
   }
@@ -24,7 +39,7 @@ namespace nfcdoorz {
     return visit(overloaded {
       [this, &aid](monostate _arg) -> bool {
         return visit([this, &aid](auto &key) {
-          cout << "authenticatePICC config.picc.key" << endl;
+          LOG_VERBOSE << "authenticatePICC config.picc.key";
           return authenticateAppByID(
             aid,
             key
@@ -32,7 +47,7 @@ namespace nfcdoorz {
         }, config.picc.key);
       },
       [this, &aid](auto key) -> bool {
-        cout << "authenticatePICC _overriddenMasterKey" << endl;
+        LOG_VERBOSE << "authenticatePICC _overriddenMasterKey";
         return authenticateAppByID(
           aid,
           key
@@ -42,12 +57,15 @@ namespace nfcdoorz {
   }
 
   bool Adapter::authenticateAppByID(AppID_t &aid, nfc::Key &key) {
+    LOG_VERBOSE << "authenticateAppByID: " << hex << (int)aid[0] << ":" << (int)aid[1] << ":" << (int)aid[2];
     MifareDESFireAID api_aid = mifare_desfire_aid_new(aid[0] | (aid[1] << 8) | (aid[2] << 16));
     if (!tagInterface.select_application(api_aid)) return false;
     _aid = aid;
+    LOG_VERBOSE << "authenticateAppByID diversify: " << key.diversify;
     CLEAN_KEY MifareDESFireKey api_key = key.diversify
       ? key.deriveKey(_uid, aid)
       : key;
+    printKey(api_key);
     return tagInterface.authenticate(0, api_key);
   }
 
@@ -82,6 +100,7 @@ namespace nfcdoorz {
       ? old_key.deriveKey(_uid, _aid)
       : old_key;
 
+    printKey(api_new_key);
     return tagInterface.change_key(key_id, api_new_key, api_old_key);
   }
 
@@ -113,10 +132,12 @@ namespace nfcdoorz {
 
   bool Adapter::getUIDFromCard() {
     char *uid = tagInterface.get_uid();
+    LOG_VERBOSE << "Adapter::getUIDFromCard: " << uid;
     return setUID(uid);
   }
 
   UID_t Adapter::getUID() {
+    LOG_VERBOSE << "Adapter::getUID";
     if (all_of(_uid.begin(), _uid.end(), [](uint8_t c){ return c == 0; })) {
       getUIDFromCard();
     }

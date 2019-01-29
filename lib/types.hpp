@@ -7,6 +7,7 @@
 #include <functional>
 
 #include <yaml-cpp/yaml.h>
+#include <plog/Log.h>
 
 #include <freefare.h>
 

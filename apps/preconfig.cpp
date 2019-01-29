@@ -11,7 +11,9 @@
 #include <yaml-cpp/yaml.h>
 #include <nfc/nfc.h>
 #include <freefare.h>
+#include <plog/Appenders/ColorConsoleAppender.h>
 
+#include "lib/types.hpp"
 #include "lib/config.hpp"
 #include "lib/signals.h"
 #include "lib/nfc.hpp"
@@ -24,7 +26,7 @@ static const char USAGE[] =
   R"(NFC-Doorz card pre-configuration
 
       Usage:
-        preconfig [options] <reader>
+        preconfig [-v | -vv | -vvv] [options] <reader>
         preconfig (-h | --help)
         preconfig --version
 
@@ -45,6 +47,8 @@ static const char USAGE[] =
         <reader>                Configure card presented to this reader
   )";
 
+static plog::ColorConsoleAppender<plog::TxtFormatter> consoleAppender;
+
 uint8_t salt[SALT_SIZE] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
 #define CHECK_BOOL(call, err_str) if (!call) { errx(9, err_str); }
@@ -61,6 +65,21 @@ int main(int argc, char *argv[]) {
     true,
     "NFC-Doorz preconfig v0.0.1"
   );
+
+  plog::Severity severity = plog::info;
+  switch(args["--verbose"].asLong()) {
+    case 1:
+      severity = plog::info;
+      break;
+    case 2:
+      severity = plog::debug;
+      break;
+    case 3:
+      severity = plog::verbose;
+      break;
+  }
+
+  plog::init(severity, &consoleAppender);
 
   struct {
     optional<string> overridden_uid;
@@ -90,12 +109,8 @@ int main(int argc, char *argv[]) {
     args["--skip-app-creation"].asBool(),
   };
 
-  for (auto a: args) {
-    cout << "key: " << a.first << " value: " << a.second << endl;
-  }
-
   if (options.dry_run)
-    cout << "DRY RUN!" << endl;
+    LOG_WARNING << "DRY RUN!";
 
   if (options.overridden_uid) {
     string uid = *options.overridden_uid;
@@ -108,6 +123,7 @@ int main(int argc, char *argv[]) {
       errx(9, "overridden uid should be an even number of hex characters e.g. 01020304");
     if (!all_of(uid.begin(), uid.end(), [](unsigned char c){ return isxdigit(c); }))
       errx(9, "overridden uid should be hex characters e.g. a1B2c3D4");
+    LOG_WARNING << "Overridden UID: " << uid;
     options.overridden_uid = uid;
   }
 
@@ -122,6 +138,7 @@ int main(int argc, char *argv[]) {
       errx(9, "overridden picc key should be 32 hex characters e.g. 01020304");
     if (!all_of(picc_key.begin(), picc_key.end(), [](unsigned char c){ return isxdigit(c); }))
       errx(9, "overridden picc key should be 32 hex characters e.g. a1B2c3D4");
+    LOG_WARNING << "Overridden PICC Key: " << picc_key;
     options.overridden_picc_key = picc_key;
   }
 
@@ -136,6 +153,7 @@ int main(int argc, char *argv[]) {
       errx(9, "delete app should be 6 hex characters e.g. 010203");
     if (!all_of(delete_apps.begin(), delete_apps.end(), [](unsigned char c){ return isxdigit(c); }))
       errx(9, "delete app should be 6 hex characters e.g. a1B2c3");
+    LOG_WARNING << "Delete apps: " << delete_apps;
     options.delete_apps = delete_apps;
   }
 
@@ -144,16 +162,16 @@ int main(int argc, char *argv[]) {
   try {
     config = config::Config::load(args["--config"].asString());
   } catch (YAML::Exception e) {
-    cout
+    LOG_ERROR
       << e.what() << endl
       << "Invalid config node found" << endl
-      << config::printDecodePath() << endl;
+      << config::printDecodePath();
     return 9;
   } catch (config::ValidationException e) {
-    cout
+    LOG_ERROR
       << e.what() << endl
       << "Invalid config node found" << endl
-      << config::printDecodePath() << endl;
+      << config::printDecodePath();
     return 9;
   }
 
@@ -190,16 +208,14 @@ int main(int argc, char *argv[]) {
   }
 
 
-  cout << "Fetched tags" << endl;
-  // DESFireCard card;
-  cout << "iterating" << endl;
+  LOG_INFO << "Fetched tags";
   for (auto &tag: tags) {
     if (MIFARE_DESFIRE != tag.getTagType()) {
-      cout << "tag not MIFARE_DESFIRE" << endl;
+      LOG_WARNING << "tag not MIFARE_DESFIRE";
       continue;
     }
     Adapter adapter(config, tag);
-    cout << "Found desfire tag" << endl;
+    LOG_INFO << "Found desfire tag";
 
     if (options.overridden_uid)
       adapter.setUID(*options.overridden_uid);
@@ -207,66 +223,68 @@ int main(int argc, char *argv[]) {
     if (options.overridden_picc_key)
       adapter.setOverriddenMasterKey(*options.overridden_picc_key);
 
-    cout << "Connecting to desfire" << endl;
+    LOG_VERBOSE << "Connecting to desfire";
     CHECK_BOOL(adapter.connect(), "Can't connect to Mifare DESFire target.");
 
     adapter.getUID();
 
-
     if (!options.skip_picc_rekey) {
       if (!options.overridden_picc_key) {
-        cout << "Authenticating with null des key" << endl;
+        LOG_INFO << "Authenticating with null des key";
         CHECK_BOOL(adapter.authenticatePICC(null_key_des), "Authentication on PICC failed");
-        cout << "Authenticated master application" << endl;
+        LOG_INFO << "Authenticated master application";
       } else {
         CHECK_BOOL(adapter.authenticatePICC(), "Authentication on PICC with overridden key failed");
       }
 
       if (!options.dry_run) {
-        cout << "Setting tag config" << endl;
+        LOG_INFO << "Setting tag config";
         CHECK_BOOL(adapter.tagInterface.set_configuration(false, true), "Failed to set card config");
       }
     }
 
 
-    cout << "Tag uid " << adapter.getUIDString() << endl;
-    // 62:07:0c:26:23:2b:a6:3e:91:8d:90:35:a3:d7:d0:32:
 
-    cout << "Authenticating with PICC master key";
+    LOG_INFO << "Tag uid " << adapter.getUIDString();
+
+    LOG_INFO << "Authenticating with PICC master key";
 
     {
       // DESFireAESKey key = config.picc.key;
       if (options.overridden_picc_key) {
-        cout << "Authenticating with existing key " << endl;
+        LOG_INFO << "Authenticating with existing key ";
         CHECK_BOOL(adapter.authenticatePICC(), "Failed to autenticate");
-        cout << "Authenticated" << endl;
+        LOG_INFO << "Authenticated";
       }
 
       if (!options.skip_picc_rekey) {
         if (!options.dry_run) {
-          cout << "Setting new master key" << endl;
+          LOG_INFO << "Setting new master key";
           visit([&adapter](auto &key){
             CHECK_BOOL(adapter.changeKey(0, key, null_key_des), "Failed to change master key");
-            cout << "Set new master key" << endl;
+            LOG_INFO << "Set new master key";
           }, config.picc.key);
         }
       }
 
-      cout << "Authenticating with master key" << endl;
+      LOG_INFO << "Authenticating with master key";
       visit([&adapter](auto &key){
         CHECK_BOOL(adapter.authenticatePICC(key), "Failed to auth with master key");
       }, config.picc.key);
     }
 
+    LOG_INFO << "Card contains applications:";
     auto apps = adapter.tagInterface.get_application_ids();
     for (auto it = apps.begin(); it != apps.end(); it++) {
-      // FIXME: actually print app ids
-      cout << "app" << endl;
+      LOG_INFO
+        << "  - "
+        << setfill('0') << setw(2) << hex
+        << (int) it->at(0) << ":" << (int) it->at(1) << ":" << (int) it->at(2);
     }
 
     if (!options.skip_app_rekey) {
       if (!options.dry_run) {
-        cout << "Setting default app key" << endl;
+        LOG_INFO << "Setting default app key";
         CHECK_BOOL(adapter.tagInterface.set_default_key(null_key_aes), "Failed to set default application key");
       }
     }
@@ -274,7 +292,7 @@ int main(int argc, char *argv[]) {
 
     if (options.delete_app_creation) {
       AppID_t aid = app.aid;
-      cout << "Deleting app" << endl;
+      LOG_INFO << "Deleting app";
       CHECK_BOOL(adapter.deleteApplication(aid), "Failed to delete application");
     }
 
@@ -284,18 +302,18 @@ int main(int argc, char *argv[]) {
       for (uint8_t i = 0; i < 6; i += 2) {
         aid[i / 2] = (char2int(c_str[i]) << 4) | char2int(c_str[i + 1]);
       }
-      cout << "Deleting app" << endl;
+      LOG_INFO << "Deleting app";
       CHECK_BOOL(adapter.deleteApplication(aid), "Failed to delete application");
     }
 
     if (!options.skip_app_creation) {
       AppID_t aid = app.aid;
-      cout << "Creating app" << endl;
+      LOG_INFO << "Creating app";
       CHECK_BOOL(adapter.createApplication(aid, app.settings.get_lib_value(), app.keys.size()), "Failed to create application");
     }
 
     if (options.skip_app_rekey) {
-      cout << "Authenticating with app key" << endl;
+      LOG_INFO << "Authenticating with app key";
       AppID_t aid = app.aid;
       visit([&adapter, &aid](auto &key){
         CHECK_BOOL(adapter.authenticateAppByID(aid, key), "Failed to authenticate app");
@@ -305,9 +323,9 @@ int main(int argc, char *argv[]) {
       CHECK_BOOL(adapter.authenticateAppByID(aid, null_key_aes), "Failed to authenticate app with default key");
       for (auto it = app.keys.rbegin(); it != app.keys.rend(); it++) {
         visit([&adapter, &aid, it](auto &key){
-          cout << "Key id: " << (int) key.id << endl;
-          cout << "Key name: " << key.name << endl;
-          cout << "Key diversify: " << key.diversify << endl;
+          LOG_INFO << "Key id: " << (int) key.id;
+          LOG_INFO << "Key name: " << key.name;
+          LOG_INFO << "Key diversify: " << key.diversify;
           CHECK_BOOL(adapter.changeKey(key.id, key, null_key_aes), "Failed to change key");
         }, *it);
       }
@@ -315,17 +333,12 @@ int main(int argc, char *argv[]) {
     }
 
     {
-
-      cout << "Reauthenticating with app master key" << endl;
+      LOG_INFO << "Reauthenticating with app master key";
       AppID_t aid = app.aid;
       visit([&adapter, &aid](auto &key){
         CHECK_BOOL(adapter.authenticateAppByID(aid, key), "Failed to authenticate app with master key");
       }, app.keys[0]);
-      // if (master_key.diversify) {
-      //   cout << "Diversifying " << endl;
-      //   CHECK_BOOL(key.diversify(app.aid, tag_uid, salt), "Diversify key failed");
-      // }
-      cout << "Authentication okay" << endl;
+      LOG_INFO << "Authentication okay";
     }
 
     // Create files

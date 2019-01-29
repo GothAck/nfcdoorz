@@ -13,7 +13,7 @@ TEST_ASSETS = $(foreach f,$(wildcard test/*.yaml),build/$(f))
 SYS_LIBS = nfc freefare yaml-cpp docopt crypto
 TEST_LIBS = dl
 
-INCDIRS = .
+INCDIRS = . ./external/plog/include
 LIBDIRS =
 
 OPTIMIZE = 2

@@ -37,10 +37,6 @@ bool DESFireTagInterface::connect() {
 bool DESFireTagInterface::authenticate(uint8_t key_id, MifareDESFireKey key) {
   if (!_connected)
     return false;
-  cout
-    << "Authenticate!" << endl
-    << "key_id: " << (int) key_id << endl
-    << "key: " << hex << key << endl;
   if (mifare_desfire_authenticate(_tag, key_id, key) < 0)
     return false;
   return true;
