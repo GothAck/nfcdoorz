@@ -130,7 +130,35 @@ bool DESFireTagInterface::create_std_data_file(uint8_t file_no, uint8_t communic
   if (mifare_desfire_create_std_data_file(_tag, file_no, communication_settings, access_rights, file_size) < 0)
     return false;
   return true;
+}
 
+bool DESFireTagInterface::create_backup_data_file(uint8_t file_no, uint8_t communication_settings, uint16_t access_rights, uint32_t file_size) {
+  if (!_connected)
+    return false;
+  if (mifare_desfire_create_backup_data_file(_tag, file_no, communication_settings, access_rights, file_size) < 0)
+    return false;
+  return true;
+}
+bool DESFireTagInterface::create_value_file(uint8_t file_no, uint8_t communication_settings, uint16_t access_rights, int32_t lower_limit, int32_t upper_limit, int32_t value, uint8_t limited_credit_enable) {
+  if (!_connected)
+    return false;
+  if (mifare_desfire_create_value_file(_tag, file_no, communication_settings, access_rights, lower_limit, upper_limit, value, limited_credit_enable) < 0)
+    return false;
+  return true;
+}
+bool DESFireTagInterface::create_linear_record_file(uint8_t file_no, uint8_t communication_settings, uint16_t access_rights, uint32_t record_size, uint32_t max_number_of_records) {
+  if (!_connected)
+    return false;
+  if (mifare_desfire_create_linear_record_file(_tag, file_no, communication_settings, access_rights, record_size, max_number_of_records) < 0)
+    return false;
+  return true;
+}
+bool DESFireTagInterface::create_cyclic_record_file(uint8_t file_no, uint8_t communication_settings, uint16_t access_rights, uint32_t record_size, uint32_t max_number_of_records) {
+  if (!_connected)
+    return false;
+  if (mifare_desfire_create_cyclic_record_file(_tag, file_no, communication_settings, access_rights, record_size, max_number_of_records) < 0)
+    return false;
+  return true;
 }
 
 bool DESFireTagInterface::disconnect() {

@@ -115,6 +115,13 @@ namespace nfcdoorz {
     return tagInterface.create_application_aes(api_aid, settings, numKeys);
   }
 
+  bool Adapter::createFile(config::FileType_t &file_config) {
+    LOG_VERBOSE << "Adapter::createFile";
+    return visit([this](auto &file){
+      return file.create(tagInterface);
+    }, file_config);
+  }
+
   bool Adapter::setUID(UID_t uid) {
     _uid = uid;
     return true;

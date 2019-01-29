@@ -348,7 +348,7 @@ int main(int argc, char *argv[]) {
         visit([](auto &file){
           cout << file << endl;
         }, config_file);
-        // visit([&card, &config_file](auto &config){config.create(card, config_file);}, config_file.config);
+        CHECK_BOOL(adapter.createFile(config_file), "Failed to create file");
       }
     }
 

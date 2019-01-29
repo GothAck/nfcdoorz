@@ -48,13 +48,41 @@ namespace nfcdoorz::config {
     }
   }
 
-  bool FileStdData::create(nfc::DESFireTagInterface &card, FileStdData &file) {
-    return card.create_std_data_file(file.id, static_cast<uint8_t>(file.communication_settings), file.access_rights.get_lib_value(), file.size);
+  bool FileStdData::create(nfc::DESFireTagInterface &card) {
+    LOG_VERBOSE
+      << "FileStdData::create:" << endl
+      << "  id: " << (int) id
+      << "  name: " << name;
+    return card.create_std_data_file(id, static_cast<uint8_t>(communication_settings), access_rights.get_lib_value(), size);
   }
-  bool FileBackupData::create(nfc::DESFireTagInterface &card, FileBackupData &file) { return true; }
-  bool FileLinearRecord::create(nfc::DESFireTagInterface &card, FileLinearRecord &file) { return true; }
-  bool FileCyclicRecord::create(nfc::DESFireTagInterface &card, FileCyclicRecord &file) { return true; }
-  bool FileValue::create(nfc::DESFireTagInterface &card, FileValue &file) { return true; }
+  bool FileBackupData::create(nfc::DESFireTagInterface &card) {
+    LOG_VERBOSE
+      << "FileStdData::create:" << endl
+      << "  id: " << (int) id
+      << "  name: " << name;
+    return card.create_std_data_file(id, static_cast<uint8_t>(communication_settings), access_rights.get_lib_value(), size);
+  }
+  bool FileLinearRecord::create(nfc::DESFireTagInterface &card) {
+    LOG_VERBOSE
+      << "FileStdData::create:" << endl
+      << "  id: " << (int) id
+      << "  name: " << name;
+    return card.create_linear_record_file(id, static_cast<uint8_t>(communication_settings), access_rights.get_lib_value(), record_size, max_number_of_records);
+  }
+  bool FileCyclicRecord::create(nfc::DESFireTagInterface &card) {
+    LOG_VERBOSE
+      << "FileStdData::create:" << endl
+      << "  id: " << (int) id
+      << "  name: " << name;
+    return card.create_cyclic_record_file(id, static_cast<uint8_t>(communication_settings), access_rights.get_lib_value(), record_size, max_number_of_records);
+  }
+  bool FileValue::create(nfc::DESFireTagInterface &card) {
+    LOG_VERBOSE
+      << "FileStdData::create:" << endl
+      << "  id: " << (int) id
+      << "  name: " << name;
+    return card.create_value_file(id, static_cast<uint8_t>(communication_settings), access_rights.get_lib_value(), lower_limit, upper_limit, value, limited_credit_enable);
+  }
 
   App::operator MifareDESFireAID() {
     return mifare_desfire_aid_new(aid[0] | (aid[1] << 8) | (aid[2] << 16));

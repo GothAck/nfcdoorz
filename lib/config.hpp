@@ -246,7 +246,7 @@ struct FileStdData : File {
     CONVERT_NODE(size, int);
   }
 
-  bool create(nfcdoorz::nfc::DESFireTagInterface &card, FileStdData &file);
+  bool create(nfc::DESFireTagInterface &card);
 };
 
 struct FileValue : File {
@@ -254,17 +254,17 @@ struct FileValue : File {
   uint32_t lower_limit;
   uint32_t upper_limit;
   uint32_t value;
-  uint32_t limited_credit_enable;
+  uint8_t limited_credit_enable;
 
   void decode(const YAML::Node &node) {
     File::decode(node);
     CONVERT_NODE(lower_limit);
     CONVERT_NODE(upper_limit);
     CONVERT_NODE(value);
-    CONVERT_NODE(limited_credit_enable);
+    CONVERT_NODE(limited_credit_enable, uint16_t);
   }
 
-  bool create(nfcdoorz::nfc::DESFireTagInterface &card, FileValue &file);
+  bool create(nfc::DESFireTagInterface &card);
 };
 
 struct FileLinearRecord : File {
@@ -278,7 +278,7 @@ struct FileLinearRecord : File {
     CONVERT_NODE(max_number_of_records, int);
   }
 
-  bool create(nfcdoorz::nfc::DESFireTagInterface &card, FileLinearRecord &file);
+  bool create(nfc::DESFireTagInterface &card);
 };
 
 struct FileCyclicRecord : File {
@@ -291,7 +291,7 @@ struct FileCyclicRecord : File {
     CONVERT_NODE(record_size, int);
     CONVERT_NODE(max_number_of_records, int);
   }
-  bool create(nfcdoorz::nfc::DESFireTagInterface &card, FileCyclicRecord &file);
+  bool create(nfc::DESFireTagInterface &card);
 };
 
 struct FileBackupData : File {
@@ -302,7 +302,7 @@ struct FileBackupData : File {
     File::decode(node);
     CONVERT_NODE(size, int);
   }
-  bool create(nfcdoorz::nfc::DESFireTagInterface &card, FileBackupData &file);
+  bool create(nfc::DESFireTagInterface &card);
 };
 
 typedef std::variant<

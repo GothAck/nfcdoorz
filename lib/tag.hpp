@@ -40,10 +40,10 @@ namespace nfcdoorz::nfc {
     bool select_application(MifareDESFireAID aid);
 
     bool create_std_data_file(uint8_t file_no, uint8_t communication_settings, uint16_t access_rights, uint32_t file_size);
-    // bool create_backup_data_file(uint8_t file_no, uint8_t communication_settings, uint16_t access_rights, uint32_t file_size);
-    // bool create_value_file(uint8_t file_no, uint8_t communication_settings, uint16_t access_rights, int32_t lower_limit, int32_t upper_limit, int32_t value, uint8_t limited_credit_enable);
-    // bool create_linear_record_file(uint8_t file_no, uint8_t communication_settings, uint16_t access_rights, uint32_t record_size, uint32_t max_number_of_records);
-    // bool create_cyclic_record_file(uint8_t file_no, uint8_t communication_settings, uint16_t access_rights, uint32_t record_size, uint32_t max_number_of_records);
+    bool create_backup_data_file(uint8_t file_no, uint8_t communication_settings, uint16_t access_rights, uint32_t file_size);
+    bool create_value_file(uint8_t file_no, uint8_t communication_settings, uint16_t access_rights, int32_t lower_limit, int32_t upper_limit, int32_t value, uint8_t limited_credit_enable);
+    bool create_linear_record_file(uint8_t file_no, uint8_t communication_settings, uint16_t access_rights, uint32_t record_size, uint32_t max_number_of_records);
+    bool create_cyclic_record_file(uint8_t file_no, uint8_t communication_settings, uint16_t access_rights, uint32_t record_size, uint32_t max_number_of_records);
   private:
     bool _connected = false;
     FreefareTag _tag = nullptr;

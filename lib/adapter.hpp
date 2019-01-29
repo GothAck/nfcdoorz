@@ -39,6 +39,8 @@ namespace nfcdoorz {
     bool deleteApplication(AppID_t aid);
     bool createApplication(AppID_t aid, uint8_t settings, uint8_t numKeys);
 
+    bool createFile(config::FileType_t &file_config);
+
     bool setUID(UID_t uid);
     bool setUID(std::string uid);
     bool getUIDFromCard();
