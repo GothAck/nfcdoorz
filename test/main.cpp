@@ -41,8 +41,9 @@ STUB_FUNC_DYNAMIC(
   const char *name)
 
 vector<vector<void *>> &get_or_add_calls(string &key) {
-  if (!calls.count(key))
+  if (!calls.count(key)) {
     calls[key] = vector<vector<void *>>();
+  }
   return calls[key];
 }
 
@@ -57,8 +58,9 @@ void mock_was_called(const char *name, size_t num_args, ...) {
   int count = 0;
   vector<vector<void *>> &fn_calls = get_or_add_calls(key);
 
-  if (call_count.count(key))
+  if (call_count.count(key)) {
     count = call_count[key];
+  }
 
   va_list ap;
   va_start(ap, num_args);

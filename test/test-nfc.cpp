@@ -172,15 +172,20 @@ TEST_CASE("KeyDES constuctable") {
   REQUIRE( key1.size == 8 );
   REQUIRE( key1.data.size() == 8 );
 
-  REQUIRE( all_of(key1.data.begin(), key1.data.end(), [](uint8_t c){ return c == 0; }) );
+  REQUIRE( all_of(key1.data.begin(), key1.data.end(), [](uint8_t c) {
+    return c == 0;
+  }) );
 
   nfc::KeyDES::KeyArray_t keyarr = {0, 1, 2, 3, 4, 5, 6, 7};
   nfc::KeyDES key2(keyarr);
 
-  for (uint8_t i = 0; i < 8; i++)
+  for (uint8_t i = 0; i < 8; i++) {
     REQUIRE( key2.data[i] == i );
+  }
 
-  REQUIRE_FALSE( all_of(key2.data.begin(), key2.data.end(), [](uint8_t c){ return c == 0; }) );
+  REQUIRE_FALSE( all_of(key2.data.begin(), key2.data.end(), [](uint8_t c) {
+    return c == 0;
+  }) );
 }
 
 TEST_CASE("KeyDES castable") {
@@ -231,7 +236,9 @@ TEST_CASE("KeyAES key deriver not called when key.diversify == false") {
 
   key.diversify = false;
 
-  REQUIRE( all_of(key.data.begin(), key.data.end(), [](uint8_t c){ return c == 0; }) );
+  REQUIRE( all_of(key.data.begin(), key.data.end(), [](uint8_t c) {
+    return c == 0;
+  }) );
 
   MifareDESFireKey retkey = key.deriveKey(tag);
   REQUIRE_FALSE( call_count.count("mifare_key_deriver_begin") );
@@ -272,7 +279,9 @@ TEST_CASE("KeyAES key deriver called when diversify == true") {
 
   key.diversify = true;
 
-  REQUIRE( all_of(key.data.begin(), key.data.end(), [](uint8_t c){ return c == 0; }) );
+  REQUIRE( all_of(key.data.begin(), key.data.end(), [](uint8_t c) {
+    return c == 0;
+  }) );
 
   MifareDESFireKey retkey = key.deriveKey(tag);
   REQUIRE( call_count.count("mifare_key_deriver_begin") );

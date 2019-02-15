@@ -14,15 +14,15 @@ TEST_CASE("Config load from valid file") {
 
   REQUIRE_NOTHROW(
     config = config::Config::load(
-      "./config-good.yaml"
-    )
+        "./config-good.yaml"
+      )
   );
 }
 
 TEST_CASE("Stringify config") {
   config::Config config = config::Config::load(
-    "./config-good.yaml"
-  );
+      "./config-good.yaml"
+    );
 
   stringstream sb("");
   sb << config << endl;
@@ -34,13 +34,13 @@ TEST_CASE("Parse basic config") {
   config::Config config;
   REQUIRE_NOTHROW(
     config = config::Config::parse(
-      "picc:\n"
-      "  key:\n"
-      "    data: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]\n"
-      "    type: aes\n"
-      "    diversify: True\n"
-      "apps: []\n"
-    )
+        "picc:\n"
+        "  key:\n"
+        "    data: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]\n"
+        "    type: aes\n"
+        "    diversify: True\n"
+        "apps: []\n"
+      )
   );
 
   REQUIRE(holds_alternative<config::KeyAES>(config.picc.key));
@@ -48,16 +48,16 @@ TEST_CASE("Parse basic config") {
 
 TEST_CASE("Key is iterable") {
   config::Config config = config::Config::parse(
-    "picc:\n"
-    "  key:\n"
-    "    data: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]\n"
-    "    type: aes\n"
-    "    diversify: True\n"
-    "apps: []\n"
-  );
+      "picc:\n"
+      "  key:\n"
+      "    data: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]\n"
+      "    type: aes\n"
+      "    diversify: True\n"
+      "apps: []\n"
+    );
 
   stringstream sb("");
-  visit([&sb](auto &key){
+  visit([&sb](auto &key) {
     for (auto &c: key.data) {
       sb << hex << c << endl;
     }
@@ -74,9 +74,10 @@ TEST_CASE("Config bad picc key") {
 
   try {
     config = config::Config::load(
-      "./config-bad-picc-key.yaml"
-    );
-  } catch (config::ValidationException e) {
+        "./config-bad-picc-key.yaml"
+      );
+  }
+  catch (config::ValidationException e) {
     thrown = true;
   }
 
@@ -84,9 +85,9 @@ TEST_CASE("Config bad picc key") {
 
   REQUIRE(
     config::decodePath ==
-    vector<string> {
-      "config", "picc", "key", "aes", "data"
-    }
+  vector<string> {
+    "config", "picc", "key", "aes", "data"
+  }
   );
 }
 
@@ -96,9 +97,10 @@ TEST_CASE("Config bad app - disparate app key types") {
 
   try {
     config = config::Config::load(
-      "./config-bad-disparate-app-keys.yaml"
-    );
-  } catch (config::ValidationException e) {
+        "./config-bad-disparate-app-keys.yaml"
+      );
+  }
+  catch (config::ValidationException e) {
     thrown = true;
   }
 
@@ -106,8 +108,8 @@ TEST_CASE("Config bad app - disparate app key types") {
 
   REQUIRE(
     config::decodePath ==
-    vector<string> {
-      "config", "apps", "app"
-    }
+  vector<string> {
+    "config", "apps", "app"
+  }
   );
 }

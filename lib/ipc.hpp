@@ -36,13 +36,14 @@ namespace nfcdoorz::ipc {
   using PipePtr = std::shared_ptr<uvw::PipeHandle>;
 
   class IpcBase {
-  public:
-    IpcBase():
+public:
+    IpcBase() :
       loop(uvw::Loop::getDefault()),
       pipe(loop->resource<uvw::PipeHandle>(true)),
       idle(loop->resource<uvw::IdleHandle>()),
       nextId(0)
-      {}
+    {
+    }
     void open(int fd);
     void run();
 
@@ -61,7 +62,7 @@ namespace nfcdoorz::ipc {
     std::shared_ptr<uvw::IdleHandle> idle;
     PipePtr pipe;
     uint64_t nextId;
-  protected:
+protected:
     std::list<std::shared_ptr<Executable>> idle_calls;
   };
 

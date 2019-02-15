@@ -20,7 +20,9 @@ namespace nfcdoorz::config {
   const string printDecodePath() {
     stringstream sb("");
     for (size_t i = 0; i < decodePath.size(); i++) {
-      if (i) sb << " > ";
+      if (i) {
+        sb << " > ";
+      }
       sb << decodePath[i];
     }
     return sb.str();
@@ -93,7 +95,7 @@ namespace nfcdoorz::config {
     return mifare_desfire_aid_new(aid[0] | (aid[1] << 8) | (aid[2] << 16));
   }
 
-  ostream &operator <<(ostream &os, KeyDES &m) {
+  ostream&operator <<(ostream &os, KeyDES &m) {
     os
       << "id: " << (int) m.id << endl;
     os
@@ -110,7 +112,7 @@ namespace nfcdoorz::config {
     os << dec << endl;
     return os;
   }
-  ostream &operator <<(ostream &os, Key3DES &m) {
+  ostream&operator <<(ostream &os, Key3DES &m) {
     os
       << "type: " << m.type << endl
       << "size: " << (int) m.size << endl
@@ -125,7 +127,7 @@ namespace nfcdoorz::config {
     os << dec << endl;
     return os;
   }
-  ostream &operator <<(ostream &os, Key3k3DES &m) {
+  ostream&operator <<(ostream &os, Key3k3DES &m) {
     os
       << "type: " << m.type << endl
       << "size: " << (int) m.size << endl
@@ -140,7 +142,7 @@ namespace nfcdoorz::config {
     os << dec << endl;
     return os;
   }
-  ostream &operator <<(ostream &os, KeyAES &m) {
+  ostream&operator <<(ostream &os, KeyAES &m) {
     os
       << "type: " << m.type << endl
       << "size: " << (int) m.size << endl
@@ -155,16 +157,18 @@ namespace nfcdoorz::config {
     os << dec << endl;
     return os;
   }
-  ostream &operator <<(ostream &os, PICC &m) {
+  ostream&operator <<(ostream &os, PICC &m) {
     os
       << "key:" << endl;
     out.indent(2);
 
-    visit([&os](auto &c){ os << c; }, m.key);
+    visit([&os](auto &c) {
+      os << c;
+    }, m.key);
     out.indent(-2);
     return os;
   }
-  ostream &operator <<(ostream &os, AppSettings &m) {
+  ostream&operator <<(ostream &os, AppSettings &m) {
     return os
       << "accesskey: " << m.accesskey << endl
       << "frozen: " << m.frozen << endl
@@ -172,19 +176,19 @@ namespace nfcdoorz::config {
       << "req_auth_dir: " << m.req_auth_dir << endl
       << "allow_master_key_chg: " << m.allow_master_key_chg << endl;
   }
-  ostream &operator <<(ostream &os, AccessRights &m) {
+  ostream&operator <<(ostream &os, AccessRights &m) {
     return os
       << "read: " << m.read << endl
       << "write: " << m.write << endl
       << "read_write: " << m.read_write << endl
       << "change_access_rights: " << m.change_access_rights << endl;
     // return os
-    //   << "picc_master_key_changeable: " << m.picc_master_key_changeable << endl
-    //   << "free_listing_apps_and_key_settings: " << m.free_listing_apps_and_key_settings << endl
-    //   << "free_create_delete_application: " << m.free_create_delete_application << endl
-    //   << "picc_master_key_settings_changeable" << m.picc_master_key_settings_changeable << endl;
+    // << "picc_master_key_changeable: " << m.picc_master_key_changeable << endl
+    // << "free_listing_apps_and_key_settings: " << m.free_listing_apps_and_key_settings << endl
+    // << "free_create_delete_application: " << m.free_create_delete_application << endl
+    // << "picc_master_key_settings_changeable" << m.picc_master_key_settings_changeable << endl;
   }
-  ostream &operator <<(ostream &os, File &m) {
+  ostream&operator <<(ostream &os, File &m) {
     out.indent(2);
     os
       << "id: " << (int) m.id << endl
@@ -192,29 +196,29 @@ namespace nfcdoorz::config {
     out.indent(-2);
     return os;
   }
-  ostream &operator <<(ostream &os, FileStdData &m) {
+  ostream&operator <<(ostream &os, FileStdData &m) {
     return os
       << "type: " << m.type << endl
       << "size: " << (int) m.size << endl;
   }
-  ostream &operator <<(ostream &os, FileBackupData &m) {
+  ostream&operator <<(ostream &os, FileBackupData &m) {
     return os
       << "type: " << m.type << endl
       << "size: " << (int) m.size << endl;
   }
-  ostream &operator <<(ostream &os, FileLinearRecord &m) {
+  ostream&operator <<(ostream &os, FileLinearRecord &m) {
     return os
       << "type: " << m.type << endl
       << "record_size: " << m.record_size << endl
       << "max_number_of_records: " << m.max_number_of_records << endl;
   }
-  ostream &operator <<(ostream &os, FileCyclicRecord &m) {
+  ostream&operator <<(ostream &os, FileCyclicRecord &m) {
     return os
       << "type: " << m.type << endl
       << "record_size: " << m.record_size << endl
       << "max_number_of_records: " << m.max_number_of_records << endl;
   }
-  ostream &operator <<(ostream &os, FileValue &m) {
+  ostream&operator <<(ostream &os, FileValue &m) {
     return os
       << "type: " << m.type << endl
       << "lower_limit: " << m.lower_limit << endl
@@ -222,23 +226,27 @@ namespace nfcdoorz::config {
       << "value: " << m.value << endl
       << "limited_credit_enable: " << m.limited_credit_enable << endl;
   }
-  ostream &operator <<(ostream &os, App &m) {
+  ostream&operator <<(ostream &os, App &m) {
     os
       << "App" << endl;
-      out.indent(2);
+    out.indent(2);
     os
       << "files:" << endl;
     out.indent(2);
-    for(auto &f: m.files) visit([&os](auto &c){ os << c; }, f);
+    for (auto &f: m.files) visit([&os](auto &c) {
+        os << c;
+      }, f);
     out.indent(-2);
     os
       << "keys:" << endl;
     out.indent(2);
-    for(auto &f: m.keys) visit([&os](auto &c){ os << c; }, f);
+    for (auto &f: m.keys) visit([&os](auto &c) {
+        os << c;
+      }, f);
     out.indent(-4);
     return os;
   }
-  ostream &operator <<(ostream &os, Config &m) {
+  ostream&operator <<(ostream &os, Config &m) {
     out.indent(0)
       << "Config" << endl;
     out.indent(2)
@@ -247,8 +255,10 @@ namespace nfcdoorz::config {
       << m.picc;
     out.indent(-2)
       << "apps:" << endl;
-      out.indent(2);
-    for (auto &app: m.apps) out << app;
+    out.indent(2);
+    for (auto &app: m.apps) {
+      out << app;
+    }
     return os;
   }
 }

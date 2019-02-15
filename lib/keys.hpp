@@ -12,7 +12,8 @@ class KeyError {};
 
 class KeyHolder {
 public:
-  KeyHolder(MifareDESFireKey key): held_key(key), used(false) {}
+  KeyHolder(MifareDESFireKey key) : held_key(key), used(false) {
+  }
   ~KeyHolder();
   operator MifareDESFireKey();
 private:
@@ -22,22 +23,22 @@ private:
 
 // class DESFireKey {
 // protected:
-//   DESFireKey() {};
+// DESFireKey() {};
 // };
 
 // class DESFireAESKey : public DESFireKey {
-//   uint8_t _keydata[16];
-//   uint8_t _version;
-//   MifareDESFireKey key;
+// uint8_t _keydata[16];
+// uint8_t _version;
+// MifareDESFireKey key;
 // public:
 //
-//   DESFireAESKey(std::array<uint8_t, 16> keydata, uint8_t version = 0x0);
-//   ~DESFireAESKey();
+// DESFireAESKey(std::array<uint8_t, 16> keydata, uint8_t version = 0x0);
+// ~DESFireAESKey();
 //
-//   operator MifareDESFireKey();
-//   uint8_t operator[](int);
+// operator MifareDESFireKey();
+// uint8_t operator[](int);
 //
-//   bool diversify(std::array<uint8_t, AID_SIZE>, char *uid, uint8_t salt[SALT_SIZE]);
+// bool diversify(std::array<uint8_t, AID_SIZE>, char *uid, uint8_t salt[SALT_SIZE]);
 //
 // };
 

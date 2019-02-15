@@ -12,9 +12,13 @@
 
 void set_raw(int fd) {
   struct termios orig_termios;
-  if (tcgetattr(fd, &orig_termios) < 0) LOG_ERROR << "Failed to get termios";
+  if (tcgetattr(fd, &orig_termios) < 0) {
+    LOG_ERROR << "Failed to get termios";
+  }
   cfmakeraw(&orig_termios);
-  if (tcsetattr(fd, TCSANOW, &orig_termios) < 0) LOG_ERROR << "Failed to set termios";
+  if (tcsetattr(fd, TCSANOW, &orig_termios) < 0) {
+    LOG_ERROR << "Failed to set termios";
+  }
 }
 
 namespace nfcdoorz::apps::api {
@@ -24,7 +28,7 @@ namespace nfcdoorz::apps::api {
   using namespace nfcdoorz;
 
 
-  std::shared_ptr<Response> MyPageHandler::status(const Request& request) {
+  std::shared_ptr<Response> MyPageHandler::status(const Request &request) {
     auto res = client.getStatusCall().gen();
     auto reply = res.get();
 
@@ -43,20 +47,22 @@ namespace nfcdoorz::apps::api {
     return Response::jsonResponse(obj.dump());
   }
 
-  std::shared_ptr<Response> MyPageHandler::tty(const Request& request) {
+  std::shared_ptr<Response> MyPageHandler::tty(const Request &request) {
     // if (!request.hasHeader("DeviceID")) {
-    //   return Response::error(ResponseCode::Unauthorized, "Unauthorized");
+    // return Response::error(ResponseCode::Unauthorized, "Unauthorized");
     // }
     return Response::unhandled();
   }
 
-  std::shared_ptr<Response> MyPageHandler::handle(const Request& request) {
+  std::shared_ptr<Response> MyPageHandler::handle(const Request &request) {
     // if (request.verb() != Request::Verb::Get)
-    //   return Response::unhandled();
-    if (request.getRequestUri() == "/status")
+    // return Response::unhandled();
+    if (request.getRequestUri() == "/status") {
       return status(request);
-    if (request.getRequestUri() == "/tty")
+    }
+    if (request.getRequestUri() == "/tty") {
       return tty(request);
+    }
     return Response::unhandled();
   }
 
@@ -77,7 +83,7 @@ namespace nfcdoorz::apps::api {
     ours->start(uvw::Flags<uvw::PollHandle::Event>::from<
       uvw::PollHandle::Event::READABLE,
       uvw::PollHandle::Event::DISCONNECT
-    >());
+      >());
 
     fds[devID] = master;
     handles[devID] = ours;
@@ -104,13 +110,13 @@ namespace nfcdoorz::apps::api {
     client.registerEventHandler(
       ipc::api::APIEvents::AuthenticatorExitEvent,
       [this, devID](auto &event) -> bool {
-        auto exitEvent = event.AsAuthenticatorExitEvent();
-        if (exitEvent->deviceID == devID) {
-          closeOut(devID);
-          return true;
-        }
-        return false;
-      });
+      auto exitEvent = event.AsAuthenticatorExitEvent();
+      if (exitEvent->deviceID == devID) {
+        closeOut(devID);
+        return true;
+      }
+      return false;
+    });
 
     auto res = client.getCreateAuthenticatorCall(name, devID).gen();
     auto reply = res.get();
@@ -125,7 +131,7 @@ namespace nfcdoorz::apps::api {
   }
 
   void TtySockHandler::onData(WebSocket *socket, const uint8_t *data, size_t length) {
-    string devID = "yes"; //socket->getHeader("DeviceID");
+    string devID = "yes"; // socket->getHeader("DeviceID");
     auto fd = fds.at(devID);
     size_t i = 0;
     while (i < length) {
@@ -135,7 +141,7 @@ namespace nfcdoorz::apps::api {
 
   void TtySockHandler::onDisconnect(WebSocket *socket) {
     LOG_DEBUG << "Disconnect";
-    string devID = "yes"; //socket->getHeader("DeviceID");
+    string devID = "yes"; // socket->getHeader("DeviceID");
     closeOut(devID);
   }
 

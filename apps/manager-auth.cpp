@@ -54,14 +54,15 @@ int main(int argc, char *argv[]) {
     { argv + 1, argv + argc },
     true,
     "NFC-Doorz preconfig v0.0.1"
-  );
+    );
 
 
   logging::init(args);
 
   nfc::Context context;
-  if (!context.init())
+  if (!context.init()) {
     errx(EXIT_FAILURE, "Unable to init libnfc (malloc)");
+  }
 
   // auto matched_device = context.getDeviceMatching(args["<reader>"].asString());
 
@@ -85,7 +86,6 @@ int main(int argc, char *argv[]) {
     cout << "tcgetattr fail" << endl;
     return 99;
   }
-  #  define CCLAIMED 0x80000000
 
   if (termios_backup.c_iflag & CCLAIMED) {
     cout << "claimed" << endl;
@@ -99,15 +99,13 @@ int main(int argc, char *argv[]) {
   termios_new.c_oflag = 0;
   termios_new.c_lflag = 0;
 
-  termios_new.c_cc[VMIN] = 0;     // block until n bytes are received
-  termios_new.c_cc[VTIME] = 0;    // block until a timer expires (n * 100 mSec.)
+  termios_new.c_cc[VMIN] = 0; // block until n bytes are received
+  termios_new.c_cc[VTIME] = 0; // block until a timer expires (n * 100 mSec.)
 
   if (tcsetattr(fd, TCSANOW, &termios_new) == -1) {
     cout << "tcsetattr" << endl;
     return 99;
   }
-
-  cout << "Hmmm" << endl;
 
   close(fd);
   // return 1;

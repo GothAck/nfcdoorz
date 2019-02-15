@@ -23,9 +23,17 @@ namespace nfcdoorz::ipc {
       }
       LOG_DEBUG << "Accept " << pid;
 
-      socket->on<uvw::ErrorEvent>([](const uvw::ErrorEvent &e, uvw::PipeHandle &) { LOG_ERROR << "err: " << e.what(); });
-      socket->on<uvw::CloseEvent>([](const uvw::CloseEvent &, uvw::PipeHandle &pipe) { LOG_DEBUG << "disconnect"; pipe.close(); });
-      socket->on<uvw::EndEvent>([](const uvw::EndEvent &, uvw::PipeHandle &pipe) { LOG_DEBUG << "end"; pipe.close(); });
+      socket->on<uvw::ErrorEvent>([](const uvw::ErrorEvent &e, uvw::PipeHandle &) {
+        LOG_ERROR << "err: " << e.what();
+      });
+      socket->on<uvw::CloseEvent>([](const uvw::CloseEvent &, uvw::PipeHandle &pipe) {
+        LOG_DEBUG << "disconnect";
+        pipe.close();
+      });
+      socket->on<uvw::EndEvent>([](const uvw::EndEvent &, uvw::PipeHandle &pipe) {
+        LOG_DEBUG << "end";
+        pipe.close();
+      });
       socket->on<uvw::DataEvent>([this, pid](const uvw::DataEvent &ev, uvw::PipeHandle &sock) {
         handleCall(pid, ev, sock);
       });

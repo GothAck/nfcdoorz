@@ -4,7 +4,7 @@
 namespace nfcdoorz::manager::proc {
   using namespace std;
 
-  // optional<ProcManager> ProcManager::_singleton;
+// optional<ProcManager> ProcManager::_singleton;
   decltype(ProcManager::processes) ProcManager::processes;
 
   Proc::~Proc() {
@@ -17,13 +17,15 @@ namespace nfcdoorz::manager::proc {
   }
 
   void Proc::kill(int signum) {
-    if (_handle) _handle->get()->kill(signum);
+    if (_handle) {
+      _handle->get()->kill(signum);
+    }
   }
 
   vector<string> ProcManager::filterArgs(
     map<string, docopt::value> &args,
     const string &beginning
-  ) {
+    ) {
     vector<string> ret;
     const size_t len = beginning.length();
     for (auto &a: args) {
@@ -34,8 +36,9 @@ namespace nfcdoorz::manager::proc {
     int v = args["--verbose"].asLong();
     if (v) {
       string verbose = "-";
-      for (int i = 0; i < v; i++)
+      for (int i = 0; i < v; i++) {
         verbose += "v";
+      }
       ret.push_back(verbose);
     }
 
@@ -58,18 +61,21 @@ namespace nfcdoorz::manager::proc {
     // LOG_WARNING << "Process exited: " << _exec << " pid " << _pid;
     _running = false;
 
-    if(_procManager.unregisterPid) {
+    if (_procManager.unregisterPid) {
       auto fn = *_procManager.unregisterPid;
       fn(*this);
     }
-    if(_handle) _handle->get()->close();
+    if (_handle) {
+      _handle->get()->close();
+    }
     _handle = nullopt;
     bool to_remove = true;
     if (_restart) {
       if (++_failures < 5) {
         to_remove = false;
         run();
-      } else {
+      }
+      else {
         LOG_ERROR << "Process failed 5 times, refusing to restart";
       }
     }
@@ -94,7 +100,7 @@ namespace nfcdoorz::manager::proc {
     bool restart,
     optional<shared_ptr<uvw::PipeHandle>> pipe,
     bool disable_server_pipe
-  ) {
+    ) {
     string exec_full = _exec_path / exec;
     LOG_INFO << exec_full;
     auto proc = make_shared<Proc>(*this, name, exec_full, args, pipe, restart, disable_server_pipe);
@@ -108,7 +114,9 @@ namespace nfcdoorz::manager::proc {
   }
 
   bool Proc::run() {
-    if (_handle) return false;
+    if (_handle) {
+      return false;
+    }
     auto handle = _procManager.loop->resource<uvw::ProcessHandle>();
     _handle = handle;
     // int child_sock = -1;
@@ -123,21 +131,21 @@ namespace nfcdoorz::manager::proc {
         *shared_pipe,
         uvw::Flags<uvw::ProcessHandle::StdIO>::from<
           uvw::ProcessHandle::StdIO::INHERIT_FD
-        >()
-      );
+          >()
+        );
     }
     handle->stdio(
       1,
       uvw::Flags<uvw::ProcessHandle::StdIO>::from<
         uvw::ProcessHandle::StdIO::INHERIT_FD
-      >()
-    );
+        >()
+      );
     handle->stdio(
       2,
       uvw::Flags<uvw::ProcessHandle::StdIO>::from<
         uvw::ProcessHandle::StdIO::INHERIT_FD
-      >()
-    );
+        >()
+      );
 
     vector<string> args = _args;
     if (server_pipe) {
@@ -153,14 +161,15 @@ namespace nfcdoorz::manager::proc {
       exited();
     });
 
-    _procManager.idle->once<uvw::IdleEvent>([this, handle, args](uvw::IdleEvent &, uvw::IdleHandle &){
+    _procManager.idle->once<uvw::IdleEvent>([this, handle, args](uvw::IdleEvent &, uvw::IdleHandle &) {
       LOG_INFO << "Idle run";
       const char **args_char = new const char *[args.size() + 2];
       args_char[0] = _exec.c_str();
       args_char[args.size() + 1] = nullptr;
-      for (size_t i = 0; i < args.size(); i++)
+      for (size_t i = 0; i < args.size(); i++) {
         args_char[i + 1] = args.at(i).c_str();
-      handle->spawn(_exec.c_str(), (char **)args_char);
+      }
+      handle->spawn(_exec.c_str(), (char **) args_char);
       LOG_INFO << "PID: !!! " << handle->pid();
       if (_procManager.registerPid) {
         auto fn = *_procManager.registerPid;
@@ -175,7 +184,7 @@ namespace nfcdoorz::manager::proc {
     return _running;
   }
 
-  const string &Proc::getName() const {
+  const string&Proc::getName() const {
     return _name;
   }
 

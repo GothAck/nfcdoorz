@@ -56,7 +56,7 @@ int main(int argc, const char *argv[]) {
     { argv + 1, argv + argc },
     true,
     "NFC-Doorz Authentication Manager API v0.0.1"
-  );
+    );
   logging::init(args, plog::info);
 
   client.connect(args["--ipc-connect"].asString());

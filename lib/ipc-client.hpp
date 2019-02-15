@@ -33,19 +33,21 @@
 
 namespace nfcdoorz::ipc {
   class IpcClientBase : public virtual IpcBase {
-  public:
-    IpcClientBase():
+public:
+    IpcClientBase() :
       IpcBase(),
       async(loop->resource<uvw::AsyncHandle>())
-      {
-        async->init();
-      }
+    {
+      async->init();
+    }
     bool connect(std::string base64_socket_addr);
-    void setFd(int fd) { _fd = fd; }
+    void setFd(int fd) {
+      _fd = fd;
+    }
     void runThread();
 
 
-  protected:
+protected:
     uint64_t getNextID();
     virtual void onAsyncEvent(std::shared_ptr<uvw::PipeHandle>) = 0;
     virtual void onDataEvent(const uvw::DataEvent &ev, uvw::PipeHandle &sock) = 0;
@@ -57,7 +59,7 @@ namespace nfcdoorz::ipc {
 
   template<class APIServer>
   class IpcClient : public IpcClientBase, public virtual IpcBase {
-  public:
+public:
     using APICall = std::remove_pointer_t<decltype(std::declval<APIServer>().call())>;
     using APICallT = typename APICall::NativeTableType;
     using APICallsEnum = std::remove_pointer_t<decltype(std::declval<APICall>().msg_type())>;
@@ -66,15 +68,15 @@ namespace nfcdoorz::ipc {
     using APIEventsEnum = std::remove_pointer_t<decltype(std::declval<APIReply>().event_type())>;
     using APIReplyT = typename APIReply::NativeTableType;
     using APIEventsUnion = decltype(APIReplyT::event);
-    using EventCallback = std::function<bool(APIEventsUnion &)>;
+    using EventCallback = std::function<bool (APIEventsUnion &)>;
 
-    template <typename CallType, typename ReplyType>
+    template<typename CallType, typename ReplyType>
     struct Callable {
       friend class IpcClient;
       CallType *value;
       std::optional<std::shared_ptr<uvw::PipeHandle>> sendPipe;
 
-      Callable &set(std::function<void(CallType *)>cb) {
+      Callable &set(std::function<void (CallType *)> cb) {
         cb(value);
         return *this;
       }
@@ -103,8 +105,8 @@ namespace nfcdoorz::ipc {
 
         return prom.get_future();
       }
-    private:
-      Callable(uint64_t id, IpcClient &client): c(client) {
+private:
+      Callable(uint64_t id, IpcClient &client) : c(client) {
         t.msg.Set(CallType());
         call_enum = t.msg.type;
         value = reinterpret_cast<CallType *>(t.msg.value);
@@ -137,7 +139,7 @@ namespace nfcdoorz::ipc {
       event_callbacks[event_type].push_back(std::move(cb));
     }
 
-  protected:
+protected:
     std::mutex call_mutex;
     std::queue<std::pair<APICallT, std::optional<std::shared_ptr<uvw::PipeHandle>>>> calls_out_queue;
     std::map<uint64_t, std::promise<APIReplyT>> call_returns;
@@ -180,7 +182,7 @@ namespace nfcdoorz::ipc {
 
     void onDataEvent(const uvw::DataEvent &ev, uvw::PipeHandle &sock) override {
       LOG_DEBUG << "onDataEvent";
-      uint8_t *data = (uint8_t *)ev.data.get();
+      uint8_t *data = (uint8_t *) ev.data.get();
       flatbuffers::BufferRef<APIReply> buf(data, ev.length);
       if (!buf.Verify()) {
         LOG_ERROR << "verify failed";

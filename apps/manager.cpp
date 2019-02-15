@@ -55,7 +55,7 @@ int main(int argc, const char *argv[]) {
     { argv + 1, argv + argc },
     true,
     "NFC-Doorz Authentication Manager v0.0.1"
-  );
+    );
 
   procManager.setRegisterPid([](auto &proc) {
     LOG_DEBUG << "registerPid " << proc.getName() << " " << proc.getPid();
@@ -95,9 +95,9 @@ int main(int argc, const char *argv[]) {
 
     if (bind(
       server_sock,
-      (struct sockaddr *)&server_sock_addr,
+      (struct sockaddr *) &server_sock_addr,
       offsetof(struct sockaddr_un, sun_path)
-    ) == -1) {
+      ) == -1) {
       LOG_ERROR << "Failed to bind " << errno;
       return false;
     }
@@ -114,7 +114,7 @@ int main(int argc, const char *argv[]) {
       "manager-api",
       proc::ProcManager::filterArgs(args, "--api-"),
       true
-    )->run();
+      )->run();
   }
 
   if (0) {
@@ -123,72 +123,72 @@ int main(int argc, const char *argv[]) {
       "manager-auth",
       proc::ProcManager::filterArgs(args, "--api-"),
       true
-    )->run();
+      )->run();
   }
 
   ipc::server->registerServiceHandler<ipc::auth::Server>();
 
   ipc::server->registerServiceHandler<ipc::api::Server>()
-    ->registerHandler(
-      ipc::api::APICalls::StatusCall,
-      [](auto self, const ipc::api::APICallT &msg, auto reply, uvw::PipeHandle &) -> auto {
-        LOG_DEBUG << "handle StatusCall";
-        reply->msg.Set(ipc::api::StatusReplyT());
-        auto s = reply->msg.AsStatusReply();
-        uint32_t i = 0;
-        for (auto p : procManager.processes) {
-          auto proc = make_unique<ipc::api::ProcessT>();
-          proc->pid = p->getPid();
-          proc->name = p->getName();
-          proc->args = p->getArgs();
-          s->processes.push_back(move(proc));
-        }
-        return reply;
-      }
+  ->registerHandler(
+    ipc::api::APICalls::StatusCall,
+    [](auto self, const ipc::api::APICallT &msg, auto reply, uvw::PipeHandle &) -> auto {
+    LOG_DEBUG << "handle StatusCall";
+    reply->msg.Set(ipc::api::StatusReplyT());
+    auto s = reply->msg.AsStatusReply();
+    uint32_t i = 0;
+    for (auto p : procManager.processes) {
+      auto proc = make_unique<ipc::api::ProcessT>();
+      proc->pid = p->getPid();
+      proc->name = p->getName();
+      proc->args = p->getArgs();
+      s->processes.push_back(move(proc));
+    }
+    return reply;
+  }
     )
-    ->registerHandler(
-      ipc::api::APICalls::CreateAuthenticatorCall,
-      [&args](auto self, const ipc::api::APICallT &msg, auto reply, uvw::PipeHandle &pipe) -> auto {
-        using PromT = promise<unique_ptr<ipc::api::APIReplyT>>;
+  ->registerHandler(
+    ipc::api::APICalls::CreateAuthenticatorCall,
+    [&args](auto self, const ipc::api::APICallT &msg, auto reply, uvw::PipeHandle &pipe) -> auto {
+    using PromT = promise<unique_ptr<ipc::api::APIReplyT>>;
 
-        LOG_DEBUG << "handle CreateAuthenticatorCall";
-        auto call = msg.msg.AsCreateAuthenticatorCall();
-        if (!call) {
-          LOG_ERROR << "Invalid call";
-          throw exception();
-        }
+    LOG_DEBUG << "handle CreateAuthenticatorCall";
+    auto call = msg.msg.AsCreateAuthenticatorCall();
+    if (!call) {
+      LOG_ERROR << "Invalid call";
+      throw exception();
+    }
 
-        PromT prom;
-        reply->msg.Set(ipc::api::CreateAuthenticatorReplyT());
-        auto s = reply->msg.AsCreateAuthenticatorReply();
+    PromT prom;
+    reply->msg.Set(ipc::api::CreateAuthenticatorReplyT());
+    auto s = reply->msg.AsCreateAuthenticatorReply();
 
-        vector<string> arg_vec = proc::ProcManager::filterArgs(args, "--auth-");
-        arg_vec.push_back(string("pn532_uart:") + call->ttyName);
+    vector<string> arg_vec = proc::ProcManager::filterArgs(args, "--auth-");
+    arg_vec.push_back(string("pn532_uart:") + call->ttyName);
 
-        auto proc = procManager.create(
-          ipc::auth::Server::GetFullyQualifiedName(),
-          "manager-auth",
-          arg_vec,
-          false
-        );
-        proc->setOnDestroy([self, deviceID = call->deviceID, &pipe](const proc::Proc &){
-          ipc::api::APIEventsUnion eventUnion;
-          eventUnion.Set(ipc::api::AuthenticatorExitEventT());
-          auto event = eventUnion.AsAuthenticatorExitEvent();
+    auto proc = procManager.create(
+      ipc::auth::Server::GetFullyQualifiedName(),
+      "manager-auth",
+      arg_vec,
+      false
+      );
+    proc->setOnDestroy([self, deviceID = call->deviceID, &pipe](const proc::Proc &) {
+      ipc::api::APIEventsUnion eventUnion;
+      eventUnion.Set(ipc::api::AuthenticatorExitEventT());
+      auto event = eventUnion.AsAuthenticatorExitEvent();
 
-          event->deviceID = deviceID;
+      event->deviceID = deviceID;
 
-          self->sendEvent(eventUnion, pipe);
-        });
-        proc->run();
+      self->sendEvent(eventUnion, pipe);
+    });
+    proc->run();
 
-        // if (pending) {
-          s->status = true;
-        // }
-        prom.set_value(move(reply));
+    // if (pending) {
+    s->status = true;
+    // }
+    prom.set_value(move(reply));
 
-        return prom.get_future();
-      }
+    return prom.get_future();
+  }
     );
 
   ipc::server->run();

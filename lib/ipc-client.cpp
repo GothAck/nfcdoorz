@@ -22,9 +22,9 @@ namespace nfcdoorz::ipc {
 
     if (::connect(
       child_sock,
-      (struct sockaddr *)&server_sock_addr,
+      (struct sockaddr *) &server_sock_addr,
       server_sock_addr_len
-    ) == -1) {
+      ) == -1) {
       LOG_ERROR << "Failed to connect to parent socket";
       close(child_sock);
       return false;
@@ -42,9 +42,15 @@ namespace nfcdoorz::ipc {
     _thread = thread([this]() {
       auto client = loop->resource<uvw::PipeHandle>(true);
 
-      client->on<uvw::ErrorEvent>([](const uvw::ErrorEvent &e, uvw::PipeHandle &) { LOG_ERROR << e.what(); });
-      client->on<uvw::CloseEvent>([](const uvw::CloseEvent &, uvw::PipeHandle &handle) { handle.close(); });
-      client->on<uvw::EndEvent>([](const uvw::EndEvent &, uvw::PipeHandle &sock) { sock.close(); });
+      client->on<uvw::ErrorEvent>([](const uvw::ErrorEvent &e, uvw::PipeHandle &) {
+        LOG_ERROR << e.what();
+      });
+      client->on<uvw::CloseEvent>([](const uvw::CloseEvent &, uvw::PipeHandle &handle) {
+        handle.close();
+      });
+      client->on<uvw::EndEvent>([](const uvw::EndEvent &, uvw::PipeHandle &sock) {
+        sock.close();
+      });
       client->on<uvw::DataEvent>([this](const uvw::DataEvent &ev, uvw::PipeHandle &sock) {
         onDataEvent(ev, sock);
       });
@@ -57,8 +63,8 @@ namespace nfcdoorz::ipc {
     });
   }
 
-  // template<class APIServer>
-  // template <typename CallType, typename ReplyType, typename ReturnTrait>
-  // APIRepliesEnum IpcClient::Callable::replyEnum = ReturnSubtypeToEnum<ReplyType>();
+// template<class APIServer>
+// template <typename CallType, typename ReplyType, typename ReturnTrait>
+// APIRepliesEnum IpcClient::Callable::replyEnum = ReturnSubtypeToEnum<ReplyType>();
 
 }

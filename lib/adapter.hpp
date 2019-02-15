@@ -10,17 +10,18 @@
 namespace nfcdoorz {
 
   class Adapter {
-  public:
+public:
     config::Config &config;
     nfc::DESFireTagInterface tagInterface;
     nfc::Tag &_tag;
-    Adapter(config::Config &_config, nfc::Tag &_tag):
+    Adapter(config::Config &_config, nfc::Tag &_tag) :
       config(_config),
       _tag(_tag),
       tagInterface(std::get<nfc::DESFireTagInterface>(_tag.getTagInterfaceByType())),
-      _aid({0, 0, 0}),
-      _uid({0, 0, 0, 0, 0, 0, 0}),
-      _app(nullptr) {}
+      _aid({ 0, 0, 0 }),
+      _uid({ 0, 0, 0, 0, 0, 0, 0 }),
+      _app(nullptr) {
+    }
 
     bool setOverriddenMasterKey(nfc::KeyVariant_t key);
     bool setOverriddenMasterKey(std::string key);
@@ -46,7 +47,7 @@ namespace nfcdoorz {
     bool getUIDFromCard();
     UID_t getUID();
     std::string getUIDString();
-  private:
+private:
     nfc::OptionalKeyVariant_t _overriddenMasterKey;
     UID_t _uid;
     AppID_t _aid;

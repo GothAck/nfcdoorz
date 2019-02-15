@@ -14,33 +14,35 @@
 namespace nfcdoorz::apps::api {
 
   class MyPageHandler : public seasocks::PageHandler {
-    std::shared_ptr<seasocks::Response> tty(const seasocks::Request& request);
+    std::shared_ptr<seasocks::Response> tty(const seasocks::Request &request);
     nfcdoorz::ipc::IpcClientAPI &client;
-  public:
-    MyPageHandler(nfcdoorz::ipc::IpcClientAPI &_client): client(_client) {};
-    virtual std::shared_ptr<seasocks::Response> handle(const seasocks::Request& request) override;
+public:
+    MyPageHandler(nfcdoorz::ipc::IpcClientAPI &_client) : client(_client) {
+    };
+    virtual std::shared_ptr<seasocks::Response> handle(const seasocks::Request &request) override;
 
-  private:
-    std::shared_ptr<seasocks::Response> status(const seasocks::Request& request);
+private:
+    std::shared_ptr<seasocks::Response> status(const seasocks::Request &request);
   };
 
   class TtySockHandler : public seasocks::WebSocket::Handler {
     nfcdoorz::ipc::IpcClientAPI &client;
-  public:
-    TtySockHandler(nfcdoorz::ipc::IpcClientAPI &_client, seasocks::Server &_server):
+public:
+    TtySockHandler(nfcdoorz::ipc::IpcClientAPI &_client, seasocks::Server &_server) :
       client(_client),
       server(_server)
-      {}
+    {
+    }
 
     struct Runnable : seasocks::Server::Runnable {
-      Runnable(seasocks::WebSocket *ws, char *data, size_t length):
+      Runnable(seasocks::WebSocket *ws, char *data, size_t length) :
         websocket(ws),
         len(length),
-        dataPtr((uint8_t *)malloc(length))
-        {
-          if (!dataPtr) throw std::exception();
-          memcpy(dataPtr, data, length);
-        }
+        dataPtr((uint8_t *) malloc(length))
+      {
+        if (!dataPtr) throw std::exception();
+        memcpy(dataPtr, data, length);
+      }
       ~Runnable() {
         free(dataPtr);
       }
@@ -58,7 +60,7 @@ namespace nfcdoorz::apps::api {
     void onData(seasocks::WebSocket *socket, const uint8_t *data, size_t length) override;
     void onDisconnect(seasocks::WebSocket *socket) override;
 
-  private:
+private:
     seasocks::Server &server;
     std::map<std::string, seasocks::WebSocket *> connections;
     std::map<std::string, int> fds;

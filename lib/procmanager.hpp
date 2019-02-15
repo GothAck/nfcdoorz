@@ -21,7 +21,7 @@ namespace nfcdoorz::manager::proc {
   class Proc;
   using base64 = cppcodec::base64_rfc4648;
 
-  using ProcessCallbackFn = std::function<void(const Proc &proc)>;
+  using ProcessCallbackFn = std::function<void (const Proc &proc)>;
 
   class ProcManager {
     friend class Proc;
@@ -31,13 +31,13 @@ namespace nfcdoorz::manager::proc {
     std::optional<ProcessCallbackFn> unregisterPid;
     std::filesystem::path _exec_path;
     std::optional<std::shared_ptr<uvw::PipeHandle>> _server_pipe;
-  public:
-    ProcManager():
+public:
+    ProcManager() :
       loop(uvw::Loop::getDefault()),
       idle(loop->resource<uvw::IdleHandle>())
-      {
-        idle->start();
-      }
+    {
+      idle->start();
+    }
 
     bool init(std::filesystem::path exec_path, std::shared_ptr<uvw::PipeHandle> server_pipe);
     void killall();
@@ -57,7 +57,7 @@ namespace nfcdoorz::manager::proc {
       bool restart = false,
       std::optional<std::shared_ptr<uvw::PipeHandle>> pipe = std::nullopt,
       bool disable_server_pipe = false
-    );
+      );
 
     // int server_sock;
     static std::vector<std::shared_ptr<Proc>> processes;
@@ -65,11 +65,11 @@ namespace nfcdoorz::manager::proc {
     static std::vector<std::string> filterArgs(
       std::map<std::string, docopt::value> &args,
       const std::string &beginning
-    );
+      );
   };
 
   class Proc {
-  public:
+public:
     friend class ProcManager;
     Proc(
       ProcManager &procManager,
@@ -79,7 +79,7 @@ namespace nfcdoorz::manager::proc {
       std::optional<std::shared_ptr<uvw::PipeHandle>> pipe,
       bool restart,
       bool disable_server_pipe
-    ):
+      ) :
       _procManager(procManager),
       _name(name),
       _running(false),
@@ -89,7 +89,8 @@ namespace nfcdoorz::manager::proc {
       _failures(0),
       _pipe(pipe),
       _disable_server_pipe(disable_server_pipe)
-      {}
+    {
+    }
     ~Proc();
     void setPreExec(std::function<bool()> cb);
     void kill(int signum);
@@ -103,7 +104,7 @@ namespace nfcdoorz::manager::proc {
     void setOnDestroy(ProcessCallbackFn fn) {
       _onDestroy = fn;
     }
-  private:
+private:
     void exited();
     ProcManager &_procManager;
     std::optional<std::shared_ptr<uvw::ProcessHandle>> _handle;

@@ -6,18 +6,24 @@ namespace nfcdoorz::nfc {
   using namespace std;
 
   Context::~Context() {
-    if (_context) nfc_exit(_context);
+    if (_context) {
+      nfc_exit(_context);
+    }
   }
 
   bool Context::init() {
-    if (_context != nullptr) return true;
+    if (_context != nullptr) {
+      return true;
+    }
     nfc_init(&_context);
     return _context != nullptr;
   }
 
   vector<Device> Context::getDevices() {
     vector<Device> ret;
-    if (_context == nullptr) return ret;
+    if (_context == nullptr) {
+      return ret;
+    }
     nfc_connstring devices[32];
     int device_count;
 
@@ -30,7 +36,9 @@ namespace nfcdoorz::nfc {
 
   optional<Device> Context::getDeviceMatching(string suffix) {
     optional<Device> ret;
-    if (_context == nullptr) return ret;
+    if (_context == nullptr) {
+      return ret;
+    }
     nfc_connstring devices[32];
     int device_count;
 
@@ -43,8 +51,8 @@ namespace nfcdoorz::nfc {
           device_string.size() - suffix.size(),
           suffix.size(),
           suffix
-        ) == 0
-      ) {
+          ) == 0
+        ) {
         ret.emplace(*this, device_string);
         break;
       }
@@ -66,18 +74,26 @@ namespace nfcdoorz::nfc {
   }
 
   bool Device::open() {
-    if (_device) return true;
+    if (_device) {
+      return true;
+    }
     _device = nfc_open(_context, _device_string.c_str());
     return _device != nullptr;
   }
 
   vector<Tag> Device::getTags() {
     vector<Tag> ret;
-    if (!_device) return ret;
-    if (_tags) free(_tags);
+    if (!_device) {
+      return ret;
+    }
+    if (_tags) {
+      free(_tags);
+    }
     _tags = freefare_get_tags(_device);
-    if (!_tags) return ret;
-    for(size_t i = 0; _tags[i] && i < 32; i++) {
+    if (!_tags) {
+      return ret;
+    }
+    for (size_t i = 0; _tags[i] && i < 32; i++) {
       ret.emplace_back(*this, _tags[i]);
     }
     return ret;
@@ -87,7 +103,7 @@ namespace nfcdoorz::nfc {
     return nfc_initiator_init(_device) > -1;
   }
 
-  bool Device::initiatorPollTarget(function<bool(Tag &tag)> handleTag) {
+  bool Device::initiatorPollTarget(function<bool (Tag &tag)> handleTag) {
     const uint8_t uiPollNr = 255;
     const uint8_t uiPeriod = 1;
     const nfc_modulation nmModulations[] = {
@@ -101,14 +117,18 @@ namespace nfcdoorz::nfc {
 
     while (true) {
       res = nfc_initiator_poll_target(_device, nmModulations, szModulations, uiPollNr, uiPeriod, &nt);
-      if (res < 0) return false;
+      if (res < 0) {
+        return false;
+      }
       if (res) {
         Tag tag = Tag(*this, freefare_tag_new(_device, nt));
         bool shouldContinue = handleTag(tag);
         // Wait for tag removal
         while (0 == nfc_initiator_target_is_present(_device, NULL)) {}
         freefare_free_tag(tag);
-        if (!shouldContinue) return true;
+        if (!shouldContinue) {
+          return true;
+        }
       }
     }
   }
@@ -120,7 +140,7 @@ namespace nfcdoorz::nfc {
   TagInterfaceVariant_t Tag::getTagInterfaceByType() {
     return
       GetVariant<
-        TagInterfaceVariant_t
+      TagInterfaceVariant_t
       >::makeArgs(getTagType(), make_tuple(*this));
   }
 
@@ -136,51 +156,55 @@ namespace nfcdoorz::nfc {
     MifareKeyType key_type,
     const UID_t &uid,
     const AppID_t &aid
-  ) {
+    ) {
     MifareDESFireKey derived = nullptr;
     CLEAN_KEY MifareDESFireKey master_key = *this;
     IF_LOG(plog::debug) {
       stringbuf sbuf;
-      ostream os (&sbuf);
+      ostream os(&sbuf);
       os << "master_key: ";
       for (uint8_t i = 0; i < 24; i++) {
-        os << hex << (int) *(((uint8_t *)master_key) + i);
+        os << hex << (int) *(((uint8_t *) master_key) + i);
       }
       LOG_DEBUG << sbuf.str();
     }
     CLEAN_DERIVER MifareKeyDeriver deriver =
       mifare_key_deriver_new_an10922(master_key, key_type);
-    if (!deriver)
+    if (!deriver) {
       return nullptr;
-    if (mifare_key_deriver_begin(deriver) < 0)
+    }
+    if (mifare_key_deriver_begin(deriver) < 0) {
       return nullptr;
+    }
 
     IF_LOG(plog::debug) {
       stringbuf sbuf;
-      ostream os (&sbuf);
+      ostream os(&sbuf);
       os << "uid: ";
       for (uint8_t i = 0; i < uid.size(); i++) {
-        os << hex << (int) *(((uint8_t *)uid.data()) + i);
+        os << hex << (int) *(((uint8_t *) uid.data()) + i);
       }
       LOG_DEBUG << sbuf.str();
     }
 
-    if (mifare_key_deriver_update_data(deriver, uid.data(), uid.size()) < 0)
+    if (mifare_key_deriver_update_data(deriver, uid.data(), uid.size()) < 0) {
       return nullptr;
+    }
     if (aid[0] || aid[1] || aid[2]) {
       LOG_DEBUG << "AppID";
-      if (mifare_key_deriver_update_data(deriver, aid.data(), aid.size()) < 0)
+      if (mifare_key_deriver_update_data(deriver, aid.data(), aid.size()) < 0) {
         return nullptr;
+      }
     }
 
     MifareDESFireKey derived_key = mifare_key_deriver_end(deriver);
 
     IF_LOG(plog::debug) {
       stringbuf sbuf;
-      ostream os (&sbuf);
+      ostream os(&sbuf);
       os << "derived_key: ";
       for (uint8_t i = 0; i < 24; i++) {
-        os << hex << (int) *(((uint8_t *)derived_key) + i);
+        os << hex << (int) *(((uint8_t *) derived_key) + i);
       }
       LOG_DEBUG << sbuf.str();
     }
@@ -199,7 +223,9 @@ namespace nfcdoorz::nfc {
 
   MifareDESFireKey KeyDES::deriveKey(const UID_t &uid, const AppID_t &aid) {
     LOG_VERBOSE << "KeyDES::deriveKey";
-    if (!diversify) return nullptr;
+    if (!diversify) {
+      return nullptr;
+    }
     return Key::deriveKeyImpl(key_type, uid, aid);
   }
 
@@ -209,7 +235,9 @@ namespace nfcdoorz::nfc {
 
   MifareDESFireKey Key3DES::deriveKey(const UID_t &uid, const AppID_t &aid) {
     LOG_VERBOSE << "Key3DES::deriveKey";
-    if (!diversify) return nullptr;
+    if (!diversify) {
+      return nullptr;
+    }
     return Key::deriveKeyImpl(key_type, uid, aid);
   }
 
@@ -219,7 +247,9 @@ namespace nfcdoorz::nfc {
 
   MifareDESFireKey Key3k3DES::deriveKey(const UID_t &uid, const AppID_t &aid) {
     LOG_VERBOSE << "Key3k3DES::deriveKey";
-    if (!diversify) return nullptr;
+    if (!diversify) {
+      return nullptr;
+    }
     return Key::deriveKeyImpl(key_type, uid, aid);
   }
 
@@ -229,7 +259,9 @@ namespace nfcdoorz::nfc {
 
   MifareDESFireKey KeyAES::deriveKey(const UID_t &uid, const AppID_t &aid) {
     LOG_VERBOSE << "KeyAES::deriveKey";
-    if (!diversify) return nullptr;
+    if (!diversify) {
+      return nullptr;
+    }
     return Key::deriveKeyImpl(key_type, uid, aid);
   }
 

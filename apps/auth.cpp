@@ -20,8 +20,9 @@ static nfc_context *context;
 
 static void stop_polling(int sig) {
   (void) sig;
-  if (pnd != NULL)
+  if (pnd != NULL) {
     nfc_abort_command(pnd);
+  }
   else {
     nfc_exit(context);
     exit(EXIT_FAILURE);
@@ -89,10 +90,10 @@ int main(int argc, const char *argv[]) {
 
   printf("NFC reader: %s opened\n", nfc_device_get_name(pnd));
 
-  while(1) {
+  while (1) {
 
     printf("NFC device will poll during %ld ms (%u pollings of %lu ms for %" PRIdPTR " modulations)\n", (unsigned long) uiPollNr * szModulations * uiPeriod * 150, uiPollNr, (unsigned long) uiPeriod * 150, szModulations);
-    if ((res = nfc_initiator_poll_target(pnd, nmModulations, szModulations, uiPollNr, uiPeriod, &nt))  < 0) {
+    if ((res = nfc_initiator_poll_target(pnd, nmModulations, szModulations, uiPollNr, uiPeriod, &nt)) < 0) {
       nfc_perror(pnd, "nfc_initiator_poll_target");
       nfc_close(pnd);
       nfc_exit(context);
@@ -105,7 +106,7 @@ int main(int argc, const char *argv[]) {
       // FreefareTag t = freefare_tag_new(pnd, nt);
       // printf("Freefare tag %s\n", freefare_get_tag_friendly_name(t));
       // if (freefare_get_tag_type(t) == MIFARE_DESFIRE) {
-      //   desfire(t);
+      // desfire(t);
       // }
       printf("Waiting for card removing...");
       fflush(stdout);
@@ -125,16 +126,16 @@ int main(int argc, const char *argv[]) {
 }
 
 void desfire(FreefareTag &t) {
-  if(mifare_desfire_connect(t) < 0) {
+  if (mifare_desfire_connect(t) < 0) {
     return;
   }
   struct mifare_desfire_version_info info;
-  if(mifare_desfire_get_version(t, &info) < 0) {
+  if (mifare_desfire_get_version(t, &info) < 0) {
     return;
   }
   if (info.software.version_major < 1) {
-		warnx("Found old DESFire, skipping");
-		return;
+    warnx("Found old DESFire, skipping");
+    return;
   }
 
 }

@@ -1,7 +1,7 @@
 #include <iostream>
 #include <stdint.h>
 #include <string.h> // memcpy
-#include <stdlib.h> //realloc
+#include <stdlib.h> // realloc
 
 extern "C" {
 #include <openssl/aes.h>
@@ -11,11 +11,15 @@ extern "C" {
 #include "keys.hpp"
 
 KeyHolder::~KeyHolder() {
-  if (held_key) free(held_key);
+  if (held_key) {
+    free(held_key);
+  }
 }
 
 KeyHolder::operator MifareDESFireKey() {
-  if (used) throw KeyError();
+  if (used) {
+    throw KeyError();
+  }
   used = true;
   return held_key;
 }
@@ -39,7 +43,7 @@ int diversify_key(uint8_t base_key[KEY_SIZE], uint8_t aid[AID_SIZE], char *uid, 
   uint8_t *uid_hex = new uint8_t[uid_len];
 
   for (uint8_t i = 0; i < uid_len; i += 2) {
-    uid_hex[i / 2] = (char2int(uid[i]) << 4) | char2int(uid[i+1]);
+    uid_hex[i / 2] = (char2int(uid[i]) << 4) | char2int(uid[i + 1]);
   }
 
   uint8_t *data = new uint8_t[1 + uid_len + AID_SIZE + SALT_SIZE];
@@ -71,11 +75,14 @@ int diversify_key(uint8_t base_key[KEY_SIZE], uint8_t aid[AID_SIZE], char *uid, 
 }
 
 uint8_t char2int(char input) {
-  if(input >= '0' && input <= '9')
+  if (input >= '0' && input <= '9') {
     return input - '0';
-  if(input >= 'A' && input <= 'F')
+  }
+  if (input >= 'A' && input <= 'F') {
     return input - 'A' + 10;
-  if(input >= 'a' && input <= 'f')
+  }
+  if (input >= 'a' && input <= 'f') {
     return input - 'a' + 10;
+  }
   return 0;
 }

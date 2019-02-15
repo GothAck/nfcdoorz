@@ -62,7 +62,7 @@ int main(int argc, char *argv[]) {
     { argv + 1, argv + argc },
     true,
     "NFC-Doorz preconfig v0.0.1"
-  );
+    );
 
   logging::init(args);
 
@@ -78,14 +78,14 @@ int main(int argc, char *argv[]) {
     bool skip_app_creation;
   } options = {
     args["--uid"]
-      ? make_optional(args["--uid"].asString())
-      : nullopt,
+    ? make_optional(args["--uid"].asString())
+    : nullopt,
     args["--delete-app"]
-      ? make_optional(args["--delete-app"].asString())
-      : nullopt,
+    ? make_optional(args["--delete-app"].asString())
+    : nullopt,
     args["--current-picc-key"]
-     ? make_optional(args["--current-picc-key"].asString())
-     : nullopt,
+    ? make_optional(args["--current-picc-key"].asString())
+    : nullopt,
     args["--dry-run"].asBool(),
     args["--print-config"].asBool(),
     args["--skip-picc-rekey"].asBool(),
@@ -94,8 +94,9 @@ int main(int argc, char *argv[]) {
     args["--skip-app-creation"].asBool(),
   };
 
-  if (options.dry_run)
+  if (options.dry_run) {
     LOG_WARNING << "DRY RUN!";
+  }
 
   if (options.overridden_uid) {
     string uid = *options.overridden_uid;
@@ -103,10 +104,15 @@ int main(int argc, char *argv[]) {
       uid.begin(),
       uid.end(),
       ':'
-    ), uid.end());
-    if (uid.length() % 2)
+      ), uid.end());
+
+    if (uid.length() % 2) {
       errx(9, "overridden uid should be an even number of hex characters e.g. 01020304");
-    if (!all_of(uid.begin(), uid.end(), [](unsigned char c){ return isxdigit(c); }))
+    }
+
+    if (!all_of(uid.begin(), uid.end(), [](unsigned char c) {
+      return isxdigit(c);
+    }))
       errx(9, "overridden uid should be hex characters e.g. a1B2c3D4");
     LOG_WARNING << "Overridden UID: " << uid;
     options.overridden_uid = uid;
@@ -118,11 +124,15 @@ int main(int argc, char *argv[]) {
       picc_key.begin(),
       picc_key.end(),
       ':'
-    ), picc_key.end());
-    if (32 != picc_key.length())
+      ), picc_key.end());
+    if (32 != picc_key.length()) {
       errx(9, "overridden picc key should be 32 hex characters e.g. 01020304");
-    if (!all_of(picc_key.begin(), picc_key.end(), [](unsigned char c){ return isxdigit(c); }))
+    }
+    if (!all_of(picc_key.begin(), picc_key.end(), [](unsigned char c) {
+      return isxdigit(c);
+    })) {
       errx(9, "overridden picc key should be 32 hex characters e.g. a1B2c3D4");
+    }
     LOG_WARNING << "Overridden PICC Key: " << picc_key;
     options.overridden_picc_key = picc_key;
   }
@@ -133,10 +143,13 @@ int main(int argc, char *argv[]) {
       delete_apps.begin(),
       delete_apps.end(),
       ':'
-    ), delete_apps.end());
-    if (6 != delete_apps.length())
+      ), delete_apps.end());
+    if (6 != delete_apps.length()) {
       errx(9, "delete app should be 6 hex characters e.g. 010203");
-    if (!all_of(delete_apps.begin(), delete_apps.end(), [](unsigned char c){ return isxdigit(c); }))
+    }
+    if (!all_of(delete_apps.begin(), delete_apps.end(), [](unsigned char c) {
+      return isxdigit(c);
+    }))
       errx(9, "delete app should be 6 hex characters e.g. a1B2c3");
     LOG_WARNING << "Delete apps: " << delete_apps;
     options.delete_apps = delete_apps;
@@ -158,14 +171,16 @@ int main(int argc, char *argv[]) {
     return 0;
   }
 
-  if (!config.apps.size())
+  if (!config.apps.size()) {
     errx(9, "No apps in config");
+  }
 
   auto &app = config.apps[0];
 
   nfc::Context context;
-  if (!context.init())
+  if (!context.init()) {
     errx(EXIT_FAILURE, "Unable to init libnfc (malloc)");
+  }
 
   auto matched_device = context.getDeviceMatching(args["<reader>"].asString());
 
@@ -195,11 +210,13 @@ int main(int argc, char *argv[]) {
     Adapter adapter(config, tag);
     LOG_INFO << "Found desfire tag";
 
-    if (options.overridden_uid)
+    if (options.overridden_uid) {
       adapter.setUID(*options.overridden_uid);
+    }
 
-    if (options.overridden_picc_key)
+    if (options.overridden_picc_key) {
       adapter.setOverriddenMasterKey(*options.overridden_picc_key);
+    }
 
     LOG_VERBOSE << "Connecting to desfire";
     CHECK_BOOL(adapter.connect(), "Can't connect to Mifare DESFire target.");
@@ -237,7 +254,7 @@ int main(int argc, char *argv[]) {
       if (!options.skip_picc_rekey) {
         if (!options.dry_run) {
           LOG_INFO << "Setting new master key";
-          visit([&adapter](auto &key){
+          visit([&adapter](auto &key) {
             CHECK_BOOL(adapter.changeKey(0, key, null_key_des), "Failed to change master key");
             LOG_INFO << "Set new master key";
           }, config.picc.key);
@@ -245,7 +262,7 @@ int main(int argc, char *argv[]) {
       }
 
       LOG_INFO << "Authenticating with master key";
-      visit([&adapter](auto &key){
+      visit([&adapter](auto &key) {
         CHECK_BOOL(adapter.authenticatePICC(key), "Failed to auth with master key");
       }, config.picc.key);
     }
@@ -265,7 +282,9 @@ int main(int argc, char *argv[]) {
         CHECK_BOOL(adapter.tagInterface.set_default_key(null_key_aes), "Failed to set default application key");
       }
     }
-    if (options.dry_run) return 0;
+    if (options.dry_run) {
+      return 0;
+    }
 
     if (options.delete_app_creation) {
       AppID_t aid = app.aid;
@@ -292,14 +311,15 @@ int main(int argc, char *argv[]) {
     if (options.skip_app_rekey) {
       LOG_INFO << "Authenticating with app key";
       AppID_t aid = app.aid;
-      visit([&adapter, &aid](auto &key){
+      visit([&adapter, &aid](auto &key) {
         CHECK_BOOL(adapter.authenticateAppByID(aid, key), "Failed to authenticate app");
       }, app.keys[0]);
-    } else {
+    }
+    else {
       AppID_t aid = app.aid;
       CHECK_BOOL(adapter.authenticateAppByID(aid, null_key_aes), "Failed to authenticate app with default key");
       for (auto it = app.keys.rbegin(); it != app.keys.rend(); it++) {
-        visit([&adapter, &aid, it](auto &key){
+        visit([&adapter, &aid, it](auto &key) {
           LOG_INFO << "Key id: " << (int) key.id;
           LOG_INFO << "Key name: " << key.name;
           LOG_INFO << "Key diversify: " << key.diversify;
@@ -312,7 +332,7 @@ int main(int argc, char *argv[]) {
     {
       LOG_INFO << "Reauthenticating with app master key";
       AppID_t aid = app.aid;
-      visit([&adapter, &aid](auto &key){
+      visit([&adapter, &aid](auto &key) {
         CHECK_BOOL(adapter.authenticateAppByID(aid, key), "Failed to authenticate app with master key");
       }, app.keys[0]);
       LOG_INFO << "Authentication okay";
@@ -322,7 +342,7 @@ int main(int argc, char *argv[]) {
 
     {
       for (auto &config_file: app.files) {
-        visit([](auto &file){
+        visit([](auto &file) {
           cout << file << endl;
         }, config_file);
         CHECK_BOOL(adapter.createFile(config_file), "Failed to create file");

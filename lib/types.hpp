@@ -31,15 +31,16 @@ class ConversionException : public std::runtime_error {
     return msg + " " + msg2;
   }
 public:
-  ConversionException(std::string msg, std::string msg2 = ""):
-    std::runtime_error(build_what(msg, msg2)) {}
+  ConversionException(std::string msg, std::string msg2 = "") :
+    std::runtime_error(build_what(msg, msg2)) {
+  }
 };
 
-template<typename TVariant, size_t I = std::variant_size_v<TVariant> - 1>
+template<typename TVariant, size_t I = std::variant_size_v<TVariant>-1>
 struct GetVariant {
   static constexpr TVariant convertNode(
     const YAML::Node &node, decltype(std::variant_alternative_t<I, TVariant>::type) type
-  ) {
+    ) {
     if (type == std::variant_alternative_t<I, TVariant>::type) {
       return node.as<std::variant_alternative_t<I, TVariant>>();
     }
@@ -63,7 +64,7 @@ struct GetVariant {
   }
   static constexpr auto make(
     decltype(std::variant_alternative_t<I, TVariant>::type) type
-  ) {
+    ) {
     if (type == std::variant_alternative_t<I, TVariant>::type) {
       return std::variant_alternative_t<I, TVariant>();
     }
@@ -77,11 +78,11 @@ struct GetVariant {
   static constexpr auto makeArgs(
     decltype(std::variant_alternative_t<I, TVariant>::type) type,
     auto args
-  ) {
+    ) {
     if (type == std::variant_alternative_t<I, TVariant>::type) {
       return std::make_from_tuple<std::variant_alternative_t<I, TVariant>>(
         args
-      );
+        );
     }
     if constexpr (I == 0) {
       throw ConversionException("Converting node");
@@ -92,5 +93,5 @@ struct GetVariant {
 
 };
 
-template<class... Ts> struct overloaded : Ts... { using Ts::operator()...; };
-template<class... Ts> overloaded(Ts...) -> overloaded<Ts...>;
+template<class ... Ts> struct overloaded : Ts ... { using Ts::operator () ...; };
+template<class ... Ts> overloaded(Ts ...)->overloaded<Ts...>;

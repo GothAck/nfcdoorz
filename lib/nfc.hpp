@@ -19,37 +19,41 @@ namespace nfcdoorz::nfc {
   class Device;
 
   class Context {
-  public:
-    Context(): _context(nullptr) {};
+public:
+    Context() : _context(nullptr) {
+    };
     ~Context();
     bool init();
     std::vector<Device> getDevices();
     std::optional<Device> getDeviceMatching(std::string suffix);
     Device getDeviceString(std::string device_string);
 
-    operator nfc_context*() { return _context; };
+    operator nfc_context *() {
+      return _context;
+    };
 
-  private:
+private:
     nfc_context *_context;
   };
 
   class Tag;
 
   class Device {
-  public:
-    Device(Context &context, std::string device_string):
+public:
+    Device(Context &context, std::string device_string) :
       _context(context),
       _device(nullptr),
       _device_string(device_string),
-      _tags(nullptr) {}
+      _tags(nullptr) {
+    }
     ~Device();
     bool open();
 
     bool initiatorInit();
-    bool initiatorPollTarget(std::function<bool(Tag &tag)> handleTag);
+    bool initiatorPollTarget(std::function<bool (Tag &tag)> handleTag);
     std::vector<Tag> getTags();
 
-  private:
+private:
     Context &_context;
     nfc_device *_device;
     std::string _device_string;
@@ -60,26 +64,27 @@ namespace nfcdoorz::nfc {
   using TagInterfaceVariant_t = std::variant<DESFireTagInterface>;
 
   class Tag {
-  public:
-    Tag(Device &device, FreefareTag tag):
-      _device(device), _tag(tag) {};
+public:
+    Tag(Device &device, FreefareTag tag) :
+      _device(device), _tag(tag) {
+    };
 
     enum freefare_tag_type getTagType();
     TagInterfaceVariant_t getTagInterfaceByType();
     operator FreefareTag();
-  private:
+private:
     Device &_device;
     FreefareTag _tag;
   };
 
-  constexpr AppID_t ZERO_AID = {0, 0, 0};
+  constexpr AppID_t ZERO_AID = { 0, 0, 0 };
 
   struct Key {
     bool diversify = false;
     virtual operator MifareDESFireKey();
     virtual MifareDESFireKey deriveKey(const UID_t &uid, const AppID_t &aid = ZERO_AID);
 
-  protected:
+protected:
     MifareDESFireKey deriveKeyImpl(MifareKeyType key_type, const UID_t &uid, const AppID_t &aid);
   };
 
@@ -91,7 +96,7 @@ namespace nfcdoorz::nfc {
       throw std::exception();
     }
     for (uint8_t i = 0; i < len; i += 2) {
-      arr[i / 2] = (char2int(str[i]) << 4) | char2int(str[i+1]);
+      arr[i / 2] = (char2int(str[i]) << 4) | char2int(str[i + 1]);
     }
     return arr;
   }
@@ -102,10 +107,13 @@ namespace nfcdoorz::nfc {
     constexpr static const uint8_t size = 8;
     using KeyArray_t = std::array<uint8_t, size>;
     KeyArray_t data;
-    KeyDES() {};
-    KeyDES(KeyArray_t _data): data(_data) {};
-    KeyDES(std::string hexString): data(hexToArray<size>(hexString)) {};
-    KeyDES(std::string hexString, bool _diversify): data(hexToArray<size>(hexString)) {
+    KeyDES() {
+    };
+    KeyDES(KeyArray_t _data) : data(_data) {
+    };
+    KeyDES(std::string hexString) : data(hexToArray<size>(hexString)) {
+    };
+    KeyDES(std::string hexString, bool _diversify) : data(hexToArray<size>(hexString)) {
       diversify = _diversify;
     };
 
@@ -118,10 +126,13 @@ namespace nfcdoorz::nfc {
     constexpr static const uint8_t size = 16;
     using KeyArray_t = std::array<uint8_t, size>;
     KeyArray_t data;
-    Key3DES() {};
-    Key3DES(KeyArray_t _data): data(_data) {};
-    Key3DES(std::string hexString): data(hexToArray<size>(hexString)) {};
-    Key3DES(std::string hexString, bool _diversify): data(hexToArray<size>(hexString)) {
+    Key3DES() {
+    };
+    Key3DES(KeyArray_t _data) : data(_data) {
+    };
+    Key3DES(std::string hexString) : data(hexToArray<size>(hexString)) {
+    };
+    Key3DES(std::string hexString, bool _diversify) : data(hexToArray<size>(hexString)) {
       diversify = _diversify;
     };
     operator MifareDESFireKey() override;
@@ -133,10 +144,13 @@ namespace nfcdoorz::nfc {
     constexpr static const uint8_t size = 24;
     using KeyArray_t = std::array<uint8_t, size>;
     KeyArray_t data;
-    Key3k3DES() {};
-    Key3k3DES(KeyArray_t _data): data(_data) {};
-    Key3k3DES(std::string hexString): data(hexToArray<size>(hexString)) {};
-    Key3k3DES(std::string hexString, bool _diversify): data(hexToArray<size>(hexString)) {
+    Key3k3DES() {
+    };
+    Key3k3DES(KeyArray_t _data) : data(_data) {
+    };
+    Key3k3DES(std::string hexString) : data(hexToArray<size>(hexString)) {
+    };
+    Key3k3DES(std::string hexString, bool _diversify) : data(hexToArray<size>(hexString)) {
       diversify = _diversify;
     };
     operator MifareDESFireKey() override;
@@ -148,10 +162,13 @@ namespace nfcdoorz::nfc {
     constexpr static const uint8_t size = 16;
     using KeyArray_t = std::array<uint8_t, size>;
     KeyArray_t data;
-    KeyAES() {};
-    KeyAES(KeyArray_t _data): data(_data) {};
-    KeyAES(std::string hexString): data(hexToArray<size>(hexString)) {};
-    KeyAES(std::string hexString, bool _diversify): data(hexToArray<size>(hexString)) {
+    KeyAES() {
+    };
+    KeyAES(KeyArray_t _data) : data(_data) {
+    };
+    KeyAES(std::string hexString) : data(hexToArray<size>(hexString)) {
+    };
+    KeyAES(std::string hexString, bool _diversify) : data(hexToArray<size>(hexString)) {
       diversify = _diversify;
     };
     operator MifareDESFireKey() override;
