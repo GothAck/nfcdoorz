@@ -1126,8 +1126,8 @@ struct AuthCallT : public flatbuffers::NativeTable {
   static FLATBUFFERS_CONSTEXPR const char *GetFullyQualifiedName() {
     return "nfcdoorz.ipc.auth.AuthCallT";
   }
-  AuthCallsUnion msg;
   uint64_t id;
+  AuthCallsUnion msg;
   AuthCallT()
       : id(0) {
   }
@@ -1142,10 +1142,13 @@ struct AuthCall FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
     return "nfcdoorz.ipc.auth.AuthCall";
   }
   enum {
-    VT_MSG_TYPE = 4,
-    VT_MSG = 6,
-    VT_ID = 8
+    VT_ID = 4,
+    VT_MSG_TYPE = 6,
+    VT_MSG = 8
   };
+  uint64_t id() const {
+    return GetField<uint64_t>(VT_ID, 0);
+  }
   AuthCalls msg_type() const {
     return static_cast<AuthCalls>(GetField<uint8_t>(VT_MSG_TYPE, 0));
   }
@@ -1159,15 +1162,12 @@ struct AuthCall FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   const Result *msg_as_Result() const {
     return msg_type() == AuthCalls::Result ? static_cast<const Result *>(msg()) : nullptr;
   }
-  uint64_t id() const {
-    return GetField<uint64_t>(VT_ID, 0);
-  }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
+           VerifyField<uint64_t>(verifier, VT_ID) &&
            VerifyField<uint8_t>(verifier, VT_MSG_TYPE) &&
            VerifyOffset(verifier, VT_MSG) &&
            VerifyAuthCalls(verifier, msg(), msg_type()) &&
-           VerifyField<uint64_t>(verifier, VT_ID) &&
            verifier.EndTable();
   }
   AuthCallT *UnPack(const flatbuffers::resolver_function_t *_resolver = nullptr) const;
@@ -1186,14 +1186,14 @@ template<> inline const Result *AuthCall::msg_as<Result>() const {
 struct AuthCallBuilder {
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
+  void add_id(uint64_t id) {
+    fbb_.AddElement<uint64_t>(AuthCall::VT_ID, id, 0);
+  }
   void add_msg_type(AuthCalls msg_type) {
     fbb_.AddElement<uint8_t>(AuthCall::VT_MSG_TYPE, static_cast<uint8_t>(msg_type), 0);
   }
   void add_msg(flatbuffers::Offset<void> msg) {
     fbb_.AddOffset(AuthCall::VT_MSG, msg);
-  }
-  void add_id(uint64_t id) {
-    fbb_.AddElement<uint64_t>(AuthCall::VT_ID, id, 0);
   }
   explicit AuthCallBuilder(flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
@@ -1209,9 +1209,9 @@ struct AuthCallBuilder {
 
 inline flatbuffers::Offset<AuthCall> CreateAuthCall(
     flatbuffers::FlatBufferBuilder &_fbb,
+    uint64_t id = 0,
     AuthCalls msg_type = AuthCalls::NONE,
-    flatbuffers::Offset<void> msg = 0,
-    uint64_t id = 0) {
+    flatbuffers::Offset<void> msg = 0) {
   AuthCallBuilder builder_(_fbb);
   builder_.add_id(id);
   builder_.add_msg(msg);
@@ -1226,8 +1226,8 @@ struct AuthReplyT : public flatbuffers::NativeTable {
   static FLATBUFFERS_CONSTEXPR const char *GetFullyQualifiedName() {
     return "nfcdoorz.ipc.auth.AuthReplyT";
   }
-  AuthRepliesUnion msg;
   uint64_t id;
+  AuthRepliesUnion msg;
   AuthEventsUnion event;
   AuthReplyT()
       : id(0) {
@@ -1243,12 +1243,15 @@ struct AuthReply FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
     return "nfcdoorz.ipc.auth.AuthReply";
   }
   enum {
-    VT_MSG_TYPE = 4,
-    VT_MSG = 6,
-    VT_ID = 8,
+    VT_ID = 4,
+    VT_MSG_TYPE = 6,
+    VT_MSG = 8,
     VT_EVENT_TYPE = 10,
     VT_EVENT = 12
   };
+  uint64_t id() const {
+    return GetField<uint64_t>(VT_ID, 0);
+  }
   AuthReplies msg_type() const {
     return static_cast<AuthReplies>(GetField<uint8_t>(VT_MSG_TYPE, 0));
   }
@@ -1262,9 +1265,6 @@ struct AuthReply FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   const GetUID *msg_as_GetUID() const {
     return msg_type() == AuthReplies::GetUID ? static_cast<const GetUID *>(msg()) : nullptr;
   }
-  uint64_t id() const {
-    return GetField<uint64_t>(VT_ID, 0);
-  }
   AuthEvents event_type() const {
     return static_cast<AuthEvents>(GetField<uint8_t>(VT_EVENT_TYPE, 0));
   }
@@ -1277,10 +1277,10 @@ struct AuthReply FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
+           VerifyField<uint64_t>(verifier, VT_ID) &&
            VerifyField<uint8_t>(verifier, VT_MSG_TYPE) &&
            VerifyOffset(verifier, VT_MSG) &&
            VerifyAuthReplies(verifier, msg(), msg_type()) &&
-           VerifyField<uint64_t>(verifier, VT_ID) &&
            VerifyField<uint8_t>(verifier, VT_EVENT_TYPE) &&
            VerifyOffset(verifier, VT_EVENT) &&
            VerifyAuthEvents(verifier, event(), event_type()) &&
@@ -1306,14 +1306,14 @@ template<> inline const RandomEvent *AuthReply::event_as<RandomEvent>() const {
 struct AuthReplyBuilder {
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
+  void add_id(uint64_t id) {
+    fbb_.AddElement<uint64_t>(AuthReply::VT_ID, id, 0);
+  }
   void add_msg_type(AuthReplies msg_type) {
     fbb_.AddElement<uint8_t>(AuthReply::VT_MSG_TYPE, static_cast<uint8_t>(msg_type), 0);
   }
   void add_msg(flatbuffers::Offset<void> msg) {
     fbb_.AddOffset(AuthReply::VT_MSG, msg);
-  }
-  void add_id(uint64_t id) {
-    fbb_.AddElement<uint64_t>(AuthReply::VT_ID, id, 0);
   }
   void add_event_type(AuthEvents event_type) {
     fbb_.AddElement<uint8_t>(AuthReply::VT_EVENT_TYPE, static_cast<uint8_t>(event_type), 0);
@@ -1335,9 +1335,9 @@ struct AuthReplyBuilder {
 
 inline flatbuffers::Offset<AuthReply> CreateAuthReply(
     flatbuffers::FlatBufferBuilder &_fbb,
+    uint64_t id = 0,
     AuthReplies msg_type = AuthReplies::NONE,
     flatbuffers::Offset<void> msg = 0,
-    uint64_t id = 0,
     AuthEvents event_type = AuthEvents::NONE,
     flatbuffers::Offset<void> event = 0) {
   AuthReplyBuilder builder_(_fbb);
@@ -1704,9 +1704,9 @@ inline AuthCallT *AuthCall::UnPack(const flatbuffers::resolver_function_t *_reso
 inline void AuthCall::UnPackTo(AuthCallT *_o, const flatbuffers::resolver_function_t *_resolver) const {
   (void)_o;
   (void)_resolver;
+  { auto _e = id(); _o->id = _e; };
   { auto _e = msg_type(); _o->msg.type = _e; };
   { auto _e = msg(); if (_e) _o->msg.value = AuthCallsUnion::UnPack(_e, msg_type(), _resolver); };
-  { auto _e = id(); _o->id = _e; };
 }
 
 inline flatbuffers::Offset<AuthCall> AuthCall::Pack(flatbuffers::FlatBufferBuilder &_fbb, const AuthCallT* _o, const flatbuffers::rehasher_function_t *_rehasher) {
@@ -1717,14 +1717,14 @@ inline flatbuffers::Offset<AuthCall> CreateAuthCall(flatbuffers::FlatBufferBuild
   (void)_rehasher;
   (void)_o;
   struct _VectorArgs { flatbuffers::FlatBufferBuilder *__fbb; const AuthCallT* __o; const flatbuffers::rehasher_function_t *__rehasher; } _va = { &_fbb, _o, _rehasher}; (void)_va;
+  auto _id = _o->id;
   auto _msg_type = _o->msg.type;
   auto _msg = _o->msg.Pack(_fbb);
-  auto _id = _o->id;
   return nfcdoorz::ipc::auth::CreateAuthCall(
       _fbb,
+      _id,
       _msg_type,
-      _msg,
-      _id);
+      _msg);
 }
 
 inline AuthReplyT *AuthReply::UnPack(const flatbuffers::resolver_function_t *_resolver) const {
@@ -1736,9 +1736,9 @@ inline AuthReplyT *AuthReply::UnPack(const flatbuffers::resolver_function_t *_re
 inline void AuthReply::UnPackTo(AuthReplyT *_o, const flatbuffers::resolver_function_t *_resolver) const {
   (void)_o;
   (void)_resolver;
+  { auto _e = id(); _o->id = _e; };
   { auto _e = msg_type(); _o->msg.type = _e; };
   { auto _e = msg(); if (_e) _o->msg.value = AuthRepliesUnion::UnPack(_e, msg_type(), _resolver); };
-  { auto _e = id(); _o->id = _e; };
   { auto _e = event_type(); _o->event.type = _e; };
   { auto _e = event(); if (_e) _o->event.value = AuthEventsUnion::UnPack(_e, event_type(), _resolver); };
 }
@@ -1751,16 +1751,16 @@ inline flatbuffers::Offset<AuthReply> CreateAuthReply(flatbuffers::FlatBufferBui
   (void)_rehasher;
   (void)_o;
   struct _VectorArgs { flatbuffers::FlatBufferBuilder *__fbb; const AuthReplyT* __o; const flatbuffers::rehasher_function_t *__rehasher; } _va = { &_fbb, _o, _rehasher}; (void)_va;
+  auto _id = _o->id;
   auto _msg_type = _o->msg.type;
   auto _msg = _o->msg.Pack(_fbb);
-  auto _id = _o->id;
   auto _event_type = _o->event.type;
   auto _event = _o->event.Pack(_fbb);
   return nfcdoorz::ipc::auth::CreateAuthReply(
       _fbb,
+      _id,
       _msg_type,
       _msg,
-      _id,
       _event_type,
       _event);
 }
@@ -2323,17 +2323,17 @@ inline const flatbuffers::TypeTable *RandomEventTypeTable() {
 
 inline const flatbuffers::TypeTable *AuthCallTypeTable() {
   static const flatbuffers::TypeCode type_codes[] = {
+    { flatbuffers::ET_ULONG, 0, -1 },
     { flatbuffers::ET_UTYPE, 0, 0 },
-    { flatbuffers::ET_SEQUENCE, 0, 0 },
-    { flatbuffers::ET_ULONG, 0, -1 }
+    { flatbuffers::ET_SEQUENCE, 0, 0 }
   };
   static const flatbuffers::TypeFunction type_refs[] = {
     AuthCallsTypeTable
   };
   static const char * const names[] = {
+    "id",
     "msg_type",
-    "msg",
-    "id"
+    "msg"
   };
   static const flatbuffers::TypeTable tt = {
     flatbuffers::ST_TABLE, 3, type_codes, type_refs, nullptr, names
@@ -2343,9 +2343,9 @@ inline const flatbuffers::TypeTable *AuthCallTypeTable() {
 
 inline const flatbuffers::TypeTable *AuthReplyTypeTable() {
   static const flatbuffers::TypeCode type_codes[] = {
+    { flatbuffers::ET_ULONG, 0, -1 },
     { flatbuffers::ET_UTYPE, 0, 0 },
     { flatbuffers::ET_SEQUENCE, 0, 0 },
-    { flatbuffers::ET_ULONG, 0, -1 },
     { flatbuffers::ET_UTYPE, 0, 1 },
     { flatbuffers::ET_SEQUENCE, 0, 1 }
   };
@@ -2354,9 +2354,9 @@ inline const flatbuffers::TypeTable *AuthReplyTypeTable() {
     AuthEventsTypeTable
   };
   static const char * const names[] = {
+    "id",
     "msg_type",
     "msg",
-    "id",
     "event_type",
     "event"
   };
