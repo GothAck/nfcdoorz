@@ -20,64 +20,6 @@ KeyHolder::operator MifareDESFireKey() {
   return held_key;
 }
 
-// DESFireAESKey::DESFireAESKey(
-//   std::array<uint8_t, 16> keydata,
-//   uint8_t version
-// ) : _version(version), key(nullptr) {
-//   memcpy(_keydata, keydata.data(), 16);
-// }
-//
-// DESFireAESKey::~DESFireAESKey() {
-//   if (key) free(key);
-// }
-//
-// DESFireAESKey::operator MifareDESFireKey() {
-//   if (key) free(key);
-//   key = mifare_desfire_aes_key_new_with_version(_keydata, _version);
-//   return key;
-// }
-//
-// uint8_t DESFireAESKey::operator[](int index) {
-//   return _keydata[index];
-// }
-//
-// bool DESFireAESKey::diversify(std::array<uint8_t, AID_SIZE> aid, char *uid, uint8_t salt[SALT_SIZE]) {
-//   uint8_t aid_data[3] = {0, 0, 0};
-//   memcpy(aid_data, aid.data(), aid.size());
-//   uint8_t *src = new uint8_t[16];
-//   memcpy(src, _keydata, 16);
-//   std::cout << "srckey: ";
-//   for (uint8_t i = 0; i < 16; i++) std::cout << std::hex << (int) src[i] << ":";
-//   std::cout << std::endl;
-//
-//   uint8_t *dest = new uint8_t[16];
-//   memset(dest, 0, 16);
-//   std::cout << "destkey: ";
-//   for (uint8_t i = 0; i < 16; i++) std::cout << std::hex << (int) dest[i] << ":";
-//   std::cout << std::endl;
-//
-//   if (diversify_key(src, aid_data, uid, dest, salt) < 0) {
-//     delete src;
-//     delete dest;
-//     return false;
-//   }
-//
-//   std::cout << "destkey: ";
-//   for (uint8_t i = 0; i < 16; i++) std::cout << std::hex << (int) dest[i] << ":";
-//   std::cout << std::endl;
-//
-//   memcpy(_keydata, dest, 16);
-//   std::cout << "keydata: ";
-//   for (uint8_t i = 0; i < 16; i++) std::cout << std::hex << (int) _keydata[i] << ":";
-//   std::cout << std::endl;
-//   if (key) {
-//     free(key);
-//     key = nullptr;
-//   }
-//
-//   return true;
-// }
-
 int diversify_key(uint8_t base_key[KEY_SIZE], uint8_t aid[AID_SIZE], char *uid, uint8_t *new_key, uint8_t salt[SALT_SIZE]) {
   CMAC_CTX *ctx;
   int ret;

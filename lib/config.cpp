@@ -6,6 +6,7 @@
 #include <string.h>
 
 #include "config.hpp"
+#include "logging.hpp"
 #include "indent.hpp"
 
 
@@ -23,6 +24,10 @@ namespace nfcdoorz::config {
       sb << decodePath[i];
     }
     return sb.str();
+  }
+
+  Config Config::load(std::map<std::string, docopt::value> args) {
+    return load(args["--config"].asString());
   }
 
   Config Config::load(string filename) {

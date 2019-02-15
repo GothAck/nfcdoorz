@@ -4,3 +4,9 @@
 [submodule "external/plog"]
 	path = external/plog
 	url = https://github.com/SergiusTheBest/plog
+[submodule "external/cppcodec"]
+	path = external/cppcodec
+	url = https://github.com/tplgy/cppcodec
+[submodule "external/json"]
+	path = external/json
+	url = https://github.com/nlohmann/json

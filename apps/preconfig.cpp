@@ -11,9 +11,9 @@
 #include <yaml-cpp/yaml.h>
 #include <nfc/nfc.h>
 #include <freefare.h>
-#include <plog/Appenders/ColorConsoleAppender.h>
 
 #include "lib/types.hpp"
+#include "lib/logging.hpp"
 #include "lib/config.hpp"
 #include "lib/signals.h"
 #include "lib/nfc.hpp"
@@ -47,8 +47,6 @@ static const char USAGE[] =
         <reader>                Configure card presented to this reader
   )";
 
-static plog::ColorConsoleAppender<plog::TxtFormatter> consoleAppender;
-
 uint8_t salt[SALT_SIZE] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
 #define CHECK_BOOL(call, err_str) if (!call) { errx(9, err_str); }
@@ -66,20 +64,7 @@ int main(int argc, char *argv[]) {
     "NFC-Doorz preconfig v0.0.1"
   );
 
-  plog::Severity severity = plog::info;
-  switch(args["--verbose"].asLong()) {
-    case 1:
-      severity = plog::info;
-      break;
-    case 2:
-      severity = plog::debug;
-      break;
-    case 3:
-      severity = plog::verbose;
-      break;
-  }
-
-  plog::init(severity, &consoleAppender);
+  logging::init(args);
 
   struct {
     optional<string> overridden_uid;
@@ -160,18 +145,11 @@ int main(int argc, char *argv[]) {
   config::Config config;
 
   try {
-    config = config::Config::load(args["--config"].asString());
-  } catch (YAML::Exception e) {
-    LOG_ERROR
-      << e.what() << endl
-      << "Invalid config node found" << endl
-      << config::printDecodePath();
-    return 9;
+    config = config::Config::load(args);
   } catch (config::ValidationException e) {
     LOG_ERROR
       << e.what() << endl
-      << "Invalid config node found" << endl
-      << config::printDecodePath();
+      << "Invalid config node found" << endl;
     return 9;
   }
 
@@ -250,7 +228,6 @@ int main(int argc, char *argv[]) {
     LOG_INFO << "Authenticating with PICC master key";
 
     {
-      // DESFireAESKey key = config.picc.key;
       if (options.overridden_picc_key) {
         LOG_INFO << "Authenticating with existing key ";
         CHECK_BOOL(adapter.authenticatePICC(), "Failed to autenticate");

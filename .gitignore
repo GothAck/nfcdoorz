@@ -1,3 +1,5 @@
 build/*
 !build/.keep
 config.yaml
+*.swp
+node_modules

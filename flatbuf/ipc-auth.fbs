@@ -1,0 +1,62 @@
+namespace nfcdoorz.ipc.auth;
+
+table Ping {}
+
+table AppID {
+  a: ubyte;
+  b: ubyte;
+  c: ubyte;
+}
+
+table Key {
+  type: string;
+  data: [ubyte];
+}
+
+table TagResult {
+  uid: [ubyte];
+}
+
+table AuthApp {
+  aid: AppID;
+  key: Key;
+}
+
+table GetUID {}
+
+table TagPresent {
+  present: bool;
+}
+
+table TagUIDResult {
+  uid: [ubyte];
+}
+
+union ResultData { TagUIDResult }
+
+table Result {
+  ok: bool;
+  data: ResultData;
+}
+
+table RandomEvent {}
+
+union AuthCalls { TagPresent, Result }
+union AuthReplies { AuthApp, GetUID }
+union AuthEvents { RandomEvent }
+
+table AuthCall {
+  msg: AuthCalls;
+  id: uint64;
+}
+
+table AuthReply {
+  msg: AuthReplies;
+  id: uint64;
+  event: AuthEvents;
+}
+
+table Server {
+  call: AuthCall;
+  reply: AuthReply;
+}

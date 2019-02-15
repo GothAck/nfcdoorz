@@ -1,0 +1,54 @@
+namespace nfcdoorz.ipc.api;
+
+table StatusCall {}
+
+table Process {
+  pid: int;
+  name: string;
+  args: [string];
+}
+
+table StatusReply {
+  processes: [Process];
+}
+
+table CreateAuthenticatorCall {
+  ttyName: string;
+  deviceID: string;
+}
+
+table CreateAuthenticatorReply {
+  status: bool;
+}
+
+table DestroyAuthenticatorCall {
+  deviceID: string;
+}
+
+table DestroyAuthenticatorReply {
+  status: bool;
+}
+
+table AuthenticatorExitEvent {
+  deviceID: string;
+}
+
+union APICalls { StatusCall, CreateAuthenticatorCall, DestroyAuthenticatorCall }
+union APIReplies { StatusReply, CreateAuthenticatorReply, DestroyAuthenticatorReply }
+union APIEvents { AuthenticatorExitEvent }
+
+table APICall {
+  id: uint64;
+  msg: APICalls;
+}
+
+table APIReply {
+  id: uint64;
+  msg: APIReplies;
+  event: APIEvents;
+}
+
+table Server {
+  call: APICall;
+  reply: APIReply;
+}

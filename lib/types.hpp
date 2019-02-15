@@ -7,15 +7,16 @@
 #include <functional>
 
 #include <yaml-cpp/yaml.h>
-#include <plog/Log.h>
-
 #include <freefare.h>
+
+#include "logging.hpp"
 
 #pragma once
 
 void freekey(MifareDESFireKey *key);
 void freederiver(MifareKeyDeriver *deriver);
 void freeaid(MifareDESFireAID *aid);
+void freetag(MifareDESFireAID *aid);
 
 #define CLEAN_KEY __attribute__((cleanup(freekey)))
 #define CLEAN_DERIVER __attribute__((cleanup(freederiver)))

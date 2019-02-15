@@ -52,6 +52,10 @@ namespace nfcdoorz::nfc {
     return ret;
   }
 
+  Device Context::getDeviceString(string device_string) {
+    return Device(*this, device_string);
+  }
+
   Device::~Device() {
     if (_tags) {
       freefare_free_tags(_tags);
@@ -77,6 +81,36 @@ namespace nfcdoorz::nfc {
       ret.emplace_back(*this, _tags[i]);
     }
     return ret;
+  }
+
+  bool Device::initiatorInit() {
+    return nfc_initiator_init(_device) > -1;
+  }
+
+  bool Device::initiatorPollTarget(function<bool(Tag &tag)> handleTag) {
+    const uint8_t uiPollNr = 255;
+    const uint8_t uiPeriod = 1;
+    const nfc_modulation nmModulations[] = {
+      { .nmt = NMT_ISO14443A, .nbr = NBR_106 },
+      { .nmt = NMT_ISO14443B, .nbr = NBR_106 },
+    };
+    const size_t szModulations = sizeof(nmModulations) / sizeof(nfc_modulation);
+
+    nfc_target nt;
+    int res = 0;
+
+    while (true) {
+      res = nfc_initiator_poll_target(_device, nmModulations, szModulations, uiPollNr, uiPeriod, &nt);
+      if (res < 0) return false;
+      if (res) {
+        Tag tag = Tag(*this, freefare_tag_new(_device, nt));
+        bool shouldContinue = handleTag(tag);
+        // Wait for tag removal
+        while (0 == nfc_initiator_target_is_present(_device, NULL)) {}
+        freefare_free_tag(tag);
+        if (!shouldContinue) return true;
+      }
+    }
   }
 
   enum freefare_tag_type Tag::getTagType() {

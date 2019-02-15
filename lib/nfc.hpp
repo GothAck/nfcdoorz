@@ -25,6 +25,7 @@ namespace nfcdoorz::nfc {
     bool init();
     std::vector<Device> getDevices();
     std::optional<Device> getDeviceMatching(std::string suffix);
+    Device getDeviceString(std::string device_string);
 
     operator nfc_context*() { return _context; };
 
@@ -44,6 +45,8 @@ namespace nfcdoorz::nfc {
     ~Device();
     bool open();
 
+    bool initiatorInit();
+    bool initiatorPollTarget(std::function<bool(Tag &tag)> handleTag);
     std::vector<Tag> getTags();
 
   private:

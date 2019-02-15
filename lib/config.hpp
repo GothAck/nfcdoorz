@@ -1,5 +1,6 @@
 #pragma once
 
+#include <docopt/docopt.h>
 #include <yaml-cpp/yaml.h>
 #include <iostream>
 #include <memory>
@@ -351,6 +352,7 @@ struct Config : Node {
   PICC picc;
   std::vector<App> apps;
 
+  static Config load(std::map<std::string, docopt::value> args);
   static Config load(std::string filename);
   static Config parse(std::string content);
 };
