@@ -1,4 +1,3 @@
-#include <iostream>
 #include <mutex>
 #include <utility>
 #include <functional>
@@ -6,11 +5,8 @@
 #include <queue>
 #include <map>
 #include <memory>
-#include <variant>
 #include <type_traits>
-#include <thread>
 #include <typeinfo>
-#include <cxxabi.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/signal.h>
@@ -19,13 +15,9 @@
 #include <flatbuffers/flatbuffers.h>
 #include <flatbuffers/minireflect.h>
 
-#include <iostream>
 #include "lib/logging.hpp"
 #include "lib/types.hpp"
 #include "ipc.hpp"
-
-#include "flatbuf/ipc-auth_generated.h"
-#include "flatbuf/ipc-api_generated.h"
 
 #pragma once
 
