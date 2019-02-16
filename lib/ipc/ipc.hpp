@@ -23,11 +23,12 @@
 #include <flatbuffers/minireflect.h>
 
 #include <iostream>
-#include "logging.hpp"
-#include "types.hpp"
+#include "lib/logging.hpp"
+#include "lib/types.hpp"
 
 #include "flatbuf/ipc-auth_generated.h"
 #include "flatbuf/ipc-api_generated.h"
+#include "flatbuf/ipc-policy_generated.h"
 
 #pragma once
 

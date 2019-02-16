@@ -7,7 +7,7 @@
 #include <seasocks/Request.h>
 #include <seasocks/Server.h>
 #include <seasocks/WebSocket.h>
-#include "lib/ipc-api.hpp"
+#include "lib/ipc/api.hpp"
 
 #pragma once
 

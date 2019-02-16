@@ -22,8 +22,8 @@
 #include "lib/logging.hpp"
 #include "lib/config.hpp"
 #include "lib/procmanager.hpp"
-#include "lib/ipc.hpp"
-#include "lib/ipc-server.hpp"
+#include "lib/ipc/ipc.hpp"
+#include "lib/ipc/server.hpp"
 
 using namespace seasocks;
 using namespace std;

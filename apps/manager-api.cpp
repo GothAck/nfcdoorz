@@ -19,7 +19,7 @@
 
 #include "lib/types.hpp"
 #include "lib/logging.hpp"
-#include "lib/ipc-api.hpp"
+#include "lib/ipc/api.hpp"
 
 #include "lib/apps/api/handlers.hpp"
 

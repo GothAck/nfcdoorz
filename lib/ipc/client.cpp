@@ -1,4 +1,4 @@
-#include "ipc-client.hpp"
+#include "client.hpp"
 
 namespace nfcdoorz::ipc {
   using namespace std;

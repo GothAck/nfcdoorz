@@ -20,8 +20,8 @@
 #include <flatbuffers/minireflect.h>
 
 #include <iostream>
-#include "logging.hpp"
-#include "types.hpp"
+#include "lib/logging.hpp"
+#include "lib/types.hpp"
 #include "ipc.hpp"
 
 #include "flatbuf/ipc-auth_generated.h"

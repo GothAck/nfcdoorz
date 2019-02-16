@@ -8,7 +8,7 @@
 #include <nlohmann/json.hpp>
 
 #include "lib/apps/api/handlers.hpp"
-#include "lib/ipc-api.hpp"
+#include "lib/ipc/api.hpp"
 
 void set_raw(int fd) {
   struct termios orig_termios;

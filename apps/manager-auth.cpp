@@ -19,7 +19,7 @@
 #include "lib/signals.h"
 #include "lib/nfc.hpp"
 #include "lib/adapter.hpp"
-#include "lib/ipc-client.hpp"
+#include "lib/ipc/client.hpp"
 
 using namespace std;
 using namespace nfcdoorz;
