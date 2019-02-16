@@ -14,10 +14,12 @@ UTIL_BIN = $(foreach f,$(basename $(wildcard util/*.cpp)),build/$(f))
 
 TEST_ASSETS = $(foreach f,$(wildcard test/*.yaml),build/$(f))
 
-SYS_LIBS = nfc freefare yaml-cpp docopt crypto seasocks pthread stdc++fs uv util
+SYS_LIBS = nfc freefare yaml-cpp docopt crypto seasocks pthread stdc++fs uv util lua5.3
 TEST_LIBS = dl
 
-INCDIRS = . ./external/plog/include ./external/uvw/src ./external/cppcodec ./external/json/single_include
+EXTERNAL_INCS = plog/include uvw/src cppcodec json/single_include sol2
+
+INCDIRS = . $(EXTERNAL_INCS:%=external/%) /usr/include/lua5.3
 LIBDIRS = ./external
 
 OPTIMIZE = 2

@@ -1,0 +1,30 @@
+namespace nfcdoorz.ipc.policy;
+
+table TestCall {}
+
+table TestReply {}
+
+table PolicyRequestEvent {
+  deviceID: string;
+  cardUID: [uint8];
+}
+
+union PolicyCalls { TestCall }
+union PolicyReplies { TestReply }
+union PolicyEvents { PolicyRequestEvent }
+
+table PolicyCall {
+  id: uint64;
+  msg: PolicyCalls;
+}
+
+table PolicyReply {
+  id: uint64;
+  msg: PolicyReplies;
+  event: PolicyEvents;
+}
+
+table Server {
+  call: PolicyCall;
+  reply: PolicyReply;
+}

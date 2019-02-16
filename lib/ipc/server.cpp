@@ -3,8 +3,8 @@
 namespace nfcdoorz::ipc {
   using namespace std;
 
-  std::shared_ptr<IpcServerMulti<api::Server, auth::Server>> server =
-    make_shared<IpcServerMulti<ipc::api::Server, ipc::auth::Server>>();
+  std::shared_ptr<IpcServerMulti<api::Server, auth::Server, policy::Server>> server =
+    make_shared<IpcServerMulti<api::Server, auth::Server, policy::Server>>();
 
   void IpcServerBase::listen() {
     pipe->on<uvw::ListenEvent>([this](const uvw::ListenEvent &, uvw::PipeHandle &handle) {

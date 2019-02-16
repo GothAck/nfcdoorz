@@ -127,6 +127,7 @@ int main(int argc, const char *argv[]) {
   }
 
   ipc::server->registerServiceHandler<ipc::auth::Server>();
+  ipc::server->registerServiceHandler<ipc::policy::Server>();
 
   ipc::server->registerServiceHandler<ipc::api::Server>()
   ->registerHandler(

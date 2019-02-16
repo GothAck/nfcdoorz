@@ -211,5 +211,5 @@ protected:
     std::map<int, std::string> pid_map;
   };
 
-  extern std::shared_ptr<IpcServerMulti<api::Server, auth::Server>> server;
+  extern std::shared_ptr<IpcServerMulti<api::Server, auth::Server, policy::Server>> server;
 }
