@@ -8,7 +8,7 @@ STRIPPED = $(foreach f,$(basename $(SOURCES)),build/stripped/$(f))
 FLATBUF_SOURCES = $(wildcard flatbuf/*.fbs)
 FLATBUF_OUTPUT = $(FLATBUF_SOURCES:%.fbs=%_generated.h)
 
-APPS_BIN = $(foreach f,$(basename $(wildcard apps/*.cpp)),build/$(f))
+APPS_BIN = $(foreach f,$(basename $(shell find apps -name '*.cpp')),build/$(f))
 TEST_BIN = $(foreach f,$(basename $(wildcard test/test-*.cpp)),build/$(f))
 UTIL_BIN = $(foreach f,$(basename $(wildcard util/*.cpp)),build/$(f))
 
@@ -34,7 +34,7 @@ C_FLAGS = $(DEP_C_FLAGS) -pipe \
 
 CPP_FLAGS = -fconcepts -std=c++2a
 
-all: $(OBJECTS) $(APPS_BIN)
+all: $(APPS_BIN)
 
 uncrustify:
 	@echo "[uncrustify]"

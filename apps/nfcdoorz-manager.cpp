@@ -80,7 +80,7 @@ int main(int argc, const char *argv[]) {
     return 9;
   }
 
-  if (!procManager.init(filesystem::path(argv[0]).parent_path(), ipc::server->pipe)) {
+  if (!procManager.init(filesystem::path(argv[0]).parent_path() / "manager", ipc::server->pipe)) {
     LOG_ERROR << "Failed to init process manager";
     return 9;
   }
@@ -111,7 +111,7 @@ int main(int argc, const char *argv[]) {
   {
     procManager.create(
       ipc::api::Server::GetFullyQualifiedName(),
-      "manager-api",
+      "api",
       proc::ProcManager::filterArgs(args, "--api-"),
       true
       )->run();
@@ -120,7 +120,7 @@ int main(int argc, const char *argv[]) {
   if (0) {
     procManager.create(
       ipc::auth::Server::GetFullyQualifiedName(),
-      "manager-auth",
+      "auth",
       proc::ProcManager::filterArgs(args, "--api-"),
       true
       )->run();
@@ -168,7 +168,7 @@ int main(int argc, const char *argv[]) {
 
     auto proc = procManager.create(
       ipc::auth::Server::GetFullyQualifiedName(),
-      "manager-auth",
+      "auth",
       arg_vec,
       false
       );
