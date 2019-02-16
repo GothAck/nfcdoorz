@@ -1,6 +1,6 @@
 export ROOT_PATH = $(CURDIR)
 
-SOURCES = $(shell find . \( -path ./external -o -path ./test/stub -o -path "*/node_modules/*" \) -prune -type f -o \( -name '*.cpp' -o -name '*.c' -o -name '*.c++' \) -printf '%P\n')
+SOURCES = $(shell find . \( -path ./external -o -path ./test/stub -o -path "*/node_modules/*" -o -path ./microcontroller \) -prune -type f -o \( -name '*.cpp' -o -name '*.c' -o -name '*.c++' \) -printf '%P\n')
 export OBJECTS = $(foreach f,$(basename $(SOURCES)),build/$(f).o)
 export NON_MAIN_OBJECTS = $(filter-out build/test/%,$(filter-out build/apps/%, $(filter-out build/util/%, $(OBJECTS))))
 STRIPPED = $(foreach f,$(basename $(SOURCES)),build/stripped/$(f))
