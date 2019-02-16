@@ -24,7 +24,7 @@ LIBDIRS = ./external
 
 OPTIMIZE = 2
 
-DEP_C_FLAGS = -MT $@ -MD -MP -MF build/$*.Td
+DEP_C_FLAGS = -MT $@ -MMD -MP -MF build/$*.Td
 
 C_FLAGS = $(DEP_C_FLAGS) -pipe \
 	$(INCDIRS:%=-I%) $(LIBDIRS:%=-L%) \
@@ -35,6 +35,20 @@ C_FLAGS = $(DEP_C_FLAGS) -pipe \
 CPP_FLAGS = -fconcepts -std=c++2a
 
 all: $(OBJECTS) $(APPS_BIN)
+
+uncrustify:
+	@echo "[uncrustify]"
+	@find lib apps -name '*.cpp' -o -name '*.hpp' | xargs uncrustify -c uncrustify.cfg --replace --no-backup
+
+clean:
+	@echo "[clean]"
+	-@rm -rf build/*
+
+stub:
+	$(MAKE) -C test/stub -f Makefile.mk
+
+stub/%:
+	make -C test/stub -f Makefile.mk $(@:stub/%=%)
 
 test: $(TEST_BIN)
 	@$(MAKE) stub
@@ -91,18 +105,8 @@ build/%.o: %.c++ Makefile $(FLATBUF_OUTPUT)
 	@mkdir -p $(dir $@)
 	@g++ -c $(C_FLAGS) $(CPP_FLAGS) -O$(OPTIMIZE) -o $@ $< $(LIBS_C) $(LIBS_CPP) $(SYS_LIBS:%=-l%)
 
-clean:
-	@echo "[clean]"
-	-@rm -rf build/*
-
 flatbuf/%_generated.h: flatbuf/%.fbs Makefile
 	@echo "[flatc] $<"
 	@flatc -o flatbuf/ --scoped-enums --reflect-names --gen-name-strings --gen-object-api -c $<
 
-stub:
-	$(MAKE) -C test/stub -f Makefile.mk
-
-stub/%:
-	make -C test/stub -f Makefile.mk $(@:stub/%=%)
-
-.PHONY: clean test external stub
+.PHONY: all uncrustify clean stub test util external
