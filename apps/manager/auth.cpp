@@ -87,11 +87,6 @@ int main(int argc, char *argv[]) {
     return 99;
   }
 
-  if (termios_backup.c_iflag & CCLAIMED) {
-    cout << "claimed" << endl;
-    return 99;
-  }
-
   termios_new = termios_backup;
 
   termios_new.c_cflag = CS8 | CLOCAL | CREAD;
