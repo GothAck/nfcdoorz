@@ -1,4 +1,8 @@
 <map id="nfcdoorz::config::Config" name="nfcdoorz::config::Config">
-<area shape="rect" id="node2" href="$structnfcdoorz_1_1config_1_1_node.htm" title="nfcdoorz::config::Node" alt="" coords="5,5,160,32"/>
-<area shape="rect" id="node3" href="$structnfcdoorz_1_1config_1_1_p_i_c_c.htm" title="nfcdoorz::config::PICC" alt="" coords="105,81,261,108"/>
+<area shape="rect" id="node2" href="$structnfcdoorz_1_1config_1_1_node.htm" title="nfcdoorz::config::Node" alt="" coords="5,81,160,108"/>
+<area shape="rect" id="node4" href="$structnfcdoorz_1_1config_1_1_app.htm" title="nfcdoorz::config::App" alt="" coords="608,208,755,235"/>
+<area shape="rect" id="node6" href="$structnfcdoorz_1_1config_1_1_app_settings.htm" title="nfcdoorz::config::AppSettings" alt="" coords="209,157,404,184"/>
+<area shape="rect" id="node11" href="$structnfcdoorz_1_1config_1_1_p_i_c_c.htm" title="nfcdoorz::config::PICC" alt="" coords="428,5,584,32"/>
+<area shape="rect" id="node8" title="STL class. " alt="" coords="267,309,347,336"/>
+<area shape="rect" id="node9" title="STL class. " alt="" coords="19,302,146,343"/>
 </map>

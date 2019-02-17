@@ -1,3 +1,4 @@
-# WIP: NFC Mifare DESFire EV1 authenticated access control system
+![logo](logo.png "Logo")
+# NFC-Doorz: NFC Mifare DESFire EV1 authenticated access control system
 
 Inspired by https://github.com/rambo/nfc_lock, written in modern C++ with wrappers around the libnfc and libfreefare APIs.

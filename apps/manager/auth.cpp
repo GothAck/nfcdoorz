@@ -73,8 +73,6 @@ int main(int argc, char *argv[]) {
     errx(EXIT_FAILURE, "Unable to init libnfc (malloc)");
   }
 
-  // auto matched_device = context.getDeviceMatching(args["<reader>"].asString());
-
   string reader = args["<reader>"].asString();
 
   string port = reader.substr(reader.find(":") + 1);
@@ -130,6 +128,16 @@ int main(int argc, char *argv[]) {
       if (tag.getTagType() == MIFARE_DESFIRE) {
         LOG_WARNING << "DESFIRE";
       }
+      // visit(
+      // [](auto &tag) {
+      // tag.connect();
+      // char *uid = tag.get_uid();
+      //
+      // client.getTagCall(get)
+      //
+      // },
+      // tag.getTagInterfaceByType()
+      // );
       return true;
     })) {
       LOG_WARNING << "Exiting on error";

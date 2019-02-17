@@ -1,4 +1,6 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node2" href="$class_conversion_exception.htm" title="ConversionException" alt="" coords="169,5,315,32"/>
-<area shape="rect" id="node3" href="$classnfcdoorz_1_1config_1_1_validation_exception.htm" title="nfcdoorz::config::Validation\lException" alt="" coords="152,57,332,98"/>
+<area shape="rect" id="node1" title="STL class. " alt="" coords="5,35,109,61"/>
+<area shape="rect" id="node2" title="STL class. " alt="" coords="157,35,281,61"/>
+<area shape="rect" id="node3" href="$class_conversion_exception.htm" title="ConversionException" alt="" coords="346,5,493,32"/>
+<area shape="rect" id="node4" href="$classnfcdoorz_1_1config_1_1_validation_exception.htm" title="nfcdoorz::config::Validation\lException" alt="" coords="329,57,509,98"/>
 </map>

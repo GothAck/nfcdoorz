@@ -1,7 +1,6 @@
 var NAVTREE =
 [
   [ "NFC Doorz", "index.htm", [
-    [ "WIP: NFC Mifare DESFire EV1 authenticated access control system", "md__r_e_a_d_m_e.htm", null ],
     [ "Classes", "annotated.htm", [
       [ "Class List", "annotated.htm", "annotated_dup" ],
       [ "Class Index", "classes.htm", null ],
@@ -20,7 +19,7 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 ".htm",
-"structnfcdoorz_1_1config_1_1_app.htm#ae31d9ab639bf707876e8f3ad81ba23f4"
+"structnfcdoorz_1_1config_1_1_app.htm#af91ac81e53ea36a5e3f5b172477d3265"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

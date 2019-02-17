@@ -1,3 +1,4 @@
 <map id="nfcdoorz::ipc::IpcClientBase" name="nfcdoorz::ipc::IpcClientBase">
-<area shape="rect" id="node2" href="$classnfcdoorz_1_1ipc_1_1_ipc_base.htm" title="Base of all IPC classes. Contains the common required components for running IPC communications. " alt="" coords="22,5,175,32"/>
+<area shape="rect" id="node2" href="$classnfcdoorz_1_1ipc_1_1_ipc_base.htm" title="Base of all IPC classes. Contains the common required components for running IPC communications. " alt="" coords="22,124,175,151"/>
+<area shape="rect" id="node4" title="STL class. " alt="" coords="199,124,283,151"/>
 </map>
