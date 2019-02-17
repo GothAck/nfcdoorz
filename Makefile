@@ -1,6 +1,6 @@
 export ROOT_PATH = $(CURDIR)
-
-SOURCES = $(shell find . \( -path ./external -o -path ./test/stub -o -path "*/node_modules/*" -o -path ./microcontroller \) -prune -type f -o \( -name '*.cpp' -o -name '*.c' -o -name '*.c++' \) -printf '%P\n')
+SOURCE_EXCLUDES = ./external ./test/stub '*/node_modules/*' ./microcontroller ./old
+SOURCES = $(shell find . \( $(patsubst %,-path % -o,$(SOURCE_EXCLUDES)) -false \) -prune -type f -o \( -name '*.cpp' -o -name '*.c' -o -name '*.c++' \) -printf '%P\n')
 export OBJECTS = $(foreach f,$(basename $(SOURCES)),build/$(f).o)
 export NON_MAIN_OBJECTS = $(filter-out build/test/%,$(filter-out build/apps/%, $(filter-out build/util/%, $(OBJECTS))))
 STRIPPED = $(foreach f,$(basename $(SOURCES)),build/stripped/$(f))
@@ -38,7 +38,7 @@ all: $(APPS_BIN)
 
 uncrustify:
 	@echo "[uncrustify]"
-	@find lib apps -name '*.cpp' -o -name '*.hpp' | xargs uncrustify -c uncrustify.cfg --replace --no-backup
+	@find lib apps -name '*.cpp' -o -name '*.hpp' | xargs uncrustify -c uncrustify.cfg --replace --no-backup --if-changed -q
 
 clean:
 	@echo "[clean]"
