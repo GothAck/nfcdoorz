@@ -73,8 +73,6 @@ int main(int argc, char *argv[]) {
     errx(EXIT_FAILURE, "Unable to init libnfc (malloc)");
   }
 
-  // auto matched_device = context.getDeviceMatching(args["<reader>"].asString());
-
   string reader = args["<reader>"].asString();
 
   string port = reader.substr(reader.find(":") + 1);

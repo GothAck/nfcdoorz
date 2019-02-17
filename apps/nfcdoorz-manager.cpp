@@ -129,7 +129,7 @@ int main(int argc, const char *argv[]) {
   ipc::server->registerServiceHandler<ipc::auth::Server>()
   ->registerHandler(
     ipc::auth::Calls::nfcdoorz_ipc_common_ConfigCall,
-    [&args, &config](auto self, const ipc::auth::CallT &msg, auto reply, uvw::PipeHandle &pipe) -> auto {
+    [&config](auto self, const ipc::auth::CallT &msg, auto reply, uvw::PipeHandle &pipe) -> auto {
     reply->msg.Set(ipc::common::ConfigReplyT());
     auto s = reply->msg.Asnfcdoorz_ipc_common_ConfigReply();
     s->config = config.stringify();
@@ -138,7 +138,7 @@ int main(int argc, const char *argv[]) {
   ipc::server->registerServiceHandler<ipc::policy::Server>()
   ->registerHandler(
     ipc::policy::Calls::nfcdoorz_ipc_common_ConfigCall,
-    [&args, &config](auto self, const ipc::policy::CallT &msg, auto reply, uvw::PipeHandle &pipe) -> auto {
+    [&config](auto self, const ipc::policy::CallT &msg, auto reply, uvw::PipeHandle &pipe) -> auto {
     reply->msg.Set(ipc::common::ConfigReplyT());
     auto s = reply->msg.Asnfcdoorz_ipc_common_ConfigReply();
     s->config = config.stringify();
@@ -148,7 +148,7 @@ int main(int argc, const char *argv[]) {
   ipc::server->registerServiceHandler<ipc::api::Server>()
   ->registerHandler(
     ipc::api::Calls::nfcdoorz_ipc_common_ConfigCall,
-    [&args, &config](auto self, const ipc::api::CallT &msg, auto reply, uvw::PipeHandle &pipe) -> auto {
+    [&config](auto self, const ipc::api::CallT &msg, auto reply, uvw::PipeHandle &pipe) -> auto {
     reply->msg.Set(ipc::common::ConfigReplyT());
     auto s = reply->msg.Asnfcdoorz_ipc_common_ConfigReply();
     s->config = config.stringify();
