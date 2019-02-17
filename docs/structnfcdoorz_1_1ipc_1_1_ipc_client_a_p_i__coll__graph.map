@@ -1,5 +1,5 @@
 <map id="nfcdoorz::ipc::IpcClientAPI" name="nfcdoorz::ipc::IpcClientAPI">
 <area shape="rect" id="node2" href="$classnfcdoorz_1_1ipc_1_1_ipc_client.htm" title="nfcdoorz::ipc::IpcClient\l\&lt; ipc::api::Server \&gt;" alt="" coords="16,155,173,196"/>
 <area shape="rect" id="node3" href="$classnfcdoorz_1_1ipc_1_1_ipc_client_base.htm" title="nfcdoorz::ipc::IpcClientBase" alt="" coords="67,80,253,107"/>
-<area shape="rect" id="node4" href="$classnfcdoorz_1_1ipc_1_1_ipc_base.htm" title="nfcdoorz::ipc::IpcBase" alt="" coords="18,5,171,32"/>
+<area shape="rect" id="node4" href="$classnfcdoorz_1_1ipc_1_1_ipc_base.htm" title="Base of all IPC classes. Contains the common required components for running IPC communications. " alt="" coords="18,5,171,32"/>
 </map>

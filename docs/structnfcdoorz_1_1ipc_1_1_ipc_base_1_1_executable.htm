@@ -81,12 +81,17 @@ $(document).ready(function(){initNavTree('structnfcdoorz_1_1ipc_1_1_ipc_base_1_1
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="#friends">Friends</a> &#124;
 <a href="structnfcdoorz_1_1ipc_1_1_ipc_base_1_1_executable-members.htm">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">nfcdoorz::ipc::IpcBase::Executable Struct Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Base for executables run in event loop idle. Used for cross thread execution in IPCClient. call registerIdleCall with an object subclassed from this. This executable will be rescheduled every event loop iteration until <a class="el" href="structnfcdoorz_1_1ipc_1_1_ipc_base_1_1_executable.htm#a5a798183762f56f6a63247b6408afe13" title="Override this method. ">run()</a> returns true.  
+ <a href="structnfcdoorz_1_1ipc_1_1_ipc_base_1_1_executable.htm#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="ipc_8hpp_source.htm">ipc.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for nfcdoorz::ipc::IpcBase::Executable:</div>
 <div class="dyncontent">
@@ -98,45 +103,26 @@ Inheritance diagram for nfcdoorz::ipc::IpcBase::Executable:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a00cd1403aaf6f1f74b6ad5f56d6be571"><td class="memItemLeft" align="right" valign="top"><a id="a00cd1403aaf6f1f74b6ad5f56d6be571"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setTimeout</b> (uint32_t)</td></tr>
-<tr class="separator:a00cd1403aaf6f1f74b6ad5f56d6be571"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4cb4602b1b2d5b8b7e42f581231fb2a9"><td class="memItemLeft" align="right" valign="top"><a id="a4cb4602b1b2d5b8b7e42f581231fb2a9"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>runWithTimeout</b> ()</td></tr>
-<tr class="separator:a4cb4602b1b2d5b8b7e42f581231fb2a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a28fa1bcf8d085745e3b17d50f8f2c34b"><td class="memItemLeft" align="right" valign="top"><a id="a28fa1bcf8d085745e3b17d50f8f2c34b"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnfcdoorz_1_1ipc_1_1_ipc_base_1_1_executable.htm#a28fa1bcf8d085745e3b17d50f8f2c34b">setTimeout</a> (uint32_t) final</td></tr>
+<tr class="memdesc:a28fa1bcf8d085745e3b17d50f8f2c34b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set callback timeout. Override default timeout of this <a class="el" href="structnfcdoorz_1_1ipc_1_1_ipc_base_1_1_executable.htm" title="Base for executables run in event loop idle. Used for cross thread execution in IPCClient. call registerIdleCall with an object subclassed from this. This executable will be rescheduled every event loop iteration until run() returns true. ">Executable</a>. <br /></td></tr>
+<tr class="separator:a28fa1bcf8d085745e3b17d50f8f2c34b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5a798183762f56f6a63247b6408afe13"><td class="memItemLeft" align="right" valign="top"><a id="a5a798183762f56f6a63247b6408afe13"></a>
-virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>run</b> ()</td></tr>
+virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnfcdoorz_1_1ipc_1_1_ipc_base_1_1_executable.htm#a5a798183762f56f6a63247b6408afe13">run</a> ()</td></tr>
+<tr class="memdesc:a5a798183762f56f6a63247b6408afe13"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override this method. <br /></td></tr>
 <tr class="separator:a5a798183762f56f6a63247b6408afe13"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
-Public Attributes</h2></td></tr>
-<tr class="memitem:aab959c0157801597915d0545cace4c78"><td class="memItemLeft" align="right" valign="top">std::chrono::time_point&lt; std::chrono::system_clock &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>start</b></td></tr>
-<tr class="separator:aab959c0157801597915d0545cace4c78"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9d3f5dec0725dfea95f73d3251b9db19"><td class="memItemLeft" align="right" valign="top"><a id="a9d3f5dec0725dfea95f73d3251b9db19"></a>
-uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>timeout</b> = 500</td></tr>
-<tr class="separator:a9d3f5dec0725dfea95f73d3251b9db19"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
+Friends</h2></td></tr>
+<tr class="memitem:ab3e646d075485b46d48e8a82631d0bf7"><td class="memItemLeft" align="right" valign="top"><a id="ab3e646d075485b46d48e8a82631d0bf7"></a>
+class&#160;</td><td class="memItemRight" valign="bottom"><b>IpcBase</b></td></tr>
+<tr class="separator:ab3e646d075485b46d48e8a82631d0bf7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="ipc_8hpp_source.htm#l00051">51</a> of file <a class="el" href="ipc_8hpp_source.htm">ipc.hpp</a>.</p>
-</div><h2 class="groupheader">Member Data Documentation</h2>
-<a id="aab959c0157801597915d0545cace4c78"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aab959c0157801597915d0545cace4c78">&#9670;&nbsp;</a></span>start</h2>
+<div class="textblock"><p>Base for executables run in event loop idle. Used for cross thread execution in IPCClient. call registerIdleCall with an object subclassed from this. This executable will be rescheduled every event loop iteration until <a class="el" href="structnfcdoorz_1_1ipc_1_1_ipc_base_1_1_executable.htm#a5a798183762f56f6a63247b6408afe13" title="Override this method. ">run()</a> returns true. </p>
 
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::chrono::time_point&lt;std::chrono::system_clock&gt; nfcdoorz::ipc::IpcBase::Executable::start</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line">=</div><div class="line">        std::chrono::system_clock::now()</div></div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="ipc_8hpp_source.htm#l00052">52</a> of file <a class="el" href="ipc_8hpp_source.htm">ipc.hpp</a>.</p>
-
-</div>
-</div>
-<hr/>The documentation for this struct was generated from the following files:<ul>
+<p class="definition">Definition at line <a class="el" href="ipc_8hpp_source.htm#l00066">66</a> of file <a class="el" href="ipc_8hpp_source.htm">ipc.hpp</a>.</p>
+</div><hr/>The documentation for this struct was generated from the following files:<ul>
 <li>lib/ipc/<a class="el" href="ipc_8hpp_source.htm">ipc.hpp</a></li>
 <li>lib/ipc/<a class="el" href="ipc_8cpp_source.htm">ipc.cpp</a></li>
 </ul>

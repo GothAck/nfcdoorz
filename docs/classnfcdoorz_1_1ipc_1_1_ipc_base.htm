@@ -89,6 +89,11 @@ $(document).ready(function(){initNavTree('classnfcdoorz_1_1ipc_1_1_ipc_base.htm'
 <div class="title">nfcdoorz::ipc::IpcBase Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Base of all IPC classes. Contains the common required components for running IPC communications.  
+ <a href="classnfcdoorz_1_1ipc_1_1_ipc_base.htm#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="ipc_8hpp_source.htm">ipc.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for nfcdoorz::ipc::IpcBase:</div>
 <div class="dyncontent">
@@ -108,15 +113,18 @@ Inheritance diagram for nfcdoorz::ipc::IpcBase:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnfcdoorz_1_1ipc_1_1_ipc_base_1_1_executable.htm">Executable</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Base for executables run in event loop idle. Used for cross thread execution in IPCClient. call registerIdleCall with an object subclassed from this. This executable will be rescheduled every event loop iteration until <a class="el" href="structnfcdoorz_1_1ipc_1_1_ipc_base_1_1_executable.htm#a5a798183762f56f6a63247b6408afe13" title="Override this method. ">run()</a> returns true.  <a href="structnfcdoorz_1_1ipc_1_1_ipc_base_1_1_executable.htm#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a0ab232960400fefb1bcfa9c72a285329"><td class="memItemLeft" align="right" valign="top"><a id="a0ab232960400fefb1bcfa9c72a285329"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>open</b> (int fd)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnfcdoorz_1_1ipc_1_1_ipc_base.htm#a0ab232960400fefb1bcfa9c72a285329">open</a> (int fd)</td></tr>
+<tr class="memdesc:a0ab232960400fefb1bcfa9c72a285329"><td class="mdescLeft">&#160;</td><td class="mdescRight">Open a file descriptor. As libuv pipe does not support abstract socket opening, we DIY. <br /></td></tr>
 <tr class="separator:a0ab232960400fefb1bcfa9c72a285329"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acaed0b79cc0ea79052a21b583b79bfb6"><td class="memItemLeft" align="right" valign="top"><a id="acaed0b79cc0ea79052a21b583b79bfb6"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>run</b> ()</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnfcdoorz_1_1ipc_1_1_ipc_base.htm#acaed0b79cc0ea79052a21b583b79bfb6">run</a> ()</td></tr>
+<tr class="memdesc:acaed0b79cc0ea79052a21b583b79bfb6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start event loop. This does not return, see UVW/libuv docs. <br /></td></tr>
 <tr class="separator:acaed0b79cc0ea79052a21b583b79bfb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a26f093b1f5a4820032c4ada22262d33c"><td class="memItemLeft" align="right" valign="top"><a id="a26f093b1f5a4820032c4ada22262d33c"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>registerIdleCall</b> (std::shared_ptr&lt; <a class="el" href="structnfcdoorz_1_1ipc_1_1_ipc_base_1_1_executable.htm">Executable</a> &gt; exec)</td></tr>
@@ -147,8 +155,9 @@ std::list&lt; std::shared_ptr&lt; <a class="el" href="structnfcdoorz_1_1ipc_1_1_
 <tr class="separator:a3b207ec8b21c02accc214c35f835cbf9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="ipc_8hpp_source.htm#l00039">39</a> of file <a class="el" href="ipc_8hpp_source.htm">ipc.hpp</a>.</p>
+<div class="textblock"><p>Base of all IPC classes. Contains the common required components for running IPC communications. </p>
+
+<p class="definition">Definition at line <a class="el" href="ipc_8hpp_source.htm#l00042">42</a> of file <a class="el" href="ipc_8hpp_source.htm">ipc.hpp</a>.</p>
 </div><hr/>The documentation for this class was generated from the following files:<ul>
 <li>lib/ipc/<a class="el" href="ipc_8hpp_source.htm">ipc.hpp</a></li>
 <li>lib/ipc/<a class="el" href="ipc_8cpp_source.htm">ipc.cpp</a></li>

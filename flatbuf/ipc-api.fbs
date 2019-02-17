@@ -33,22 +33,22 @@ table AuthenticatorExitEvent {
   deviceID: string;
 }
 
-union APICalls { StatusCall, CreateAuthenticatorCall, DestroyAuthenticatorCall }
-union APIReplies { StatusReply, CreateAuthenticatorReply, DestroyAuthenticatorReply }
-union APIEvents { AuthenticatorExitEvent }
+union Calls { StatusCall, CreateAuthenticatorCall, DestroyAuthenticatorCall }
+union Replies { StatusReply, CreateAuthenticatorReply, DestroyAuthenticatorReply }
+union Events { AuthenticatorExitEvent }
 
-table APICall {
+table Call {
   id: uint64;
-  msg: APICalls;
+  msg: Calls;
 }
 
-table APIReply {
+table Reply {
   id: uint64;
-  msg: APIReplies;
-  event: APIEvents;
+  msg: Replies;
+  event: Events;
 }
 
 table Server {
-  call: APICall;
-  reply: APIReply;
+  call: Call;
+  reply: Reply;
 }

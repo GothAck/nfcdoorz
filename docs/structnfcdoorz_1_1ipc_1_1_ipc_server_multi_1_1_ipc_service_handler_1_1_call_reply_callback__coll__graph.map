@@ -1,3 +1,3 @@
 <map id="nfcdoorz::ipc::IpcServerMulti&lt; APIServers &gt;::IpcServiceHandler&lt; APIServer &gt;::CallReplyCallback" name="nfcdoorz::ipc::IpcServerMulti&lt; APIServers &gt;::IpcServiceHandler&lt; APIServer &gt;::CallReplyCallback">
-<area shape="rect" id="node2" href="$structnfcdoorz_1_1ipc_1_1_ipc_base_1_1_executable.htm" title="nfcdoorz::ipc::IpcBase\l::Executable" alt="" coords="62,5,215,47"/>
+<area shape="rect" id="node2" href="$structnfcdoorz_1_1ipc_1_1_ipc_base_1_1_executable.htm" title="Base for executables run in event loop idle. Used for cross thread execution in IPCClient. call registerIdleCall with an object subclassed from this. This executable will be rescheduled every event loop iteration until run() returns true. " alt="" coords="62,5,215,47"/>
 </map>

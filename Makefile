@@ -116,3 +116,5 @@ flatbuf/%_generated.h: flatbuf/%.fbs Makefile
 	@flatc -o flatbuf/ --scoped-enums --reflect-names --gen-name-strings --gen-object-api -c $<
 
 .PHONY: all uncrustify clean stub test util external
+
+.PRECIOUS: $(FLATBUF_OUTPUT)

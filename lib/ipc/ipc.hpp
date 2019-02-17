@@ -36,6 +36,9 @@ namespace nfcdoorz::ipc {
   using base64 = cppcodec::base64_rfc4648;
   using PipePtr = std::shared_ptr<uvw::PipeHandle>;
 
+  /*! \brief Base of all IPC classes.
+   *  Contains the common required components for running IPC communications.
+   */
   class IpcBase {
 public:
     IpcBase() :
@@ -45,16 +48,36 @@ public:
       nextId(0)
     {
     }
+    /*! \brief Open a file descriptor.
+     *  As libuv pipe does not support abstract socket opening, we DIY.
+     */
     void open(int fd);
+    /*! \brief Start event loop.
+    *  This does not return, see UVW/libuv docs.
+    */
     void run();
 
+    /*! \brief Base for executables run in event loop idle.
+     *  Used for cross thread execution in IPCClient.
+     *  call registerIdleCall with an object subclassed from this.
+     *  This executable will be rescheduled every event loop iteration
+     *  until run() returns true.
+     */
     struct Executable {
-      std::chrono::time_point<std::chrono::system_clock> start =
-        std::chrono::system_clock::now();
-      uint32_t timeout = 500;
-      void setTimeout(uint32_t);
-      bool runWithTimeout();
+        friend class IpcBase;
+      /*! \brief Set callback timeout.
+       *  Override default timeout of this Executable.
+       */
+      virtual void setTimeout(uint32_t) final;
+
+      /*! \brief Override this method.
+       */
       virtual bool run();
+private:
+      virtual bool runWithTimeout() final;
+      std::chrono::time_point<std::chrono::system_clock> start =
+      std::chrono::system_clock::now();
+      uint32_t timeout = 500;
     };
 
     void registerIdleCall(std::shared_ptr<Executable> exec);

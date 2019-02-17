@@ -131,8 +131,8 @@ int main(int argc, const char *argv[]) {
 
   ipc::server->registerServiceHandler<ipc::api::Server>()
   ->registerHandler(
-    ipc::api::APICalls::StatusCall,
-    [](auto self, const ipc::api::APICallT &msg, auto reply, uvw::PipeHandle &) -> auto {
+    ipc::api::Calls::StatusCall,
+    [](auto self, const ipc::api::CallT &msg, auto reply, uvw::PipeHandle &) -> auto {
     LOG_DEBUG << "handle StatusCall";
     reply->msg.Set(ipc::api::StatusReplyT());
     auto s = reply->msg.AsStatusReply();
@@ -148,9 +148,9 @@ int main(int argc, const char *argv[]) {
   }
     )
   ->registerHandler(
-    ipc::api::APICalls::CreateAuthenticatorCall,
-    [&args](auto self, const ipc::api::APICallT &msg, auto reply, uvw::PipeHandle &pipe) -> auto {
-    using PromT = promise<unique_ptr<ipc::api::APIReplyT>>;
+    ipc::api::Calls::CreateAuthenticatorCall,
+    [&args](auto self, const ipc::api::CallT &msg, auto reply, uvw::PipeHandle &pipe) -> auto {
+    using PromT = promise<unique_ptr<ipc::api::ReplyT>>;
 
     LOG_DEBUG << "handle CreateAuthenticatorCall";
     auto call = msg.msg.AsCreateAuthenticatorCall();
@@ -173,7 +173,7 @@ int main(int argc, const char *argv[]) {
       false
       );
     proc->setOnDestroy([self, deviceID = call->deviceID, &pipe](const proc::Proc &) {
-      ipc::api::APIEventsUnion eventUnion;
+      ipc::api::EventsUnion eventUnion;
       eventUnion.Set(ipc::api::AuthenticatorExitEventT());
       auto event = eventUnion.AsAuthenticatorExitEvent();
 

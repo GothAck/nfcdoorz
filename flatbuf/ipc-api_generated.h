@@ -34,11 +34,11 @@ struct DestroyAuthenticatorReplyT;
 struct AuthenticatorExitEvent;
 struct AuthenticatorExitEventT;
 
-struct APICall;
-struct APICallT;
+struct Call;
+struct CallT;
 
-struct APIReply;
-struct APIReplyT;
+struct Reply;
+struct ReplyT;
 
 struct Server;
 struct ServerT;
@@ -59,13 +59,13 @@ inline const flatbuffers::TypeTable *DestroyAuthenticatorReplyTypeTable();
 
 inline const flatbuffers::TypeTable *AuthenticatorExitEventTypeTable();
 
-inline const flatbuffers::TypeTable *APICallTypeTable();
+inline const flatbuffers::TypeTable *CallTypeTable();
 
-inline const flatbuffers::TypeTable *APIReplyTypeTable();
+inline const flatbuffers::TypeTable *ReplyTypeTable();
 
 inline const flatbuffers::TypeTable *ServerTypeTable();
 
-enum class APICalls : uint8_t {
+enum class Calls : uint8_t {
   NONE = 0,
   StatusCall = 1,
   CreateAuthenticatorCall = 2,
@@ -74,17 +74,17 @@ enum class APICalls : uint8_t {
   MAX = DestroyAuthenticatorCall
 };
 
-inline const APICalls (&EnumValuesAPICalls())[4] {
-  static const APICalls values[] = {
-    APICalls::NONE,
-    APICalls::StatusCall,
-    APICalls::CreateAuthenticatorCall,
-    APICalls::DestroyAuthenticatorCall
+inline const Calls (&EnumValuesCalls())[4] {
+  static const Calls values[] = {
+    Calls::NONE,
+    Calls::StatusCall,
+    Calls::CreateAuthenticatorCall,
+    Calls::DestroyAuthenticatorCall
   };
   return values;
 }
 
-inline const char * const *EnumNamesAPICalls() {
+inline const char * const *EnumNamesCalls() {
   static const char * const names[] = {
     "NONE",
     "StatusCall",
@@ -95,41 +95,41 @@ inline const char * const *EnumNamesAPICalls() {
   return names;
 }
 
-inline const char *EnumNameAPICalls(APICalls e) {
+inline const char *EnumNameCalls(Calls e) {
   const size_t index = static_cast<int>(e);
-  return EnumNamesAPICalls()[index];
+  return EnumNamesCalls()[index];
 }
 
-template<typename T> struct APICallsTraits {
-  static const APICalls enum_value = APICalls::NONE;
+template<typename T> struct CallsTraits {
+  static const Calls enum_value = Calls::NONE;
 };
 
-template<> struct APICallsTraits<StatusCall> {
-  static const APICalls enum_value = APICalls::StatusCall;
+template<> struct CallsTraits<StatusCall> {
+  static const Calls enum_value = Calls::StatusCall;
 };
 
-template<> struct APICallsTraits<CreateAuthenticatorCall> {
-  static const APICalls enum_value = APICalls::CreateAuthenticatorCall;
+template<> struct CallsTraits<CreateAuthenticatorCall> {
+  static const Calls enum_value = Calls::CreateAuthenticatorCall;
 };
 
-template<> struct APICallsTraits<DestroyAuthenticatorCall> {
-  static const APICalls enum_value = APICalls::DestroyAuthenticatorCall;
+template<> struct CallsTraits<DestroyAuthenticatorCall> {
+  static const Calls enum_value = Calls::DestroyAuthenticatorCall;
 };
 
-struct APICallsUnion {
-  APICalls type;
+struct CallsUnion {
+  Calls type;
   void *value;
 
-  APICallsUnion() : type(APICalls::NONE), value(nullptr) {}
-  APICallsUnion(APICallsUnion&& u) FLATBUFFERS_NOEXCEPT :
-    type(APICalls::NONE), value(nullptr)
+  CallsUnion() : type(Calls::NONE), value(nullptr) {}
+  CallsUnion(CallsUnion&& u) FLATBUFFERS_NOEXCEPT :
+    type(Calls::NONE), value(nullptr)
     { std::swap(type, u.type); std::swap(value, u.value); }
-  APICallsUnion(const APICallsUnion &) FLATBUFFERS_NOEXCEPT;
-  APICallsUnion &operator=(const APICallsUnion &u) FLATBUFFERS_NOEXCEPT
-    { APICallsUnion t(u); std::swap(type, t.type); std::swap(value, t.value); return *this; }
-  APICallsUnion &operator=(APICallsUnion &&u) FLATBUFFERS_NOEXCEPT
+  CallsUnion(const CallsUnion &) FLATBUFFERS_NOEXCEPT;
+  CallsUnion &operator=(const CallsUnion &u) FLATBUFFERS_NOEXCEPT
+    { CallsUnion t(u); std::swap(type, t.type); std::swap(value, t.value); return *this; }
+  CallsUnion &operator=(CallsUnion &&u) FLATBUFFERS_NOEXCEPT
     { std::swap(type, u.type); std::swap(value, u.value); return *this; }
-  ~APICallsUnion() { Reset(); }
+  ~CallsUnion() { Reset(); }
 
   void Reset();
 
@@ -137,46 +137,46 @@ struct APICallsUnion {
   template <typename T>
   void Set(T&& val) {
     Reset();
-    type = APICallsTraits<typename T::TableType>::enum_value;
-    if (type != APICalls::NONE) {
+    type = CallsTraits<typename T::TableType>::enum_value;
+    if (type != Calls::NONE) {
       value = new T(std::forward<T>(val));
     }
   }
 #endif  // FLATBUFFERS_CPP98_STL
 
-  static void *UnPack(const void *obj, APICalls type, const flatbuffers::resolver_function_t *resolver);
+  static void *UnPack(const void *obj, Calls type, const flatbuffers::resolver_function_t *resolver);
   flatbuffers::Offset<void> Pack(flatbuffers::FlatBufferBuilder &_fbb, const flatbuffers::rehasher_function_t *_rehasher = nullptr) const;
 
   StatusCallT *AsStatusCall() {
-    return type == APICalls::StatusCall ?
+    return type == Calls::StatusCall ?
       reinterpret_cast<StatusCallT *>(value) : nullptr;
   }
   const StatusCallT *AsStatusCall() const {
-    return type == APICalls::StatusCall ?
+    return type == Calls::StatusCall ?
       reinterpret_cast<const StatusCallT *>(value) : nullptr;
   }
   CreateAuthenticatorCallT *AsCreateAuthenticatorCall() {
-    return type == APICalls::CreateAuthenticatorCall ?
+    return type == Calls::CreateAuthenticatorCall ?
       reinterpret_cast<CreateAuthenticatorCallT *>(value) : nullptr;
   }
   const CreateAuthenticatorCallT *AsCreateAuthenticatorCall() const {
-    return type == APICalls::CreateAuthenticatorCall ?
+    return type == Calls::CreateAuthenticatorCall ?
       reinterpret_cast<const CreateAuthenticatorCallT *>(value) : nullptr;
   }
   DestroyAuthenticatorCallT *AsDestroyAuthenticatorCall() {
-    return type == APICalls::DestroyAuthenticatorCall ?
+    return type == Calls::DestroyAuthenticatorCall ?
       reinterpret_cast<DestroyAuthenticatorCallT *>(value) : nullptr;
   }
   const DestroyAuthenticatorCallT *AsDestroyAuthenticatorCall() const {
-    return type == APICalls::DestroyAuthenticatorCall ?
+    return type == Calls::DestroyAuthenticatorCall ?
       reinterpret_cast<const DestroyAuthenticatorCallT *>(value) : nullptr;
   }
 };
 
-bool VerifyAPICalls(flatbuffers::Verifier &verifier, const void *obj, APICalls type);
-bool VerifyAPICallsVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types);
+bool VerifyCalls(flatbuffers::Verifier &verifier, const void *obj, Calls type);
+bool VerifyCallsVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types);
 
-enum class APIReplies : uint8_t {
+enum class Replies : uint8_t {
   NONE = 0,
   StatusReply = 1,
   CreateAuthenticatorReply = 2,
@@ -185,17 +185,17 @@ enum class APIReplies : uint8_t {
   MAX = DestroyAuthenticatorReply
 };
 
-inline const APIReplies (&EnumValuesAPIReplies())[4] {
-  static const APIReplies values[] = {
-    APIReplies::NONE,
-    APIReplies::StatusReply,
-    APIReplies::CreateAuthenticatorReply,
-    APIReplies::DestroyAuthenticatorReply
+inline const Replies (&EnumValuesReplies())[4] {
+  static const Replies values[] = {
+    Replies::NONE,
+    Replies::StatusReply,
+    Replies::CreateAuthenticatorReply,
+    Replies::DestroyAuthenticatorReply
   };
   return values;
 }
 
-inline const char * const *EnumNamesAPIReplies() {
+inline const char * const *EnumNamesReplies() {
   static const char * const names[] = {
     "NONE",
     "StatusReply",
@@ -206,41 +206,41 @@ inline const char * const *EnumNamesAPIReplies() {
   return names;
 }
 
-inline const char *EnumNameAPIReplies(APIReplies e) {
+inline const char *EnumNameReplies(Replies e) {
   const size_t index = static_cast<int>(e);
-  return EnumNamesAPIReplies()[index];
+  return EnumNamesReplies()[index];
 }
 
-template<typename T> struct APIRepliesTraits {
-  static const APIReplies enum_value = APIReplies::NONE;
+template<typename T> struct RepliesTraits {
+  static const Replies enum_value = Replies::NONE;
 };
 
-template<> struct APIRepliesTraits<StatusReply> {
-  static const APIReplies enum_value = APIReplies::StatusReply;
+template<> struct RepliesTraits<StatusReply> {
+  static const Replies enum_value = Replies::StatusReply;
 };
 
-template<> struct APIRepliesTraits<CreateAuthenticatorReply> {
-  static const APIReplies enum_value = APIReplies::CreateAuthenticatorReply;
+template<> struct RepliesTraits<CreateAuthenticatorReply> {
+  static const Replies enum_value = Replies::CreateAuthenticatorReply;
 };
 
-template<> struct APIRepliesTraits<DestroyAuthenticatorReply> {
-  static const APIReplies enum_value = APIReplies::DestroyAuthenticatorReply;
+template<> struct RepliesTraits<DestroyAuthenticatorReply> {
+  static const Replies enum_value = Replies::DestroyAuthenticatorReply;
 };
 
-struct APIRepliesUnion {
-  APIReplies type;
+struct RepliesUnion {
+  Replies type;
   void *value;
 
-  APIRepliesUnion() : type(APIReplies::NONE), value(nullptr) {}
-  APIRepliesUnion(APIRepliesUnion&& u) FLATBUFFERS_NOEXCEPT :
-    type(APIReplies::NONE), value(nullptr)
+  RepliesUnion() : type(Replies::NONE), value(nullptr) {}
+  RepliesUnion(RepliesUnion&& u) FLATBUFFERS_NOEXCEPT :
+    type(Replies::NONE), value(nullptr)
     { std::swap(type, u.type); std::swap(value, u.value); }
-  APIRepliesUnion(const APIRepliesUnion &) FLATBUFFERS_NOEXCEPT;
-  APIRepliesUnion &operator=(const APIRepliesUnion &u) FLATBUFFERS_NOEXCEPT
-    { APIRepliesUnion t(u); std::swap(type, t.type); std::swap(value, t.value); return *this; }
-  APIRepliesUnion &operator=(APIRepliesUnion &&u) FLATBUFFERS_NOEXCEPT
+  RepliesUnion(const RepliesUnion &) FLATBUFFERS_NOEXCEPT;
+  RepliesUnion &operator=(const RepliesUnion &u) FLATBUFFERS_NOEXCEPT
+    { RepliesUnion t(u); std::swap(type, t.type); std::swap(value, t.value); return *this; }
+  RepliesUnion &operator=(RepliesUnion &&u) FLATBUFFERS_NOEXCEPT
     { std::swap(type, u.type); std::swap(value, u.value); return *this; }
-  ~APIRepliesUnion() { Reset(); }
+  ~RepliesUnion() { Reset(); }
 
   void Reset();
 
@@ -248,61 +248,61 @@ struct APIRepliesUnion {
   template <typename T>
   void Set(T&& val) {
     Reset();
-    type = APIRepliesTraits<typename T::TableType>::enum_value;
-    if (type != APIReplies::NONE) {
+    type = RepliesTraits<typename T::TableType>::enum_value;
+    if (type != Replies::NONE) {
       value = new T(std::forward<T>(val));
     }
   }
 #endif  // FLATBUFFERS_CPP98_STL
 
-  static void *UnPack(const void *obj, APIReplies type, const flatbuffers::resolver_function_t *resolver);
+  static void *UnPack(const void *obj, Replies type, const flatbuffers::resolver_function_t *resolver);
   flatbuffers::Offset<void> Pack(flatbuffers::FlatBufferBuilder &_fbb, const flatbuffers::rehasher_function_t *_rehasher = nullptr) const;
 
   StatusReplyT *AsStatusReply() {
-    return type == APIReplies::StatusReply ?
+    return type == Replies::StatusReply ?
       reinterpret_cast<StatusReplyT *>(value) : nullptr;
   }
   const StatusReplyT *AsStatusReply() const {
-    return type == APIReplies::StatusReply ?
+    return type == Replies::StatusReply ?
       reinterpret_cast<const StatusReplyT *>(value) : nullptr;
   }
   CreateAuthenticatorReplyT *AsCreateAuthenticatorReply() {
-    return type == APIReplies::CreateAuthenticatorReply ?
+    return type == Replies::CreateAuthenticatorReply ?
       reinterpret_cast<CreateAuthenticatorReplyT *>(value) : nullptr;
   }
   const CreateAuthenticatorReplyT *AsCreateAuthenticatorReply() const {
-    return type == APIReplies::CreateAuthenticatorReply ?
+    return type == Replies::CreateAuthenticatorReply ?
       reinterpret_cast<const CreateAuthenticatorReplyT *>(value) : nullptr;
   }
   DestroyAuthenticatorReplyT *AsDestroyAuthenticatorReply() {
-    return type == APIReplies::DestroyAuthenticatorReply ?
+    return type == Replies::DestroyAuthenticatorReply ?
       reinterpret_cast<DestroyAuthenticatorReplyT *>(value) : nullptr;
   }
   const DestroyAuthenticatorReplyT *AsDestroyAuthenticatorReply() const {
-    return type == APIReplies::DestroyAuthenticatorReply ?
+    return type == Replies::DestroyAuthenticatorReply ?
       reinterpret_cast<const DestroyAuthenticatorReplyT *>(value) : nullptr;
   }
 };
 
-bool VerifyAPIReplies(flatbuffers::Verifier &verifier, const void *obj, APIReplies type);
-bool VerifyAPIRepliesVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types);
+bool VerifyReplies(flatbuffers::Verifier &verifier, const void *obj, Replies type);
+bool VerifyRepliesVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types);
 
-enum class APIEvents : uint8_t {
+enum class Events : uint8_t {
   NONE = 0,
   AuthenticatorExitEvent = 1,
   MIN = NONE,
   MAX = AuthenticatorExitEvent
 };
 
-inline const APIEvents (&EnumValuesAPIEvents())[2] {
-  static const APIEvents values[] = {
-    APIEvents::NONE,
-    APIEvents::AuthenticatorExitEvent
+inline const Events (&EnumValuesEvents())[2] {
+  static const Events values[] = {
+    Events::NONE,
+    Events::AuthenticatorExitEvent
   };
   return values;
 }
 
-inline const char * const *EnumNamesAPIEvents() {
+inline const char * const *EnumNamesEvents() {
   static const char * const names[] = {
     "NONE",
     "AuthenticatorExitEvent",
@@ -311,33 +311,33 @@ inline const char * const *EnumNamesAPIEvents() {
   return names;
 }
 
-inline const char *EnumNameAPIEvents(APIEvents e) {
+inline const char *EnumNameEvents(Events e) {
   const size_t index = static_cast<int>(e);
-  return EnumNamesAPIEvents()[index];
+  return EnumNamesEvents()[index];
 }
 
-template<typename T> struct APIEventsTraits {
-  static const APIEvents enum_value = APIEvents::NONE;
+template<typename T> struct EventsTraits {
+  static const Events enum_value = Events::NONE;
 };
 
-template<> struct APIEventsTraits<AuthenticatorExitEvent> {
-  static const APIEvents enum_value = APIEvents::AuthenticatorExitEvent;
+template<> struct EventsTraits<AuthenticatorExitEvent> {
+  static const Events enum_value = Events::AuthenticatorExitEvent;
 };
 
-struct APIEventsUnion {
-  APIEvents type;
+struct EventsUnion {
+  Events type;
   void *value;
 
-  APIEventsUnion() : type(APIEvents::NONE), value(nullptr) {}
-  APIEventsUnion(APIEventsUnion&& u) FLATBUFFERS_NOEXCEPT :
-    type(APIEvents::NONE), value(nullptr)
+  EventsUnion() : type(Events::NONE), value(nullptr) {}
+  EventsUnion(EventsUnion&& u) FLATBUFFERS_NOEXCEPT :
+    type(Events::NONE), value(nullptr)
     { std::swap(type, u.type); std::swap(value, u.value); }
-  APIEventsUnion(const APIEventsUnion &) FLATBUFFERS_NOEXCEPT;
-  APIEventsUnion &operator=(const APIEventsUnion &u) FLATBUFFERS_NOEXCEPT
-    { APIEventsUnion t(u); std::swap(type, t.type); std::swap(value, t.value); return *this; }
-  APIEventsUnion &operator=(APIEventsUnion &&u) FLATBUFFERS_NOEXCEPT
+  EventsUnion(const EventsUnion &) FLATBUFFERS_NOEXCEPT;
+  EventsUnion &operator=(const EventsUnion &u) FLATBUFFERS_NOEXCEPT
+    { EventsUnion t(u); std::swap(type, t.type); std::swap(value, t.value); return *this; }
+  EventsUnion &operator=(EventsUnion &&u) FLATBUFFERS_NOEXCEPT
     { std::swap(type, u.type); std::swap(value, u.value); return *this; }
-  ~APIEventsUnion() { Reset(); }
+  ~EventsUnion() { Reset(); }
 
   void Reset();
 
@@ -345,28 +345,28 @@ struct APIEventsUnion {
   template <typename T>
   void Set(T&& val) {
     Reset();
-    type = APIEventsTraits<typename T::TableType>::enum_value;
-    if (type != APIEvents::NONE) {
+    type = EventsTraits<typename T::TableType>::enum_value;
+    if (type != Events::NONE) {
       value = new T(std::forward<T>(val));
     }
   }
 #endif  // FLATBUFFERS_CPP98_STL
 
-  static void *UnPack(const void *obj, APIEvents type, const flatbuffers::resolver_function_t *resolver);
+  static void *UnPack(const void *obj, Events type, const flatbuffers::resolver_function_t *resolver);
   flatbuffers::Offset<void> Pack(flatbuffers::FlatBufferBuilder &_fbb, const flatbuffers::rehasher_function_t *_rehasher = nullptr) const;
 
   AuthenticatorExitEventT *AsAuthenticatorExitEvent() {
-    return type == APIEvents::AuthenticatorExitEvent ?
+    return type == Events::AuthenticatorExitEvent ?
       reinterpret_cast<AuthenticatorExitEventT *>(value) : nullptr;
   }
   const AuthenticatorExitEventT *AsAuthenticatorExitEvent() const {
-    return type == APIEvents::AuthenticatorExitEvent ?
+    return type == Events::AuthenticatorExitEvent ?
       reinterpret_cast<const AuthenticatorExitEventT *>(value) : nullptr;
   }
 };
 
-bool VerifyAPIEvents(flatbuffers::Verifier &verifier, const void *obj, APIEvents type);
-bool VerifyAPIEventsVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types);
+bool VerifyEvents(flatbuffers::Verifier &verifier, const void *obj, Events type);
+bool VerifyEventsVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types);
 
 struct StatusCallT : public flatbuffers::NativeTable {
   typedef StatusCall TableType;
@@ -942,25 +942,25 @@ inline flatbuffers::Offset<AuthenticatorExitEvent> CreateAuthenticatorExitEventD
 
 flatbuffers::Offset<AuthenticatorExitEvent> CreateAuthenticatorExitEvent(flatbuffers::FlatBufferBuilder &_fbb, const AuthenticatorExitEventT *_o, const flatbuffers::rehasher_function_t *_rehasher = nullptr);
 
-struct APICallT : public flatbuffers::NativeTable {
-  typedef APICall TableType;
+struct CallT : public flatbuffers::NativeTable {
+  typedef Call TableType;
   static FLATBUFFERS_CONSTEXPR const char *GetFullyQualifiedName() {
-    return "nfcdoorz.ipc.api.APICallT";
+    return "nfcdoorz.ipc.api.CallT";
   }
   uint64_t id;
-  APICallsUnion msg;
-  APICallT()
+  CallsUnion msg;
+  CallT()
       : id(0) {
   }
 };
 
-struct APICall FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
-  typedef APICallT NativeTableType;
+struct Call FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  typedef CallT NativeTableType;
   static const flatbuffers::TypeTable *MiniReflectTypeTable() {
-    return APICallTypeTable();
+    return CallTypeTable();
   }
   static FLATBUFFERS_CONSTEXPR const char *GetFullyQualifiedName() {
-    return "nfcdoorz.ipc.api.APICall";
+    return "nfcdoorz.ipc.api.Call";
   }
   enum {
     VT_ID = 4,
@@ -970,105 +970,105 @@ struct APICall FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   uint64_t id() const {
     return GetField<uint64_t>(VT_ID, 0);
   }
-  APICalls msg_type() const {
-    return static_cast<APICalls>(GetField<uint8_t>(VT_MSG_TYPE, 0));
+  Calls msg_type() const {
+    return static_cast<Calls>(GetField<uint8_t>(VT_MSG_TYPE, 0));
   }
   const void *msg() const {
     return GetPointer<const void *>(VT_MSG);
   }
   template<typename T> const T *msg_as() const;
   const StatusCall *msg_as_StatusCall() const {
-    return msg_type() == APICalls::StatusCall ? static_cast<const StatusCall *>(msg()) : nullptr;
+    return msg_type() == Calls::StatusCall ? static_cast<const StatusCall *>(msg()) : nullptr;
   }
   const CreateAuthenticatorCall *msg_as_CreateAuthenticatorCall() const {
-    return msg_type() == APICalls::CreateAuthenticatorCall ? static_cast<const CreateAuthenticatorCall *>(msg()) : nullptr;
+    return msg_type() == Calls::CreateAuthenticatorCall ? static_cast<const CreateAuthenticatorCall *>(msg()) : nullptr;
   }
   const DestroyAuthenticatorCall *msg_as_DestroyAuthenticatorCall() const {
-    return msg_type() == APICalls::DestroyAuthenticatorCall ? static_cast<const DestroyAuthenticatorCall *>(msg()) : nullptr;
+    return msg_type() == Calls::DestroyAuthenticatorCall ? static_cast<const DestroyAuthenticatorCall *>(msg()) : nullptr;
   }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<uint64_t>(verifier, VT_ID) &&
            VerifyField<uint8_t>(verifier, VT_MSG_TYPE) &&
            VerifyOffset(verifier, VT_MSG) &&
-           VerifyAPICalls(verifier, msg(), msg_type()) &&
+           VerifyCalls(verifier, msg(), msg_type()) &&
            verifier.EndTable();
   }
-  APICallT *UnPack(const flatbuffers::resolver_function_t *_resolver = nullptr) const;
-  void UnPackTo(APICallT *_o, const flatbuffers::resolver_function_t *_resolver = nullptr) const;
-  static flatbuffers::Offset<APICall> Pack(flatbuffers::FlatBufferBuilder &_fbb, const APICallT* _o, const flatbuffers::rehasher_function_t *_rehasher = nullptr);
+  CallT *UnPack(const flatbuffers::resolver_function_t *_resolver = nullptr) const;
+  void UnPackTo(CallT *_o, const flatbuffers::resolver_function_t *_resolver = nullptr) const;
+  static flatbuffers::Offset<Call> Pack(flatbuffers::FlatBufferBuilder &_fbb, const CallT* _o, const flatbuffers::rehasher_function_t *_rehasher = nullptr);
 };
 
-template<> inline const StatusCall *APICall::msg_as<StatusCall>() const {
+template<> inline const StatusCall *Call::msg_as<StatusCall>() const {
   return msg_as_StatusCall();
 }
 
-template<> inline const CreateAuthenticatorCall *APICall::msg_as<CreateAuthenticatorCall>() const {
+template<> inline const CreateAuthenticatorCall *Call::msg_as<CreateAuthenticatorCall>() const {
   return msg_as_CreateAuthenticatorCall();
 }
 
-template<> inline const DestroyAuthenticatorCall *APICall::msg_as<DestroyAuthenticatorCall>() const {
+template<> inline const DestroyAuthenticatorCall *Call::msg_as<DestroyAuthenticatorCall>() const {
   return msg_as_DestroyAuthenticatorCall();
 }
 
-struct APICallBuilder {
+struct CallBuilder {
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
   void add_id(uint64_t id) {
-    fbb_.AddElement<uint64_t>(APICall::VT_ID, id, 0);
+    fbb_.AddElement<uint64_t>(Call::VT_ID, id, 0);
   }
-  void add_msg_type(APICalls msg_type) {
-    fbb_.AddElement<uint8_t>(APICall::VT_MSG_TYPE, static_cast<uint8_t>(msg_type), 0);
+  void add_msg_type(Calls msg_type) {
+    fbb_.AddElement<uint8_t>(Call::VT_MSG_TYPE, static_cast<uint8_t>(msg_type), 0);
   }
   void add_msg(flatbuffers::Offset<void> msg) {
-    fbb_.AddOffset(APICall::VT_MSG, msg);
+    fbb_.AddOffset(Call::VT_MSG, msg);
   }
-  explicit APICallBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit CallBuilder(flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  APICallBuilder &operator=(const APICallBuilder &);
-  flatbuffers::Offset<APICall> Finish() {
+  CallBuilder &operator=(const CallBuilder &);
+  flatbuffers::Offset<Call> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<APICall>(end);
+    auto o = flatbuffers::Offset<Call>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<APICall> CreateAPICall(
+inline flatbuffers::Offset<Call> CreateCall(
     flatbuffers::FlatBufferBuilder &_fbb,
     uint64_t id = 0,
-    APICalls msg_type = APICalls::NONE,
+    Calls msg_type = Calls::NONE,
     flatbuffers::Offset<void> msg = 0) {
-  APICallBuilder builder_(_fbb);
+  CallBuilder builder_(_fbb);
   builder_.add_id(id);
   builder_.add_msg(msg);
   builder_.add_msg_type(msg_type);
   return builder_.Finish();
 }
 
-flatbuffers::Offset<APICall> CreateAPICall(flatbuffers::FlatBufferBuilder &_fbb, const APICallT *_o, const flatbuffers::rehasher_function_t *_rehasher = nullptr);
+flatbuffers::Offset<Call> CreateCall(flatbuffers::FlatBufferBuilder &_fbb, const CallT *_o, const flatbuffers::rehasher_function_t *_rehasher = nullptr);
 
-struct APIReplyT : public flatbuffers::NativeTable {
-  typedef APIReply TableType;
+struct ReplyT : public flatbuffers::NativeTable {
+  typedef Reply TableType;
   static FLATBUFFERS_CONSTEXPR const char *GetFullyQualifiedName() {
-    return "nfcdoorz.ipc.api.APIReplyT";
+    return "nfcdoorz.ipc.api.ReplyT";
   }
   uint64_t id;
-  APIRepliesUnion msg;
-  APIEventsUnion event;
-  APIReplyT()
+  RepliesUnion msg;
+  EventsUnion event;
+  ReplyT()
       : id(0) {
   }
 };
 
-struct APIReply FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
-  typedef APIReplyT NativeTableType;
+struct Reply FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  typedef ReplyT NativeTableType;
   static const flatbuffers::TypeTable *MiniReflectTypeTable() {
-    return APIReplyTypeTable();
+    return ReplyTypeTable();
   }
   static FLATBUFFERS_CONSTEXPR const char *GetFullyQualifiedName() {
-    return "nfcdoorz.ipc.api.APIReply";
+    return "nfcdoorz.ipc.api.Reply";
   }
   enum {
     VT_ID = 4,
@@ -1080,102 +1080,102 @@ struct APIReply FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   uint64_t id() const {
     return GetField<uint64_t>(VT_ID, 0);
   }
-  APIReplies msg_type() const {
-    return static_cast<APIReplies>(GetField<uint8_t>(VT_MSG_TYPE, 0));
+  Replies msg_type() const {
+    return static_cast<Replies>(GetField<uint8_t>(VT_MSG_TYPE, 0));
   }
   const void *msg() const {
     return GetPointer<const void *>(VT_MSG);
   }
   template<typename T> const T *msg_as() const;
   const StatusReply *msg_as_StatusReply() const {
-    return msg_type() == APIReplies::StatusReply ? static_cast<const StatusReply *>(msg()) : nullptr;
+    return msg_type() == Replies::StatusReply ? static_cast<const StatusReply *>(msg()) : nullptr;
   }
   const CreateAuthenticatorReply *msg_as_CreateAuthenticatorReply() const {
-    return msg_type() == APIReplies::CreateAuthenticatorReply ? static_cast<const CreateAuthenticatorReply *>(msg()) : nullptr;
+    return msg_type() == Replies::CreateAuthenticatorReply ? static_cast<const CreateAuthenticatorReply *>(msg()) : nullptr;
   }
   const DestroyAuthenticatorReply *msg_as_DestroyAuthenticatorReply() const {
-    return msg_type() == APIReplies::DestroyAuthenticatorReply ? static_cast<const DestroyAuthenticatorReply *>(msg()) : nullptr;
+    return msg_type() == Replies::DestroyAuthenticatorReply ? static_cast<const DestroyAuthenticatorReply *>(msg()) : nullptr;
   }
-  APIEvents event_type() const {
-    return static_cast<APIEvents>(GetField<uint8_t>(VT_EVENT_TYPE, 0));
+  Events event_type() const {
+    return static_cast<Events>(GetField<uint8_t>(VT_EVENT_TYPE, 0));
   }
   const void *event() const {
     return GetPointer<const void *>(VT_EVENT);
   }
   template<typename T> const T *event_as() const;
   const AuthenticatorExitEvent *event_as_AuthenticatorExitEvent() const {
-    return event_type() == APIEvents::AuthenticatorExitEvent ? static_cast<const AuthenticatorExitEvent *>(event()) : nullptr;
+    return event_type() == Events::AuthenticatorExitEvent ? static_cast<const AuthenticatorExitEvent *>(event()) : nullptr;
   }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<uint64_t>(verifier, VT_ID) &&
            VerifyField<uint8_t>(verifier, VT_MSG_TYPE) &&
            VerifyOffset(verifier, VT_MSG) &&
-           VerifyAPIReplies(verifier, msg(), msg_type()) &&
+           VerifyReplies(verifier, msg(), msg_type()) &&
            VerifyField<uint8_t>(verifier, VT_EVENT_TYPE) &&
            VerifyOffset(verifier, VT_EVENT) &&
-           VerifyAPIEvents(verifier, event(), event_type()) &&
+           VerifyEvents(verifier, event(), event_type()) &&
            verifier.EndTable();
   }
-  APIReplyT *UnPack(const flatbuffers::resolver_function_t *_resolver = nullptr) const;
-  void UnPackTo(APIReplyT *_o, const flatbuffers::resolver_function_t *_resolver = nullptr) const;
-  static flatbuffers::Offset<APIReply> Pack(flatbuffers::FlatBufferBuilder &_fbb, const APIReplyT* _o, const flatbuffers::rehasher_function_t *_rehasher = nullptr);
+  ReplyT *UnPack(const flatbuffers::resolver_function_t *_resolver = nullptr) const;
+  void UnPackTo(ReplyT *_o, const flatbuffers::resolver_function_t *_resolver = nullptr) const;
+  static flatbuffers::Offset<Reply> Pack(flatbuffers::FlatBufferBuilder &_fbb, const ReplyT* _o, const flatbuffers::rehasher_function_t *_rehasher = nullptr);
 };
 
-template<> inline const StatusReply *APIReply::msg_as<StatusReply>() const {
+template<> inline const StatusReply *Reply::msg_as<StatusReply>() const {
   return msg_as_StatusReply();
 }
 
-template<> inline const CreateAuthenticatorReply *APIReply::msg_as<CreateAuthenticatorReply>() const {
+template<> inline const CreateAuthenticatorReply *Reply::msg_as<CreateAuthenticatorReply>() const {
   return msg_as_CreateAuthenticatorReply();
 }
 
-template<> inline const DestroyAuthenticatorReply *APIReply::msg_as<DestroyAuthenticatorReply>() const {
+template<> inline const DestroyAuthenticatorReply *Reply::msg_as<DestroyAuthenticatorReply>() const {
   return msg_as_DestroyAuthenticatorReply();
 }
 
-template<> inline const AuthenticatorExitEvent *APIReply::event_as<AuthenticatorExitEvent>() const {
+template<> inline const AuthenticatorExitEvent *Reply::event_as<AuthenticatorExitEvent>() const {
   return event_as_AuthenticatorExitEvent();
 }
 
-struct APIReplyBuilder {
+struct ReplyBuilder {
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
   void add_id(uint64_t id) {
-    fbb_.AddElement<uint64_t>(APIReply::VT_ID, id, 0);
+    fbb_.AddElement<uint64_t>(Reply::VT_ID, id, 0);
   }
-  void add_msg_type(APIReplies msg_type) {
-    fbb_.AddElement<uint8_t>(APIReply::VT_MSG_TYPE, static_cast<uint8_t>(msg_type), 0);
+  void add_msg_type(Replies msg_type) {
+    fbb_.AddElement<uint8_t>(Reply::VT_MSG_TYPE, static_cast<uint8_t>(msg_type), 0);
   }
   void add_msg(flatbuffers::Offset<void> msg) {
-    fbb_.AddOffset(APIReply::VT_MSG, msg);
+    fbb_.AddOffset(Reply::VT_MSG, msg);
   }
-  void add_event_type(APIEvents event_type) {
-    fbb_.AddElement<uint8_t>(APIReply::VT_EVENT_TYPE, static_cast<uint8_t>(event_type), 0);
+  void add_event_type(Events event_type) {
+    fbb_.AddElement<uint8_t>(Reply::VT_EVENT_TYPE, static_cast<uint8_t>(event_type), 0);
   }
   void add_event(flatbuffers::Offset<void> event) {
-    fbb_.AddOffset(APIReply::VT_EVENT, event);
+    fbb_.AddOffset(Reply::VT_EVENT, event);
   }
-  explicit APIReplyBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit ReplyBuilder(flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  APIReplyBuilder &operator=(const APIReplyBuilder &);
-  flatbuffers::Offset<APIReply> Finish() {
+  ReplyBuilder &operator=(const ReplyBuilder &);
+  flatbuffers::Offset<Reply> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<APIReply>(end);
+    auto o = flatbuffers::Offset<Reply>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<APIReply> CreateAPIReply(
+inline flatbuffers::Offset<Reply> CreateReply(
     flatbuffers::FlatBufferBuilder &_fbb,
     uint64_t id = 0,
-    APIReplies msg_type = APIReplies::NONE,
+    Replies msg_type = Replies::NONE,
     flatbuffers::Offset<void> msg = 0,
-    APIEvents event_type = APIEvents::NONE,
+    Events event_type = Events::NONE,
     flatbuffers::Offset<void> event = 0) {
-  APIReplyBuilder builder_(_fbb);
+  ReplyBuilder builder_(_fbb);
   builder_.add_id(id);
   builder_.add_event(event);
   builder_.add_msg(msg);
@@ -1184,15 +1184,15 @@ inline flatbuffers::Offset<APIReply> CreateAPIReply(
   return builder_.Finish();
 }
 
-flatbuffers::Offset<APIReply> CreateAPIReply(flatbuffers::FlatBufferBuilder &_fbb, const APIReplyT *_o, const flatbuffers::rehasher_function_t *_rehasher = nullptr);
+flatbuffers::Offset<Reply> CreateReply(flatbuffers::FlatBufferBuilder &_fbb, const ReplyT *_o, const flatbuffers::rehasher_function_t *_rehasher = nullptr);
 
 struct ServerT : public flatbuffers::NativeTable {
   typedef Server TableType;
   static FLATBUFFERS_CONSTEXPR const char *GetFullyQualifiedName() {
     return "nfcdoorz.ipc.api.ServerT";
   }
-  std::unique_ptr<APICallT> call;
-  std::unique_ptr<APIReplyT> reply;
+  std::unique_ptr<CallT> call;
+  std::unique_ptr<ReplyT> reply;
   ServerT() {
   }
 };
@@ -1209,11 +1209,11 @@ struct Server FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
     VT_CALL = 4,
     VT_REPLY = 6
   };
-  const APICall *call() const {
-    return GetPointer<const APICall *>(VT_CALL);
+  const Call *call() const {
+    return GetPointer<const Call *>(VT_CALL);
   }
-  const APIReply *reply() const {
-    return GetPointer<const APIReply *>(VT_REPLY);
+  const Reply *reply() const {
+    return GetPointer<const Reply *>(VT_REPLY);
   }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
@@ -1231,10 +1231,10 @@ struct Server FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 struct ServerBuilder {
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
-  void add_call(flatbuffers::Offset<APICall> call) {
+  void add_call(flatbuffers::Offset<Call> call) {
     fbb_.AddOffset(Server::VT_CALL, call);
   }
-  void add_reply(flatbuffers::Offset<APIReply> reply) {
+  void add_reply(flatbuffers::Offset<Reply> reply) {
     fbb_.AddOffset(Server::VT_REPLY, reply);
   }
   explicit ServerBuilder(flatbuffers::FlatBufferBuilder &_fbb)
@@ -1251,8 +1251,8 @@ struct ServerBuilder {
 
 inline flatbuffers::Offset<Server> CreateServer(
     flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<APICall> call = 0,
-    flatbuffers::Offset<APIReply> reply = 0) {
+    flatbuffers::Offset<Call> call = 0,
+    flatbuffers::Offset<Reply> reply = 0) {
   ServerBuilder builder_(_fbb);
   builder_.add_reply(reply);
   builder_.add_call(call);
@@ -1475,68 +1475,68 @@ inline flatbuffers::Offset<AuthenticatorExitEvent> CreateAuthenticatorExitEvent(
       _deviceID);
 }
 
-inline APICallT *APICall::UnPack(const flatbuffers::resolver_function_t *_resolver) const {
-  auto _o = new APICallT();
+inline CallT *Call::UnPack(const flatbuffers::resolver_function_t *_resolver) const {
+  auto _o = new CallT();
   UnPackTo(_o, _resolver);
   return _o;
 }
 
-inline void APICall::UnPackTo(APICallT *_o, const flatbuffers::resolver_function_t *_resolver) const {
+inline void Call::UnPackTo(CallT *_o, const flatbuffers::resolver_function_t *_resolver) const {
   (void)_o;
   (void)_resolver;
   { auto _e = id(); _o->id = _e; };
   { auto _e = msg_type(); _o->msg.type = _e; };
-  { auto _e = msg(); if (_e) _o->msg.value = APICallsUnion::UnPack(_e, msg_type(), _resolver); };
+  { auto _e = msg(); if (_e) _o->msg.value = CallsUnion::UnPack(_e, msg_type(), _resolver); };
 }
 
-inline flatbuffers::Offset<APICall> APICall::Pack(flatbuffers::FlatBufferBuilder &_fbb, const APICallT* _o, const flatbuffers::rehasher_function_t *_rehasher) {
-  return CreateAPICall(_fbb, _o, _rehasher);
+inline flatbuffers::Offset<Call> Call::Pack(flatbuffers::FlatBufferBuilder &_fbb, const CallT* _o, const flatbuffers::rehasher_function_t *_rehasher) {
+  return CreateCall(_fbb, _o, _rehasher);
 }
 
-inline flatbuffers::Offset<APICall> CreateAPICall(flatbuffers::FlatBufferBuilder &_fbb, const APICallT *_o, const flatbuffers::rehasher_function_t *_rehasher) {
+inline flatbuffers::Offset<Call> CreateCall(flatbuffers::FlatBufferBuilder &_fbb, const CallT *_o, const flatbuffers::rehasher_function_t *_rehasher) {
   (void)_rehasher;
   (void)_o;
-  struct _VectorArgs { flatbuffers::FlatBufferBuilder *__fbb; const APICallT* __o; const flatbuffers::rehasher_function_t *__rehasher; } _va = { &_fbb, _o, _rehasher}; (void)_va;
+  struct _VectorArgs { flatbuffers::FlatBufferBuilder *__fbb; const CallT* __o; const flatbuffers::rehasher_function_t *__rehasher; } _va = { &_fbb, _o, _rehasher}; (void)_va;
   auto _id = _o->id;
   auto _msg_type = _o->msg.type;
   auto _msg = _o->msg.Pack(_fbb);
-  return nfcdoorz::ipc::api::CreateAPICall(
+  return nfcdoorz::ipc::api::CreateCall(
       _fbb,
       _id,
       _msg_type,
       _msg);
 }
 
-inline APIReplyT *APIReply::UnPack(const flatbuffers::resolver_function_t *_resolver) const {
-  auto _o = new APIReplyT();
+inline ReplyT *Reply::UnPack(const flatbuffers::resolver_function_t *_resolver) const {
+  auto _o = new ReplyT();
   UnPackTo(_o, _resolver);
   return _o;
 }
 
-inline void APIReply::UnPackTo(APIReplyT *_o, const flatbuffers::resolver_function_t *_resolver) const {
+inline void Reply::UnPackTo(ReplyT *_o, const flatbuffers::resolver_function_t *_resolver) const {
   (void)_o;
   (void)_resolver;
   { auto _e = id(); _o->id = _e; };
   { auto _e = msg_type(); _o->msg.type = _e; };
-  { auto _e = msg(); if (_e) _o->msg.value = APIRepliesUnion::UnPack(_e, msg_type(), _resolver); };
+  { auto _e = msg(); if (_e) _o->msg.value = RepliesUnion::UnPack(_e, msg_type(), _resolver); };
   { auto _e = event_type(); _o->event.type = _e; };
-  { auto _e = event(); if (_e) _o->event.value = APIEventsUnion::UnPack(_e, event_type(), _resolver); };
+  { auto _e = event(); if (_e) _o->event.value = EventsUnion::UnPack(_e, event_type(), _resolver); };
 }
 
-inline flatbuffers::Offset<APIReply> APIReply::Pack(flatbuffers::FlatBufferBuilder &_fbb, const APIReplyT* _o, const flatbuffers::rehasher_function_t *_rehasher) {
-  return CreateAPIReply(_fbb, _o, _rehasher);
+inline flatbuffers::Offset<Reply> Reply::Pack(flatbuffers::FlatBufferBuilder &_fbb, const ReplyT* _o, const flatbuffers::rehasher_function_t *_rehasher) {
+  return CreateReply(_fbb, _o, _rehasher);
 }
 
-inline flatbuffers::Offset<APIReply> CreateAPIReply(flatbuffers::FlatBufferBuilder &_fbb, const APIReplyT *_o, const flatbuffers::rehasher_function_t *_rehasher) {
+inline flatbuffers::Offset<Reply> CreateReply(flatbuffers::FlatBufferBuilder &_fbb, const ReplyT *_o, const flatbuffers::rehasher_function_t *_rehasher) {
   (void)_rehasher;
   (void)_o;
-  struct _VectorArgs { flatbuffers::FlatBufferBuilder *__fbb; const APIReplyT* __o; const flatbuffers::rehasher_function_t *__rehasher; } _va = { &_fbb, _o, _rehasher}; (void)_va;
+  struct _VectorArgs { flatbuffers::FlatBufferBuilder *__fbb; const ReplyT* __o; const flatbuffers::rehasher_function_t *__rehasher; } _va = { &_fbb, _o, _rehasher}; (void)_va;
   auto _id = _o->id;
   auto _msg_type = _o->msg.type;
   auto _msg = _o->msg.Pack(_fbb);
   auto _event_type = _o->event.type;
   auto _event = _o->event.Pack(_fbb);
-  return nfcdoorz::ipc::api::CreateAPIReply(
+  return nfcdoorz::ipc::api::CreateReply(
       _fbb,
       _id,
       _msg_type,
@@ -1554,8 +1554,8 @@ inline ServerT *Server::UnPack(const flatbuffers::resolver_function_t *_resolver
 inline void Server::UnPackTo(ServerT *_o, const flatbuffers::resolver_function_t *_resolver) const {
   (void)_o;
   (void)_resolver;
-  { auto _e = call(); if (_e) _o->call = std::unique_ptr<APICallT>(_e->UnPack(_resolver)); };
-  { auto _e = reply(); if (_e) _o->reply = std::unique_ptr<APIReplyT>(_e->UnPack(_resolver)); };
+  { auto _e = call(); if (_e) _o->call = std::unique_ptr<CallT>(_e->UnPack(_resolver)); };
+  { auto _e = reply(); if (_e) _o->reply = std::unique_ptr<ReplyT>(_e->UnPack(_resolver)); };
 }
 
 inline flatbuffers::Offset<Server> Server::Pack(flatbuffers::FlatBufferBuilder &_fbb, const ServerT* _o, const flatbuffers::rehasher_function_t *_rehasher) {
@@ -1566,28 +1566,28 @@ inline flatbuffers::Offset<Server> CreateServer(flatbuffers::FlatBufferBuilder &
   (void)_rehasher;
   (void)_o;
   struct _VectorArgs { flatbuffers::FlatBufferBuilder *__fbb; const ServerT* __o; const flatbuffers::rehasher_function_t *__rehasher; } _va = { &_fbb, _o, _rehasher}; (void)_va;
-  auto _call = _o->call ? CreateAPICall(_fbb, _o->call.get(), _rehasher) : 0;
-  auto _reply = _o->reply ? CreateAPIReply(_fbb, _o->reply.get(), _rehasher) : 0;
+  auto _call = _o->call ? CreateCall(_fbb, _o->call.get(), _rehasher) : 0;
+  auto _reply = _o->reply ? CreateReply(_fbb, _o->reply.get(), _rehasher) : 0;
   return nfcdoorz::ipc::api::CreateServer(
       _fbb,
       _call,
       _reply);
 }
 
-inline bool VerifyAPICalls(flatbuffers::Verifier &verifier, const void *obj, APICalls type) {
+inline bool VerifyCalls(flatbuffers::Verifier &verifier, const void *obj, Calls type) {
   switch (type) {
-    case APICalls::NONE: {
+    case Calls::NONE: {
       return true;
     }
-    case APICalls::StatusCall: {
+    case Calls::StatusCall: {
       auto ptr = reinterpret_cast<const StatusCall *>(obj);
       return verifier.VerifyTable(ptr);
     }
-    case APICalls::CreateAuthenticatorCall: {
+    case Calls::CreateAuthenticatorCall: {
       auto ptr = reinterpret_cast<const CreateAuthenticatorCall *>(obj);
       return verifier.VerifyTable(ptr);
     }
-    case APICalls::DestroyAuthenticatorCall: {
+    case Calls::DestroyAuthenticatorCall: {
       auto ptr = reinterpret_cast<const DestroyAuthenticatorCall *>(obj);
       return verifier.VerifyTable(ptr);
     }
@@ -1595,29 +1595,29 @@ inline bool VerifyAPICalls(flatbuffers::Verifier &verifier, const void *obj, API
   }
 }
 
-inline bool VerifyAPICallsVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types) {
+inline bool VerifyCallsVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types) {
   if (!values || !types) return !values && !types;
   if (values->size() != types->size()) return false;
   for (flatbuffers::uoffset_t i = 0; i < values->size(); ++i) {
-    if (!VerifyAPICalls(
-        verifier,  values->Get(i), types->GetEnum<APICalls>(i))) {
+    if (!VerifyCalls(
+        verifier,  values->Get(i), types->GetEnum<Calls>(i))) {
       return false;
     }
   }
   return true;
 }
 
-inline void *APICallsUnion::UnPack(const void *obj, APICalls type, const flatbuffers::resolver_function_t *resolver) {
+inline void *CallsUnion::UnPack(const void *obj, Calls type, const flatbuffers::resolver_function_t *resolver) {
   switch (type) {
-    case APICalls::StatusCall: {
+    case Calls::StatusCall: {
       auto ptr = reinterpret_cast<const StatusCall *>(obj);
       return ptr->UnPack(resolver);
     }
-    case APICalls::CreateAuthenticatorCall: {
+    case Calls::CreateAuthenticatorCall: {
       auto ptr = reinterpret_cast<const CreateAuthenticatorCall *>(obj);
       return ptr->UnPack(resolver);
     }
-    case APICalls::DestroyAuthenticatorCall: {
+    case Calls::DestroyAuthenticatorCall: {
       auto ptr = reinterpret_cast<const DestroyAuthenticatorCall *>(obj);
       return ptr->UnPack(resolver);
     }
@@ -1625,17 +1625,17 @@ inline void *APICallsUnion::UnPack(const void *obj, APICalls type, const flatbuf
   }
 }
 
-inline flatbuffers::Offset<void> APICallsUnion::Pack(flatbuffers::FlatBufferBuilder &_fbb, const flatbuffers::rehasher_function_t *_rehasher) const {
+inline flatbuffers::Offset<void> CallsUnion::Pack(flatbuffers::FlatBufferBuilder &_fbb, const flatbuffers::rehasher_function_t *_rehasher) const {
   switch (type) {
-    case APICalls::StatusCall: {
+    case Calls::StatusCall: {
       auto ptr = reinterpret_cast<const StatusCallT *>(value);
       return CreateStatusCall(_fbb, ptr, _rehasher).Union();
     }
-    case APICalls::CreateAuthenticatorCall: {
+    case Calls::CreateAuthenticatorCall: {
       auto ptr = reinterpret_cast<const CreateAuthenticatorCallT *>(value);
       return CreateCreateAuthenticatorCall(_fbb, ptr, _rehasher).Union();
     }
-    case APICalls::DestroyAuthenticatorCall: {
+    case Calls::DestroyAuthenticatorCall: {
       auto ptr = reinterpret_cast<const DestroyAuthenticatorCallT *>(value);
       return CreateDestroyAuthenticatorCall(_fbb, ptr, _rehasher).Union();
     }
@@ -1643,17 +1643,17 @@ inline flatbuffers::Offset<void> APICallsUnion::Pack(flatbuffers::FlatBufferBuil
   }
 }
 
-inline APICallsUnion::APICallsUnion(const APICallsUnion &u) FLATBUFFERS_NOEXCEPT : type(u.type), value(nullptr) {
+inline CallsUnion::CallsUnion(const CallsUnion &u) FLATBUFFERS_NOEXCEPT : type(u.type), value(nullptr) {
   switch (type) {
-    case APICalls::StatusCall: {
+    case Calls::StatusCall: {
       value = new StatusCallT(*reinterpret_cast<StatusCallT *>(u.value));
       break;
     }
-    case APICalls::CreateAuthenticatorCall: {
+    case Calls::CreateAuthenticatorCall: {
       value = new CreateAuthenticatorCallT(*reinterpret_cast<CreateAuthenticatorCallT *>(u.value));
       break;
     }
-    case APICalls::DestroyAuthenticatorCall: {
+    case Calls::DestroyAuthenticatorCall: {
       value = new DestroyAuthenticatorCallT(*reinterpret_cast<DestroyAuthenticatorCallT *>(u.value));
       break;
     }
@@ -1662,19 +1662,19 @@ inline APICallsUnion::APICallsUnion(const APICallsUnion &u) FLATBUFFERS_NOEXCEPT
   }
 }
 
-inline void APICallsUnion::Reset() {
+inline void CallsUnion::Reset() {
   switch (type) {
-    case APICalls::StatusCall: {
+    case Calls::StatusCall: {
       auto ptr = reinterpret_cast<StatusCallT *>(value);
       delete ptr;
       break;
     }
-    case APICalls::CreateAuthenticatorCall: {
+    case Calls::CreateAuthenticatorCall: {
       auto ptr = reinterpret_cast<CreateAuthenticatorCallT *>(value);
       delete ptr;
       break;
     }
-    case APICalls::DestroyAuthenticatorCall: {
+    case Calls::DestroyAuthenticatorCall: {
       auto ptr = reinterpret_cast<DestroyAuthenticatorCallT *>(value);
       delete ptr;
       break;
@@ -1682,23 +1682,23 @@ inline void APICallsUnion::Reset() {
     default: break;
   }
   value = nullptr;
-  type = APICalls::NONE;
+  type = Calls::NONE;
 }
 
-inline bool VerifyAPIReplies(flatbuffers::Verifier &verifier, const void *obj, APIReplies type) {
+inline bool VerifyReplies(flatbuffers::Verifier &verifier, const void *obj, Replies type) {
   switch (type) {
-    case APIReplies::NONE: {
+    case Replies::NONE: {
       return true;
     }
-    case APIReplies::StatusReply: {
+    case Replies::StatusReply: {
       auto ptr = reinterpret_cast<const StatusReply *>(obj);
       return verifier.VerifyTable(ptr);
     }
-    case APIReplies::CreateAuthenticatorReply: {
+    case Replies::CreateAuthenticatorReply: {
       auto ptr = reinterpret_cast<const CreateAuthenticatorReply *>(obj);
       return verifier.VerifyTable(ptr);
     }
-    case APIReplies::DestroyAuthenticatorReply: {
+    case Replies::DestroyAuthenticatorReply: {
       auto ptr = reinterpret_cast<const DestroyAuthenticatorReply *>(obj);
       return verifier.VerifyTable(ptr);
     }
@@ -1706,29 +1706,29 @@ inline bool VerifyAPIReplies(flatbuffers::Verifier &verifier, const void *obj, A
   }
 }
 
-inline bool VerifyAPIRepliesVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types) {
+inline bool VerifyRepliesVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types) {
   if (!values || !types) return !values && !types;
   if (values->size() != types->size()) return false;
   for (flatbuffers::uoffset_t i = 0; i < values->size(); ++i) {
-    if (!VerifyAPIReplies(
-        verifier,  values->Get(i), types->GetEnum<APIReplies>(i))) {
+    if (!VerifyReplies(
+        verifier,  values->Get(i), types->GetEnum<Replies>(i))) {
       return false;
     }
   }
   return true;
 }
 
-inline void *APIRepliesUnion::UnPack(const void *obj, APIReplies type, const flatbuffers::resolver_function_t *resolver) {
+inline void *RepliesUnion::UnPack(const void *obj, Replies type, const flatbuffers::resolver_function_t *resolver) {
   switch (type) {
-    case APIReplies::StatusReply: {
+    case Replies::StatusReply: {
       auto ptr = reinterpret_cast<const StatusReply *>(obj);
       return ptr->UnPack(resolver);
     }
-    case APIReplies::CreateAuthenticatorReply: {
+    case Replies::CreateAuthenticatorReply: {
       auto ptr = reinterpret_cast<const CreateAuthenticatorReply *>(obj);
       return ptr->UnPack(resolver);
     }
-    case APIReplies::DestroyAuthenticatorReply: {
+    case Replies::DestroyAuthenticatorReply: {
       auto ptr = reinterpret_cast<const DestroyAuthenticatorReply *>(obj);
       return ptr->UnPack(resolver);
     }
@@ -1736,17 +1736,17 @@ inline void *APIRepliesUnion::UnPack(const void *obj, APIReplies type, const fla
   }
 }
 
-inline flatbuffers::Offset<void> APIRepliesUnion::Pack(flatbuffers::FlatBufferBuilder &_fbb, const flatbuffers::rehasher_function_t *_rehasher) const {
+inline flatbuffers::Offset<void> RepliesUnion::Pack(flatbuffers::FlatBufferBuilder &_fbb, const flatbuffers::rehasher_function_t *_rehasher) const {
   switch (type) {
-    case APIReplies::StatusReply: {
+    case Replies::StatusReply: {
       auto ptr = reinterpret_cast<const StatusReplyT *>(value);
       return CreateStatusReply(_fbb, ptr, _rehasher).Union();
     }
-    case APIReplies::CreateAuthenticatorReply: {
+    case Replies::CreateAuthenticatorReply: {
       auto ptr = reinterpret_cast<const CreateAuthenticatorReplyT *>(value);
       return CreateCreateAuthenticatorReply(_fbb, ptr, _rehasher).Union();
     }
-    case APIReplies::DestroyAuthenticatorReply: {
+    case Replies::DestroyAuthenticatorReply: {
       auto ptr = reinterpret_cast<const DestroyAuthenticatorReplyT *>(value);
       return CreateDestroyAuthenticatorReply(_fbb, ptr, _rehasher).Union();
     }
@@ -1754,17 +1754,17 @@ inline flatbuffers::Offset<void> APIRepliesUnion::Pack(flatbuffers::FlatBufferBu
   }
 }
 
-inline APIRepliesUnion::APIRepliesUnion(const APIRepliesUnion &u) FLATBUFFERS_NOEXCEPT : type(u.type), value(nullptr) {
+inline RepliesUnion::RepliesUnion(const RepliesUnion &u) FLATBUFFERS_NOEXCEPT : type(u.type), value(nullptr) {
   switch (type) {
-    case APIReplies::StatusReply: {
+    case Replies::StatusReply: {
       FLATBUFFERS_ASSERT(false);  // StatusReplyT not copyable.
       break;
     }
-    case APIReplies::CreateAuthenticatorReply: {
+    case Replies::CreateAuthenticatorReply: {
       value = new CreateAuthenticatorReplyT(*reinterpret_cast<CreateAuthenticatorReplyT *>(u.value));
       break;
     }
-    case APIReplies::DestroyAuthenticatorReply: {
+    case Replies::DestroyAuthenticatorReply: {
       value = new DestroyAuthenticatorReplyT(*reinterpret_cast<DestroyAuthenticatorReplyT *>(u.value));
       break;
     }
@@ -1773,19 +1773,19 @@ inline APIRepliesUnion::APIRepliesUnion(const APIRepliesUnion &u) FLATBUFFERS_NO
   }
 }
 
-inline void APIRepliesUnion::Reset() {
+inline void RepliesUnion::Reset() {
   switch (type) {
-    case APIReplies::StatusReply: {
+    case Replies::StatusReply: {
       auto ptr = reinterpret_cast<StatusReplyT *>(value);
       delete ptr;
       break;
     }
-    case APIReplies::CreateAuthenticatorReply: {
+    case Replies::CreateAuthenticatorReply: {
       auto ptr = reinterpret_cast<CreateAuthenticatorReplyT *>(value);
       delete ptr;
       break;
     }
-    case APIReplies::DestroyAuthenticatorReply: {
+    case Replies::DestroyAuthenticatorReply: {
       auto ptr = reinterpret_cast<DestroyAuthenticatorReplyT *>(value);
       delete ptr;
       break;
@@ -1793,15 +1793,15 @@ inline void APIRepliesUnion::Reset() {
     default: break;
   }
   value = nullptr;
-  type = APIReplies::NONE;
+  type = Replies::NONE;
 }
 
-inline bool VerifyAPIEvents(flatbuffers::Verifier &verifier, const void *obj, APIEvents type) {
+inline bool VerifyEvents(flatbuffers::Verifier &verifier, const void *obj, Events type) {
   switch (type) {
-    case APIEvents::NONE: {
+    case Events::NONE: {
       return true;
     }
-    case APIEvents::AuthenticatorExitEvent: {
+    case Events::AuthenticatorExitEvent: {
       auto ptr = reinterpret_cast<const AuthenticatorExitEvent *>(obj);
       return verifier.VerifyTable(ptr);
     }
@@ -1809,21 +1809,21 @@ inline bool VerifyAPIEvents(flatbuffers::Verifier &verifier, const void *obj, AP
   }
 }
 
-inline bool VerifyAPIEventsVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types) {
+inline bool VerifyEventsVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types) {
   if (!values || !types) return !values && !types;
   if (values->size() != types->size()) return false;
   for (flatbuffers::uoffset_t i = 0; i < values->size(); ++i) {
-    if (!VerifyAPIEvents(
-        verifier,  values->Get(i), types->GetEnum<APIEvents>(i))) {
+    if (!VerifyEvents(
+        verifier,  values->Get(i), types->GetEnum<Events>(i))) {
       return false;
     }
   }
   return true;
 }
 
-inline void *APIEventsUnion::UnPack(const void *obj, APIEvents type, const flatbuffers::resolver_function_t *resolver) {
+inline void *EventsUnion::UnPack(const void *obj, Events type, const flatbuffers::resolver_function_t *resolver) {
   switch (type) {
-    case APIEvents::AuthenticatorExitEvent: {
+    case Events::AuthenticatorExitEvent: {
       auto ptr = reinterpret_cast<const AuthenticatorExitEvent *>(obj);
       return ptr->UnPack(resolver);
     }
@@ -1831,9 +1831,9 @@ inline void *APIEventsUnion::UnPack(const void *obj, APIEvents type, const flatb
   }
 }
 
-inline flatbuffers::Offset<void> APIEventsUnion::Pack(flatbuffers::FlatBufferBuilder &_fbb, const flatbuffers::rehasher_function_t *_rehasher) const {
+inline flatbuffers::Offset<void> EventsUnion::Pack(flatbuffers::FlatBufferBuilder &_fbb, const flatbuffers::rehasher_function_t *_rehasher) const {
   switch (type) {
-    case APIEvents::AuthenticatorExitEvent: {
+    case Events::AuthenticatorExitEvent: {
       auto ptr = reinterpret_cast<const AuthenticatorExitEventT *>(value);
       return CreateAuthenticatorExitEvent(_fbb, ptr, _rehasher).Union();
     }
@@ -1841,9 +1841,9 @@ inline flatbuffers::Offset<void> APIEventsUnion::Pack(flatbuffers::FlatBufferBui
   }
 }
 
-inline APIEventsUnion::APIEventsUnion(const APIEventsUnion &u) FLATBUFFERS_NOEXCEPT : type(u.type), value(nullptr) {
+inline EventsUnion::EventsUnion(const EventsUnion &u) FLATBUFFERS_NOEXCEPT : type(u.type), value(nullptr) {
   switch (type) {
-    case APIEvents::AuthenticatorExitEvent: {
+    case Events::AuthenticatorExitEvent: {
       value = new AuthenticatorExitEventT(*reinterpret_cast<AuthenticatorExitEventT *>(u.value));
       break;
     }
@@ -1852,9 +1852,9 @@ inline APIEventsUnion::APIEventsUnion(const APIEventsUnion &u) FLATBUFFERS_NOEXC
   }
 }
 
-inline void APIEventsUnion::Reset() {
+inline void EventsUnion::Reset() {
   switch (type) {
-    case APIEvents::AuthenticatorExitEvent: {
+    case Events::AuthenticatorExitEvent: {
       auto ptr = reinterpret_cast<AuthenticatorExitEventT *>(value);
       delete ptr;
       break;
@@ -1862,10 +1862,10 @@ inline void APIEventsUnion::Reset() {
     default: break;
   }
   value = nullptr;
-  type = APIEvents::NONE;
+  type = Events::NONE;
 }
 
-inline const flatbuffers::TypeTable *APICallsTypeTable() {
+inline const flatbuffers::TypeTable *CallsTypeTable() {
   static const flatbuffers::TypeCode type_codes[] = {
     { flatbuffers::ET_SEQUENCE, 0, -1 },
     { flatbuffers::ET_SEQUENCE, 0, 0 },
@@ -1889,7 +1889,7 @@ inline const flatbuffers::TypeTable *APICallsTypeTable() {
   return &tt;
 }
 
-inline const flatbuffers::TypeTable *APIRepliesTypeTable() {
+inline const flatbuffers::TypeTable *RepliesTypeTable() {
   static const flatbuffers::TypeCode type_codes[] = {
     { flatbuffers::ET_SEQUENCE, 0, -1 },
     { flatbuffers::ET_SEQUENCE, 0, 0 },
@@ -1913,7 +1913,7 @@ inline const flatbuffers::TypeTable *APIRepliesTypeTable() {
   return &tt;
 }
 
-inline const flatbuffers::TypeTable *APIEventsTypeTable() {
+inline const flatbuffers::TypeTable *EventsTypeTable() {
   static const flatbuffers::TypeCode type_codes[] = {
     { flatbuffers::ET_SEQUENCE, 0, -1 },
     { flatbuffers::ET_SEQUENCE, 0, 0 }
@@ -2038,14 +2038,14 @@ inline const flatbuffers::TypeTable *AuthenticatorExitEventTypeTable() {
   return &tt;
 }
 
-inline const flatbuffers::TypeTable *APICallTypeTable() {
+inline const flatbuffers::TypeTable *CallTypeTable() {
   static const flatbuffers::TypeCode type_codes[] = {
     { flatbuffers::ET_ULONG, 0, -1 },
     { flatbuffers::ET_UTYPE, 0, 0 },
     { flatbuffers::ET_SEQUENCE, 0, 0 }
   };
   static const flatbuffers::TypeFunction type_refs[] = {
-    APICallsTypeTable
+    CallsTypeTable
   };
   static const char * const names[] = {
     "id",
@@ -2058,7 +2058,7 @@ inline const flatbuffers::TypeTable *APICallTypeTable() {
   return &tt;
 }
 
-inline const flatbuffers::TypeTable *APIReplyTypeTable() {
+inline const flatbuffers::TypeTable *ReplyTypeTable() {
   static const flatbuffers::TypeCode type_codes[] = {
     { flatbuffers::ET_ULONG, 0, -1 },
     { flatbuffers::ET_UTYPE, 0, 0 },
@@ -2067,8 +2067,8 @@ inline const flatbuffers::TypeTable *APIReplyTypeTable() {
     { flatbuffers::ET_SEQUENCE, 0, 1 }
   };
   static const flatbuffers::TypeFunction type_refs[] = {
-    APIRepliesTypeTable,
-    APIEventsTypeTable
+    RepliesTypeTable,
+    EventsTypeTable
   };
   static const char * const names[] = {
     "id",
@@ -2089,8 +2089,8 @@ inline const flatbuffers::TypeTable *ServerTypeTable() {
     { flatbuffers::ET_SEQUENCE, 0, 1 }
   };
   static const flatbuffers::TypeFunction type_refs[] = {
-    APICallTypeTable,
-    APIReplyTypeTable
+    CallTypeTable,
+    ReplyTypeTable
   };
   static const char * const names[] = {
     "call",

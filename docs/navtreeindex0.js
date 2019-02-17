@@ -193,6 +193,8 @@ var NAVTREEINDEX0 =
 "dir_bf748a4ed17e892abd657bdfd884aa74.htm":[2,0,1,0,0],
 "dir_eea5a30af1860202cf994ad4b8d0af6a.htm":[2,0,1,1],
 "files.htm":[2,0],
+"functions.htm":[1,3,0],
+"functions_func.htm":[1,3,1],
 "handlers_8cpp_source.htm":[2,0,1,0,0,0],
 "handlers_8hpp_source.htm":[2,0,1,0,0,1],
 "hierarchy.htm":[1,2],
@@ -247,7 +249,5 @@ var NAVTREEINDEX0 =
 "structnfcdoorz_1_1config_1_1_app.htm#aab60e75dc9fb96b0ee23ba8f6d3f8b0d":[1,0,0,1,1,1],
 "structnfcdoorz_1_1config_1_1_app.htm#acd1f6abb344e14d9072ebc0f619b0b90":[1,0,0,1,1,4],
 "structnfcdoorz_1_1config_1_1_app.htm#ae31d9ab639bf707876e8f3ad81ba23f4":[1,0,0,1,1,6],
-"structnfcdoorz_1_1config_1_1_app.htm#af91ac81e53ea36a5e3f5b172477d3265":[1,0,0,1,1,2],
-"structnfcdoorz_1_1config_1_1_app_settings.htm":[1,0,0,1,2],
-"structnfcdoorz_1_1config_1_1_app_settings.htm#a047e5823da4577bb296da223d3dfe66b":[1,0,0,1,2,5]
+"structnfcdoorz_1_1config_1_1_app.htm#af91ac81e53ea36a5e3f5b172477d3265":[1,0,0,1,1,2]
 };

@@ -107,7 +107,7 @@ namespace nfcdoorz::apps::api {
     });
 
     client.registerEventHandler(
-      ipc::api::APIEvents::AuthenticatorExitEvent,
+      ipc::api::Events::AuthenticatorExitEvent,
       [this, devID](auto &event) -> bool {
       auto exitEvent = event.AsAuthenticatorExitEvent();
       if (exitEvent->deviceID == devID) {

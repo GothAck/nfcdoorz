@@ -4,27 +4,27 @@ table TestCall {}
 
 table TestReply {}
 
-table PolicyRequestEvent {
+table RequestEvent {
   deviceID: string;
   cardUID: [uint8];
 }
 
-union PolicyCalls { TestCall }
-union PolicyReplies { TestReply }
-union PolicyEvents { PolicyRequestEvent }
+union Calls { TestCall }
+union Replies { TestReply }
+union Events { RequestEvent }
 
-table PolicyCall {
+table Call {
   id: uint64;
-  msg: PolicyCalls;
+  msg: Calls;
 }
 
-table PolicyReply {
+table Reply {
   id: uint64;
-  msg: PolicyReplies;
-  event: PolicyEvents;
+  msg: Replies;
+  event: Events;
 }
 
 table Server {
-  call: PolicyCall;
-  reply: PolicyReply;
+  call: Call;
+  reply: Reply;
 }

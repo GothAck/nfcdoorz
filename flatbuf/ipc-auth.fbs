@@ -13,7 +13,9 @@ table Key {
   data: [ubyte];
 }
 
-table TagResult {
+table TagCall {}
+
+table TagReply {
   uid: [ubyte];
 }
 
@@ -41,22 +43,22 @@ table Result {
 
 table RandomEvent {}
 
-union AuthCalls { TagPresent, Result }
-union AuthReplies { AuthApp, GetUID }
-union AuthEvents { RandomEvent }
+union Calls { TagCall }
+union Replies { TagReply }
+union Events { RandomEvent }
 
-table AuthCall {
+table Call {
   id: uint64;
-  msg: AuthCalls;
+  msg: Calls;
 }
 
-table AuthReply {
+table Reply {
   id: uint64;
-  msg: AuthReplies;
-  event: AuthEvents;
+  msg: Replies;
+  event: Events;
 }
 
 table Server {
-  call: AuthCall;
-  reply: AuthReply;
+  call: Call;
+  reply: Reply;
 }

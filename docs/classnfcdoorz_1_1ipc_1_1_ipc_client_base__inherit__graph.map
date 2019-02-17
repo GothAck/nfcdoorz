@@ -2,7 +2,7 @@
 <area shape="rect" id="node3" href="$classnfcdoorz_1_1ipc_1_1_ipc_client.htm" title="nfcdoorz::ipc::IpcClient\l\&lt; ipc::api::Server \&gt;" alt="" coords="441,5,599,47"/>
 <area shape="rect" id="node5" href="$classnfcdoorz_1_1ipc_1_1_ipc_client.htm" title="nfcdoorz::ipc::IpcClient\l\&lt; ipc::policy::Server \&gt;" alt="" coords="441,71,599,112"/>
 <area shape="rect" id="node7" href="$classnfcdoorz_1_1ipc_1_1_ipc_client.htm" title="nfcdoorz::ipc::IpcClient\l\&lt; APIServer \&gt;" alt="" coords="441,136,599,177"/>
-<area shape="rect" id="node2" href="$classnfcdoorz_1_1ipc_1_1_ipc_base.htm" title="nfcdoorz::ipc::IpcBase" alt="" coords="5,78,159,105"/>
+<area shape="rect" id="node2" href="$classnfcdoorz_1_1ipc_1_1_ipc_base.htm" title="Base of all IPC classes. Contains the common required components for running IPC communications. " alt="" coords="5,78,159,105"/>
 <area shape="rect" id="node4" href="$structnfcdoorz_1_1ipc_1_1_ipc_client_a_p_i.htm" title="nfcdoorz::ipc::IpcClientAPI" alt="" coords="647,13,825,39"/>
 <area shape="rect" id="node6" href="$structnfcdoorz_1_1ipc_1_1_ipc_client_policy.htm" title="nfcdoorz::ipc::IpcClient\lPolicy" alt="" coords="657,71,815,112"/>
 </map>

@@ -1,5 +1,7 @@
 var NAVTREEINDEX1 =
 {
+"structnfcdoorz_1_1config_1_1_app_settings.htm":[1,0,0,1,2],
+"structnfcdoorz_1_1config_1_1_app_settings.htm#a047e5823da4577bb296da223d3dfe66b":[1,0,0,1,2,5],
 "structnfcdoorz_1_1config_1_1_app_settings.htm#a204f2e6c772188827af786d81ac83e51":[1,0,0,1,2,2],
 "structnfcdoorz_1_1config_1_1_app_settings.htm#a21d18a77d125d8843b8a40350941fe91":[1,0,0,1,2,0],
 "structnfcdoorz_1_1config_1_1_app_settings.htm#a47eca41252fab7e92d4215fee1d794bb":[1,0,0,1,2,3],
@@ -73,11 +75,9 @@ var NAVTREEINDEX1 =
 "structnfcdoorz_1_1config_1_1_p_i_c_c.htm#a124b6e1b2f2e8b962781a6249d2e149a":[1,0,0,1,16,1],
 "structnfcdoorz_1_1config_1_1_p_i_c_c.htm#a18f0d83619520d6e628a9c59428d5219":[1,0,0,1,16,0],
 "structnfcdoorz_1_1ipc_1_1_ipc_base_1_1_executable.htm":[1,0,0,2,0,0],
-"structnfcdoorz_1_1ipc_1_1_ipc_base_1_1_executable.htm#a00cd1403aaf6f1f74b6ad5f56d6be571":[1,0,0,2,0,0,2],
-"structnfcdoorz_1_1ipc_1_1_ipc_base_1_1_executable.htm#a4cb4602b1b2d5b8b7e42f581231fb2a9":[1,0,0,2,0,0,1],
+"structnfcdoorz_1_1ipc_1_1_ipc_base_1_1_executable.htm#a28fa1bcf8d085745e3b17d50f8f2c34b":[1,0,0,2,0,0,1],
 "structnfcdoorz_1_1ipc_1_1_ipc_base_1_1_executable.htm#a5a798183762f56f6a63247b6408afe13":[1,0,0,2,0,0,0],
-"structnfcdoorz_1_1ipc_1_1_ipc_base_1_1_executable.htm#a9d3f5dec0725dfea95f73d3251b9db19":[1,0,0,2,0,0,4],
-"structnfcdoorz_1_1ipc_1_1_ipc_base_1_1_executable.htm#aab959c0157801597915d0545cace4c78":[1,0,0,2,0,0,3],
+"structnfcdoorz_1_1ipc_1_1_ipc_base_1_1_executable.htm#ab3e646d075485b46d48e8a82631d0bf7":[1,0,0,2,0,0,2],
 "structnfcdoorz_1_1ipc_1_1_ipc_client_1_1_callable.htm":[1,0,0,2,1,0],
 "structnfcdoorz_1_1ipc_1_1_ipc_client_1_1_callable.htm#a3ade2e5950c7566af8deab602e99d56e":[1,0,0,2,1,0,0],
 "structnfcdoorz_1_1ipc_1_1_ipc_client_1_1_callable.htm#a51d9b7be3a863b0c5c9258798a95766f":[1,0,0,2,1,0,4],

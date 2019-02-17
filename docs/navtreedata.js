@@ -5,7 +5,11 @@ var NAVTREE =
     [ "Classes", "annotated.htm", [
       [ "Class List", "annotated.htm", "annotated_dup" ],
       [ "Class Index", "classes.htm", null ],
-      [ "Class Hierarchy", "hierarchy.htm", "hierarchy" ]
+      [ "Class Hierarchy", "hierarchy.htm", "hierarchy" ],
+      [ "Class Members", "functions.htm", [
+        [ "All", "functions.htm", null ],
+        [ "Functions", "functions_func.htm", null ]
+      ] ]
     ] ],
     [ "Files", null, [
       [ "File List", "files.htm", "files" ]
@@ -16,7 +20,7 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 ".htm",
-"structnfcdoorz_1_1config_1_1_app_settings.htm#a204f2e6c772188827af786d81ac83e51"
+"structnfcdoorz_1_1config_1_1_app_settings.htm"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

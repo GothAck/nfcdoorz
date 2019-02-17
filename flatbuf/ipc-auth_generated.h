@@ -19,8 +19,11 @@ struct AppIDT;
 struct Key;
 struct KeyT;
 
-struct TagResult;
-struct TagResultT;
+struct TagCall;
+struct TagCallT;
+
+struct TagReply;
+struct TagReplyT;
 
 struct AuthApp;
 struct AuthAppT;
@@ -40,11 +43,11 @@ struct ResultT;
 struct RandomEvent;
 struct RandomEventT;
 
-struct AuthCall;
-struct AuthCallT;
+struct Call;
+struct CallT;
 
-struct AuthReply;
-struct AuthReplyT;
+struct Reply;
+struct ReplyT;
 
 struct Server;
 struct ServerT;
@@ -55,7 +58,9 @@ inline const flatbuffers::TypeTable *AppIDTypeTable();
 
 inline const flatbuffers::TypeTable *KeyTypeTable();
 
-inline const flatbuffers::TypeTable *TagResultTypeTable();
+inline const flatbuffers::TypeTable *TagCallTypeTable();
+
+inline const flatbuffers::TypeTable *TagReplyTypeTable();
 
 inline const flatbuffers::TypeTable *AuthAppTypeTable();
 
@@ -69,9 +74,9 @@ inline const flatbuffers::TypeTable *ResultTypeTable();
 
 inline const flatbuffers::TypeTable *RandomEventTypeTable();
 
-inline const flatbuffers::TypeTable *AuthCallTypeTable();
+inline const flatbuffers::TypeTable *CallTypeTable();
 
-inline const flatbuffers::TypeTable *AuthReplyTypeTable();
+inline const flatbuffers::TypeTable *ReplyTypeTable();
 
 inline const flatbuffers::TypeTable *ServerTypeTable();
 
@@ -156,64 +161,57 @@ struct ResultDataUnion {
 bool VerifyResultData(flatbuffers::Verifier &verifier, const void *obj, ResultData type);
 bool VerifyResultDataVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types);
 
-enum class AuthCalls : uint8_t {
+enum class Calls : uint8_t {
   NONE = 0,
-  TagPresent = 1,
-  Result = 2,
+  TagCall = 1,
   MIN = NONE,
-  MAX = Result
+  MAX = TagCall
 };
 
-inline const AuthCalls (&EnumValuesAuthCalls())[3] {
-  static const AuthCalls values[] = {
-    AuthCalls::NONE,
-    AuthCalls::TagPresent,
-    AuthCalls::Result
+inline const Calls (&EnumValuesCalls())[2] {
+  static const Calls values[] = {
+    Calls::NONE,
+    Calls::TagCall
   };
   return values;
 }
 
-inline const char * const *EnumNamesAuthCalls() {
+inline const char * const *EnumNamesCalls() {
   static const char * const names[] = {
     "NONE",
-    "TagPresent",
-    "Result",
+    "TagCall",
     nullptr
   };
   return names;
 }
 
-inline const char *EnumNameAuthCalls(AuthCalls e) {
+inline const char *EnumNameCalls(Calls e) {
   const size_t index = static_cast<int>(e);
-  return EnumNamesAuthCalls()[index];
+  return EnumNamesCalls()[index];
 }
 
-template<typename T> struct AuthCallsTraits {
-  static const AuthCalls enum_value = AuthCalls::NONE;
+template<typename T> struct CallsTraits {
+  static const Calls enum_value = Calls::NONE;
 };
 
-template<> struct AuthCallsTraits<TagPresent> {
-  static const AuthCalls enum_value = AuthCalls::TagPresent;
+template<> struct CallsTraits<TagCall> {
+  static const Calls enum_value = Calls::TagCall;
 };
 
-template<> struct AuthCallsTraits<Result> {
-  static const AuthCalls enum_value = AuthCalls::Result;
-};
-
-struct AuthCallsUnion {
-  AuthCalls type;
+struct CallsUnion {
+  Calls type;
   void *value;
 
-  AuthCallsUnion() : type(AuthCalls::NONE), value(nullptr) {}
-  AuthCallsUnion(AuthCallsUnion&& u) FLATBUFFERS_NOEXCEPT :
-    type(AuthCalls::NONE), value(nullptr)
+  CallsUnion() : type(Calls::NONE), value(nullptr) {}
+  CallsUnion(CallsUnion&& u) FLATBUFFERS_NOEXCEPT :
+    type(Calls::NONE), value(nullptr)
     { std::swap(type, u.type); std::swap(value, u.value); }
-  AuthCallsUnion(const AuthCallsUnion &) FLATBUFFERS_NOEXCEPT;
-  AuthCallsUnion &operator=(const AuthCallsUnion &u) FLATBUFFERS_NOEXCEPT
-    { AuthCallsUnion t(u); std::swap(type, t.type); std::swap(value, t.value); return *this; }
-  AuthCallsUnion &operator=(AuthCallsUnion &&u) FLATBUFFERS_NOEXCEPT
+  CallsUnion(const CallsUnion &) FLATBUFFERS_NOEXCEPT;
+  CallsUnion &operator=(const CallsUnion &u) FLATBUFFERS_NOEXCEPT
+    { CallsUnion t(u); std::swap(type, t.type); std::swap(value, t.value); return *this; }
+  CallsUnion &operator=(CallsUnion &&u) FLATBUFFERS_NOEXCEPT
     { std::swap(type, u.type); std::swap(value, u.value); return *this; }
-  ~AuthCallsUnion() { Reset(); }
+  ~CallsUnion() { Reset(); }
 
   void Reset();
 
@@ -221,95 +219,80 @@ struct AuthCallsUnion {
   template <typename T>
   void Set(T&& val) {
     Reset();
-    type = AuthCallsTraits<typename T::TableType>::enum_value;
-    if (type != AuthCalls::NONE) {
+    type = CallsTraits<typename T::TableType>::enum_value;
+    if (type != Calls::NONE) {
       value = new T(std::forward<T>(val));
     }
   }
 #endif  // FLATBUFFERS_CPP98_STL
 
-  static void *UnPack(const void *obj, AuthCalls type, const flatbuffers::resolver_function_t *resolver);
+  static void *UnPack(const void *obj, Calls type, const flatbuffers::resolver_function_t *resolver);
   flatbuffers::Offset<void> Pack(flatbuffers::FlatBufferBuilder &_fbb, const flatbuffers::rehasher_function_t *_rehasher = nullptr) const;
 
-  TagPresentT *AsTagPresent() {
-    return type == AuthCalls::TagPresent ?
-      reinterpret_cast<TagPresentT *>(value) : nullptr;
+  TagCallT *AsTagCall() {
+    return type == Calls::TagCall ?
+      reinterpret_cast<TagCallT *>(value) : nullptr;
   }
-  const TagPresentT *AsTagPresent() const {
-    return type == AuthCalls::TagPresent ?
-      reinterpret_cast<const TagPresentT *>(value) : nullptr;
-  }
-  ResultT *AsResult() {
-    return type == AuthCalls::Result ?
-      reinterpret_cast<ResultT *>(value) : nullptr;
-  }
-  const ResultT *AsResult() const {
-    return type == AuthCalls::Result ?
-      reinterpret_cast<const ResultT *>(value) : nullptr;
+  const TagCallT *AsTagCall() const {
+    return type == Calls::TagCall ?
+      reinterpret_cast<const TagCallT *>(value) : nullptr;
   }
 };
 
-bool VerifyAuthCalls(flatbuffers::Verifier &verifier, const void *obj, AuthCalls type);
-bool VerifyAuthCallsVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types);
+bool VerifyCalls(flatbuffers::Verifier &verifier, const void *obj, Calls type);
+bool VerifyCallsVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types);
 
-enum class AuthReplies : uint8_t {
+enum class Replies : uint8_t {
   NONE = 0,
-  AuthApp = 1,
-  GetUID = 2,
+  TagReply = 1,
   MIN = NONE,
-  MAX = GetUID
+  MAX = TagReply
 };
 
-inline const AuthReplies (&EnumValuesAuthReplies())[3] {
-  static const AuthReplies values[] = {
-    AuthReplies::NONE,
-    AuthReplies::AuthApp,
-    AuthReplies::GetUID
+inline const Replies (&EnumValuesReplies())[2] {
+  static const Replies values[] = {
+    Replies::NONE,
+    Replies::TagReply
   };
   return values;
 }
 
-inline const char * const *EnumNamesAuthReplies() {
+inline const char * const *EnumNamesReplies() {
   static const char * const names[] = {
     "NONE",
-    "AuthApp",
-    "GetUID",
+    "TagReply",
     nullptr
   };
   return names;
 }
 
-inline const char *EnumNameAuthReplies(AuthReplies e) {
+inline const char *EnumNameReplies(Replies e) {
   const size_t index = static_cast<int>(e);
-  return EnumNamesAuthReplies()[index];
+  return EnumNamesReplies()[index];
 }
 
-template<typename T> struct AuthRepliesTraits {
-  static const AuthReplies enum_value = AuthReplies::NONE;
+template<typename T> struct RepliesTraits {
+  static const Replies enum_value = Replies::NONE;
 };
 
-template<> struct AuthRepliesTraits<AuthApp> {
-  static const AuthReplies enum_value = AuthReplies::AuthApp;
+template<> struct RepliesTraits<TagReply> {
+  static const Replies enum_value = Replies::TagReply;
 };
 
-template<> struct AuthRepliesTraits<GetUID> {
-  static const AuthReplies enum_value = AuthReplies::GetUID;
-};
-
-struct AuthRepliesUnion {
-  AuthReplies type;
+struct RepliesUnion {
+  Replies type;
   void *value;
 
-  AuthRepliesUnion() : type(AuthReplies::NONE), value(nullptr) {}
-  AuthRepliesUnion(AuthRepliesUnion&& u) FLATBUFFERS_NOEXCEPT :
-    type(AuthReplies::NONE), value(nullptr)
+  RepliesUnion() : type(Replies::NONE), value(nullptr) {}
+  RepliesUnion(RepliesUnion&& u) FLATBUFFERS_NOEXCEPT :
+    type(Replies::NONE), value(nullptr)
     { std::swap(type, u.type); std::swap(value, u.value); }
-  AuthRepliesUnion(const AuthRepliesUnion &) FLATBUFFERS_NOEXCEPT;
-  AuthRepliesUnion &operator=(const AuthRepliesUnion &u) FLATBUFFERS_NOEXCEPT
-    { AuthRepliesUnion t(u); std::swap(type, t.type); std::swap(value, t.value); return *this; }
-  AuthRepliesUnion &operator=(AuthRepliesUnion &&u) FLATBUFFERS_NOEXCEPT
+  RepliesUnion(const RepliesUnion &) FLATBUFFERS_NOEXCEPT;
+  RepliesUnion &operator=(const RepliesUnion &u) FLATBUFFERS_NOEXCEPT
+    { RepliesUnion t(u); std::swap(type, t.type); std::swap(value, t.value); return *this; }
+  RepliesUnion &operator=(RepliesUnion &&u) FLATBUFFERS_NOEXCEPT
     { std::swap(type, u.type); std::swap(value, u.value); return *this; }
-  ~AuthRepliesUnion() { Reset(); }
+  ~RepliesUnion() { Reset(); }
 
   void Reset();
 
@@ -317,53 +300,45 @@ struct AuthRepliesUnion {
   template <typename T>
   void Set(T&& val) {
     Reset();
-    type = AuthRepliesTraits<typename T::TableType>::enum_value;
-    if (type != AuthReplies::NONE) {
+    type = RepliesTraits<typename T::TableType>::enum_value;
+    if (type != Replies::NONE) {
       value = new T(std::forward<T>(val));
     }
   }
 #endif  // FLATBUFFERS_CPP98_STL
 
-  static void *UnPack(const void *obj, AuthReplies type, const flatbuffers::resolver_function_t *resolver);
+  static void *UnPack(const void *obj, Replies type, const flatbuffers::resolver_function_t *resolver);
   flatbuffers::Offset<void> Pack(flatbuffers::FlatBufferBuilder &_fbb, const flatbuffers::rehasher_function_t *_rehasher = nullptr) const;
 
-  AuthAppT *AsAuthApp() {
-    return type == AuthReplies::AuthApp ?
-      reinterpret_cast<AuthAppT *>(value) : nullptr;
+  TagReplyT *AsTagReply() {
+    return type == Replies::TagReply ?
+      reinterpret_cast<TagReplyT *>(value) : nullptr;
   }
-  const AuthAppT *AsAuthApp() const {
-    return type == AuthReplies::AuthApp ?
-      reinterpret_cast<const AuthAppT *>(value) : nullptr;
-  }
-  GetUIDT *AsGetUID() {
-    return type == AuthReplies::GetUID ?
-      reinterpret_cast<GetUIDT *>(value) : nullptr;
-  }
-  const GetUIDT *AsGetUID() const {
-    return type == AuthReplies::GetUID ?
-      reinterpret_cast<const GetUIDT *>(value) : nullptr;
+  const TagReplyT *AsTagReply() const {
+    return type == Replies::TagReply ?
+      reinterpret_cast<const TagReplyT *>(value) : nullptr;
   }
 };
 
-bool VerifyAuthReplies(flatbuffers::Verifier &verifier, const void *obj, AuthReplies type);
-bool VerifyAuthRepliesVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types);
+bool VerifyReplies(flatbuffers::Verifier &verifier, const void *obj, Replies type);
+bool VerifyRepliesVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types);
 
-enum class AuthEvents : uint8_t {
+enum class Events : uint8_t {
   NONE = 0,
   RandomEvent = 1,
   MIN = NONE,
   MAX = RandomEvent
 };
 
-inline const AuthEvents (&EnumValuesAuthEvents())[2] {
-  static const AuthEvents values[] = {
-    AuthEvents::NONE,
-    AuthEvents::RandomEvent
+inline const Events (&EnumValuesEvents())[2] {
+  static const Events values[] = {
+    Events::NONE,
+    Events::RandomEvent
   };
   return values;
 }
 
-inline const char * const *EnumNamesAuthEvents() {
+inline const char * const *EnumNamesEvents() {
   static const char * const names[] = {
     "NONE",
     "RandomEvent",
@@ -372,33 +347,33 @@ inline const char * const *EnumNamesAuthEvents() {
   return names;
 }
 
-inline const char *EnumNameAuthEvents(AuthEvents e) {
+inline const char *EnumNameEvents(Events e) {
   const size_t index = static_cast<int>(e);
-  return EnumNamesAuthEvents()[index];
+  return EnumNamesEvents()[index];
 }
 
-template<typename T> struct AuthEventsTraits {
-  static const AuthEvents enum_value = AuthEvents::NONE;
+template<typename T> struct EventsTraits {
+  static const Events enum_value = Events::NONE;
 };
 
-template<> struct AuthEventsTraits<RandomEvent> {
-  static const AuthEvents enum_value = AuthEvents::RandomEvent;
+template<> struct EventsTraits<RandomEvent> {
+  static const Events enum_value = Events::RandomEvent;
 };
 
-struct AuthEventsUnion {
-  AuthEvents type;
+struct EventsUnion {
+  Events type;
   void *value;
 
-  AuthEventsUnion() : type(AuthEvents::NONE), value(nullptr) {}
-  AuthEventsUnion(AuthEventsUnion&& u) FLATBUFFERS_NOEXCEPT :
-    type(AuthEvents::NONE), value(nullptr)
+  EventsUnion() : type(Events::NONE), value(nullptr) {}
+  EventsUnion(EventsUnion&& u) FLATBUFFERS_NOEXCEPT :
+    type(Events::NONE), value(nullptr)
     { std::swap(type, u.type); std::swap(value, u.value); }
-  AuthEventsUnion(const AuthEventsUnion &) FLATBUFFERS_NOEXCEPT;
-  AuthEventsUnion &operator=(const AuthEventsUnion &u) FLATBUFFERS_NOEXCEPT
-    { AuthEventsUnion t(u); std::swap(type, t.type); std::swap(value, t.value); return *this; }
-  AuthEventsUnion &operator=(AuthEventsUnion &&u) FLATBUFFERS_NOEXCEPT
+  EventsUnion(const EventsUnion &) FLATBUFFERS_NOEXCEPT;
+  EventsUnion &operator=(const EventsUnion &u) FLATBUFFERS_NOEXCEPT
+    { EventsUnion t(u); std::swap(type, t.type); std::swap(value, t.value); return *this; }
+  EventsUnion &operator=(EventsUnion &&u) FLATBUFFERS_NOEXCEPT
     { std::swap(type, u.type); std::swap(value, u.value); return *this; }
-  ~AuthEventsUnion() { Reset(); }
+  ~EventsUnion() { Reset(); }
 
   void Reset();
 
@@ -406,28 +381,28 @@ struct AuthEventsUnion {
   template <typename T>
   void Set(T&& val) {
     Reset();
-    type = AuthEventsTraits<typename T::TableType>::enum_value;
-    if (type != AuthEvents::NONE) {
+    type = EventsTraits<typename T::TableType>::enum_value;
+    if (type != Events::NONE) {
       value = new T(std::forward<T>(val));
     }
   }
 #endif  // FLATBUFFERS_CPP98_STL
 
-  static void *UnPack(const void *obj, AuthEvents type, const flatbuffers::resolver_function_t *resolver);
+  static void *UnPack(const void *obj, Events type, const flatbuffers::resolver_function_t *resolver);
   flatbuffers::Offset<void> Pack(flatbuffers::FlatBufferBuilder &_fbb, const flatbuffers::rehasher_function_t *_rehasher = nullptr) const;
 
   RandomEventT *AsRandomEvent() {
-    return type == AuthEvents::RandomEvent ?
+    return type == Events::RandomEvent ?
       reinterpret_cast<RandomEventT *>(value) : nullptr;
   }
   const RandomEventT *AsRandomEvent() const {
-    return type == AuthEvents::RandomEvent ?
+    return type == Events::RandomEvent ?
       reinterpret_cast<const RandomEventT *>(value) : nullptr;
   }
 };
 
-bool VerifyAuthEvents(flatbuffers::Verifier &verifier, const void *obj, AuthEvents type);
-bool VerifyAuthEventsVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types);
+bool VerifyEvents(flatbuffers::Verifier &verifier, const void *obj, Events type);
+bool VerifyEventsVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types);
 
 struct PingT : public flatbuffers::NativeTable {
   typedef Ping TableType;
@@ -650,23 +625,72 @@ inline flatbuffers::Offset<Key> CreateKeyDirect(
 
 flatbuffers::Offset<Key> CreateKey(flatbuffers::FlatBufferBuilder &_fbb, const KeyT *_o, const flatbuffers::rehasher_function_t *_rehasher = nullptr);
 
-struct TagResultT : public flatbuffers::NativeTable {
-  typedef TagResult TableType;
+struct TagCallT : public flatbuffers::NativeTable {
+  typedef TagCall TableType;
   static FLATBUFFERS_CONSTEXPR const char *GetFullyQualifiedName() {
-    return "nfcdoorz.ipc.auth.TagResultT";
+    return "nfcdoorz.ipc.auth.TagCallT";
   }
-  std::vector<uint8_t> uid;
-  TagResultT() {
+  TagCallT() {
   }
 };
 
-struct TagResult FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
-  typedef TagResultT NativeTableType;
+struct TagCall FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  typedef TagCallT NativeTableType;
   static const flatbuffers::TypeTable *MiniReflectTypeTable() {
-    return TagResultTypeTable();
+    return TagCallTypeTable();
   }
   static FLATBUFFERS_CONSTEXPR const char *GetFullyQualifiedName() {
-    return "nfcdoorz.ipc.auth.TagResult";
+    return "nfcdoorz.ipc.auth.TagCall";
+  }
+  bool Verify(flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           verifier.EndTable();
+  }
+  TagCallT *UnPack(const flatbuffers::resolver_function_t *_resolver = nullptr) const;
+  void UnPackTo(TagCallT *_o, const flatbuffers::resolver_function_t *_resolver = nullptr) const;
+  static flatbuffers::Offset<TagCall> Pack(flatbuffers::FlatBufferBuilder &_fbb, const TagCallT* _o, const flatbuffers::rehasher_function_t *_rehasher = nullptr);
+};
+
+struct TagCallBuilder {
+  flatbuffers::FlatBufferBuilder &fbb_;
+  flatbuffers::uoffset_t start_;
+  explicit TagCallBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  TagCallBuilder &operator=(const TagCallBuilder &);
+  flatbuffers::Offset<TagCall> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = flatbuffers::Offset<TagCall>(end);
+    return o;
+  }
+};
+
+inline flatbuffers::Offset<TagCall> CreateTagCall(
+    flatbuffers::FlatBufferBuilder &_fbb) {
+  TagCallBuilder builder_(_fbb);
+  return builder_.Finish();
+}
+
+flatbuffers::Offset<TagCall> CreateTagCall(flatbuffers::FlatBufferBuilder &_fbb, const TagCallT *_o, const flatbuffers::rehasher_function_t *_rehasher = nullptr);
+
+struct TagReplyT : public flatbuffers::NativeTable {
+  typedef TagReply TableType;
+  static FLATBUFFERS_CONSTEXPR const char *GetFullyQualifiedName() {
+    return "nfcdoorz.ipc.auth.TagReplyT";
+  }
+  std::vector<uint8_t> uid;
+  TagReplyT() {
+  }
+};
+
+struct TagReply FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  typedef TagReplyT NativeTableType;
+  static const flatbuffers::TypeTable *MiniReflectTypeTable() {
+    return TagReplyTypeTable();
+  }
+  static FLATBUFFERS_CONSTEXPR const char *GetFullyQualifiedName() {
+    return "nfcdoorz.ipc.auth.TagReply";
   }
   enum {
     VT_UID = 4
@@ -680,46 +704,46 @@ struct TagResult FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
            verifier.VerifyVector(uid()) &&
            verifier.EndTable();
   }
-  TagResultT *UnPack(const flatbuffers::resolver_function_t *_resolver = nullptr) const;
-  void UnPackTo(TagResultT *_o, const flatbuffers::resolver_function_t *_resolver = nullptr) const;
-  static flatbuffers::Offset<TagResult> Pack(flatbuffers::FlatBufferBuilder &_fbb, const TagResultT* _o, const flatbuffers::rehasher_function_t *_rehasher = nullptr);
+  TagReplyT *UnPack(const flatbuffers::resolver_function_t *_resolver = nullptr) const;
+  void UnPackTo(TagReplyT *_o, const flatbuffers::resolver_function_t *_resolver = nullptr) const;
+  static flatbuffers::Offset<TagReply> Pack(flatbuffers::FlatBufferBuilder &_fbb, const TagReplyT* _o, const flatbuffers::rehasher_function_t *_rehasher = nullptr);
 };
 
-struct TagResultBuilder {
+struct TagReplyBuilder {
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
   void add_uid(flatbuffers::Offset<flatbuffers::Vector<uint8_t>> uid) {
-    fbb_.AddOffset(TagResult::VT_UID, uid);
+    fbb_.AddOffset(TagReply::VT_UID, uid);
   }
-  explicit TagResultBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit TagReplyBuilder(flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  TagResultBuilder &operator=(const TagResultBuilder &);
-  flatbuffers::Offset<TagResult> Finish() {
+  TagReplyBuilder &operator=(const TagReplyBuilder &);
+  flatbuffers::Offset<TagReply> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<TagResult>(end);
+    auto o = flatbuffers::Offset<TagReply>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<TagResult> CreateTagResult(
+inline flatbuffers::Offset<TagReply> CreateTagReply(
     flatbuffers::FlatBufferBuilder &_fbb,
     flatbuffers::Offset<flatbuffers::Vector<uint8_t>> uid = 0) {
-  TagResultBuilder builder_(_fbb);
+  TagReplyBuilder builder_(_fbb);
   builder_.add_uid(uid);
   return builder_.Finish();
 }
 
-inline flatbuffers::Offset<TagResult> CreateTagResultDirect(
+inline flatbuffers::Offset<TagReply> CreateTagReplyDirect(
     flatbuffers::FlatBufferBuilder &_fbb,
     const std::vector<uint8_t> *uid = nullptr) {
-  return nfcdoorz::ipc::auth::CreateTagResult(
+  return nfcdoorz::ipc::auth::CreateTagReply(
       _fbb,
       uid ? _fbb.CreateVector<uint8_t>(*uid) : 0);
 }
 
-flatbuffers::Offset<TagResult> CreateTagResult(flatbuffers::FlatBufferBuilder &_fbb, const TagResultT *_o, const flatbuffers::rehasher_function_t *_rehasher = nullptr);
+flatbuffers::Offset<TagReply> CreateTagReply(flatbuffers::FlatBufferBuilder &_fbb, const TagReplyT *_o, const flatbuffers::rehasher_function_t *_rehasher = nullptr);
 
 struct AuthAppT : public flatbuffers::NativeTable {
   typedef AuthApp TableType;
@@ -1121,25 +1145,25 @@ inline flatbuffers::Offset<RandomEvent> CreateRandomEvent(
 
 flatbuffers::Offset<RandomEvent> CreateRandomEvent(flatbuffers::FlatBufferBuilder &_fbb, const RandomEventT *_o, const flatbuffers::rehasher_function_t *_rehasher = nullptr);
 
-struct AuthCallT : public flatbuffers::NativeTable {
-  typedef AuthCall TableType;
+struct CallT : public flatbuffers::NativeTable {
+  typedef Call TableType;
   static FLATBUFFERS_CONSTEXPR const char *GetFullyQualifiedName() {
-    return "nfcdoorz.ipc.auth.AuthCallT";
+    return "nfcdoorz.ipc.auth.CallT";
   }
   uint64_t id;
-  AuthCallsUnion msg;
-  AuthCallT()
+  CallsUnion msg;
+  CallT()
       : id(0) {
   }
 };
 
-struct AuthCall FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
-  typedef AuthCallT NativeTableType;
+struct Call FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  typedef CallT NativeTableType;
   static const flatbuffers::TypeTable *MiniReflectTypeTable() {
-    return AuthCallTypeTable();
+    return CallTypeTable();
   }
   static FLATBUFFERS_CONSTEXPR const char *GetFullyQualifiedName() {
-    return "nfcdoorz.ipc.auth.AuthCall";
+    return "nfcdoorz.ipc.auth.Call";
   }
   enum {
     VT_ID = 4,
@@ -1149,98 +1173,91 @@ struct AuthCall FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   uint64_t id() const {
     return GetField<uint64_t>(VT_ID, 0);
   }
-  AuthCalls msg_type() const {
-    return static_cast<AuthCalls>(GetField<uint8_t>(VT_MSG_TYPE, 0));
+  Calls msg_type() const {
+    return static_cast<Calls>(GetField<uint8_t>(VT_MSG_TYPE, 0));
   }
   const void *msg() const {
     return GetPointer<const void *>(VT_MSG);
   }
   template<typename T> const T *msg_as() const;
-  const TagPresent *msg_as_TagPresent() const {
-    return msg_type() == AuthCalls::TagPresent ? static_cast<const TagPresent *>(msg()) : nullptr;
-  }
-  const Result *msg_as_Result() const {
-    return msg_type() == AuthCalls::Result ? static_cast<const Result *>(msg()) : nullptr;
+  const TagCall *msg_as_TagCall() const {
+    return msg_type() == Calls::TagCall ? static_cast<const TagCall *>(msg()) : nullptr;
   }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<uint64_t>(verifier, VT_ID) &&
            VerifyField<uint8_t>(verifier, VT_MSG_TYPE) &&
            VerifyOffset(verifier, VT_MSG) &&
-           VerifyAuthCalls(verifier, msg(), msg_type()) &&
+           VerifyCalls(verifier, msg(), msg_type()) &&
            verifier.EndTable();
   }
-  AuthCallT *UnPack(const flatbuffers::resolver_function_t *_resolver = nullptr) const;
-  void UnPackTo(AuthCallT *_o, const flatbuffers::resolver_function_t *_resolver = nullptr) const;
-  static flatbuffers::Offset<AuthCall> Pack(flatbuffers::FlatBufferBuilder &_fbb, const AuthCallT* _o, const flatbuffers::rehasher_function_t *_rehasher = nullptr);
+  CallT *UnPack(const flatbuffers::resolver_function_t *_resolver = nullptr) const;
+  void UnPackTo(CallT *_o, const flatbuffers::resolver_function_t *_resolver = nullptr) const;
+  static flatbuffers::Offset<Call> Pack(flatbuffers::FlatBufferBuilder &_fbb, const CallT* _o, const flatbuffers::rehasher_function_t *_rehasher = nullptr);
 };
 
-template<> inline const TagPresent *AuthCall::msg_as<TagPresent>() const {
-  return msg_as_TagPresent();
+template<> inline const TagCall *Call::msg_as<TagCall>() const {
+  return msg_as_TagCall();
 }
 
-template<> inline const Result *AuthCall::msg_as<Result>() const {
-  return msg_as_Result();
-}
-
-struct AuthCallBuilder {
+struct CallBuilder {
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
   void add_id(uint64_t id) {
-    fbb_.AddElement<uint64_t>(AuthCall::VT_ID, id, 0);
+    fbb_.AddElement<uint64_t>(Call::VT_ID, id, 0);
   }
-  void add_msg_type(AuthCalls msg_type) {
-    fbb_.AddElement<uint8_t>(AuthCall::VT_MSG_TYPE, static_cast<uint8_t>(msg_type), 0);
+  void add_msg_type(Calls msg_type) {
+    fbb_.AddElement<uint8_t>(Call::VT_MSG_TYPE, static_cast<uint8_t>(msg_type), 0);
   }
   void add_msg(flatbuffers::Offset<void> msg) {
-    fbb_.AddOffset(AuthCall::VT_MSG, msg);
+    fbb_.AddOffset(Call::VT_MSG, msg);
   }
-  explicit AuthCallBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit CallBuilder(flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  AuthCallBuilder &operator=(const AuthCallBuilder &);
-  flatbuffers::Offset<AuthCall> Finish() {
+  CallBuilder &operator=(const CallBuilder &);
+  flatbuffers::Offset<Call> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<AuthCall>(end);
+    auto o = flatbuffers::Offset<Call>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<AuthCall> CreateAuthCall(
+inline flatbuffers::Offset<Call> CreateCall(
     flatbuffers::FlatBufferBuilder &_fbb,
     uint64_t id = 0,
-    AuthCalls msg_type = AuthCalls::NONE,
+    Calls msg_type = Calls::NONE,
     flatbuffers::Offset<void> msg = 0) {
-  AuthCallBuilder builder_(_fbb);
+  CallBuilder builder_(_fbb);
   builder_.add_id(id);
   builder_.add_msg(msg);
   builder_.add_msg_type(msg_type);
   return builder_.Finish();
 }
 
-flatbuffers::Offset<AuthCall> CreateAuthCall(flatbuffers::FlatBufferBuilder &_fbb, const AuthCallT *_o, const flatbuffers::rehasher_function_t *_rehasher = nullptr);
+flatbuffers::Offset<Call> CreateCall(flatbuffers::FlatBufferBuilder &_fbb, const CallT *_o, const flatbuffers::rehasher_function_t *_rehasher = nullptr);
 
-struct AuthReplyT : public flatbuffers::NativeTable {
-  typedef AuthReply TableType;
+struct ReplyT : public flatbuffers::NativeTable {
+  typedef Reply TableType;
   static FLATBUFFERS_CONSTEXPR const char *GetFullyQualifiedName() {
-    return "nfcdoorz.ipc.auth.AuthReplyT";
+    return "nfcdoorz.ipc.auth.ReplyT";
   }
   uint64_t id;
-  AuthRepliesUnion msg;
-  AuthEventsUnion event;
-  AuthReplyT()
+  RepliesUnion msg;
+  EventsUnion event;
+  ReplyT()
       : id(0) {
   }
 };
 
-struct AuthReply FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
-  typedef AuthReplyT NativeTableType;
+struct Reply FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  typedef ReplyT NativeTableType;
   static const flatbuffers::TypeTable *MiniReflectTypeTable() {
-    return AuthReplyTypeTable();
+    return ReplyTypeTable();
   }
   static FLATBUFFERS_CONSTEXPR const char *GetFullyQualifiedName() {
-    return "nfcdoorz.ipc.auth.AuthReply";
+    return "nfcdoorz.ipc.auth.Reply";
   }
   enum {
     VT_ID = 4,
@@ -1252,95 +1269,88 @@ struct AuthReply FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   uint64_t id() const {
     return GetField<uint64_t>(VT_ID, 0);
   }
-  AuthReplies msg_type() const {
-    return static_cast<AuthReplies>(GetField<uint8_t>(VT_MSG_TYPE, 0));
+  Replies msg_type() const {
+    return static_cast<Replies>(GetField<uint8_t>(VT_MSG_TYPE, 0));
   }
   const void *msg() const {
     return GetPointer<const void *>(VT_MSG);
   }
   template<typename T> const T *msg_as() const;
-  const AuthApp *msg_as_AuthApp() const {
-    return msg_type() == AuthReplies::AuthApp ? static_cast<const AuthApp *>(msg()) : nullptr;
+  const TagReply *msg_as_TagReply() const {
+    return msg_type() == Replies::TagReply ? static_cast<const TagReply *>(msg()) : nullptr;
   }
-  const GetUID *msg_as_GetUID() const {
-    return msg_type() == AuthReplies::GetUID ? static_cast<const GetUID *>(msg()) : nullptr;
-  }
-  AuthEvents event_type() const {
-    return static_cast<AuthEvents>(GetField<uint8_t>(VT_EVENT_TYPE, 0));
+  Events event_type() const {
+    return static_cast<Events>(GetField<uint8_t>(VT_EVENT_TYPE, 0));
   }
   const void *event() const {
     return GetPointer<const void *>(VT_EVENT);
   }
   template<typename T> const T *event_as() const;
   const RandomEvent *event_as_RandomEvent() const {
-    return event_type() == AuthEvents::RandomEvent ? static_cast<const RandomEvent *>(event()) : nullptr;
+    return event_type() == Events::RandomEvent ? static_cast<const RandomEvent *>(event()) : nullptr;
   }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<uint64_t>(verifier, VT_ID) &&
            VerifyField<uint8_t>(verifier, VT_MSG_TYPE) &&
            VerifyOffset(verifier, VT_MSG) &&
-           VerifyAuthReplies(verifier, msg(), msg_type()) &&
+           VerifyReplies(verifier, msg(), msg_type()) &&
            VerifyField<uint8_t>(verifier, VT_EVENT_TYPE) &&
            VerifyOffset(verifier, VT_EVENT) &&
-           VerifyAuthEvents(verifier, event(), event_type()) &&
+           VerifyEvents(verifier, event(), event_type()) &&
            verifier.EndTable();
   }
-  AuthReplyT *UnPack(const flatbuffers::resolver_function_t *_resolver = nullptr) const;
-  void UnPackTo(AuthReplyT *_o, const flatbuffers::resolver_function_t *_resolver = nullptr) const;
-  static flatbuffers::Offset<AuthReply> Pack(flatbuffers::FlatBufferBuilder &_fbb, const AuthReplyT* _o, const flatbuffers::rehasher_function_t *_rehasher = nullptr);
+  ReplyT *UnPack(const flatbuffers::resolver_function_t *_resolver = nullptr) const;
+  void UnPackTo(ReplyT *_o, const flatbuffers::resolver_function_t *_resolver = nullptr) const;
+  static flatbuffers::Offset<Reply> Pack(flatbuffers::FlatBufferBuilder &_fbb, const ReplyT* _o, const flatbuffers::rehasher_function_t *_rehasher = nullptr);
 };
 
-template<> inline const AuthApp *AuthReply::msg_as<AuthApp>() const {
-  return msg_as_AuthApp();
+template<> inline const TagReply *Reply::msg_as<TagReply>() const {
+  return msg_as_TagReply();
 }
 
-template<> inline const GetUID *AuthReply::msg_as<GetUID>() const {
-  return msg_as_GetUID();
-}
-
-template<> inline const RandomEvent *AuthReply::event_as<RandomEvent>() const {
+template<> inline const RandomEvent *Reply::event_as<RandomEvent>() const {
   return event_as_RandomEvent();
 }
 
-struct AuthReplyBuilder {
+struct ReplyBuilder {
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
   void add_id(uint64_t id) {
-    fbb_.AddElement<uint64_t>(AuthReply::VT_ID, id, 0);
+    fbb_.AddElement<uint64_t>(Reply::VT_ID, id, 0);
   }
-  void add_msg_type(AuthReplies msg_type) {
-    fbb_.AddElement<uint8_t>(AuthReply::VT_MSG_TYPE, static_cast<uint8_t>(msg_type), 0);
+  void add_msg_type(Replies msg_type) {
+    fbb_.AddElement<uint8_t>(Reply::VT_MSG_TYPE, static_cast<uint8_t>(msg_type), 0);
   }
   void add_msg(flatbuffers::Offset<void> msg) {
-    fbb_.AddOffset(AuthReply::VT_MSG, msg);
+    fbb_.AddOffset(Reply::VT_MSG, msg);
   }
-  void add_event_type(AuthEvents event_type) {
-    fbb_.AddElement<uint8_t>(AuthReply::VT_EVENT_TYPE, static_cast<uint8_t>(event_type), 0);
+  void add_event_type(Events event_type) {
+    fbb_.AddElement<uint8_t>(Reply::VT_EVENT_TYPE, static_cast<uint8_t>(event_type), 0);
   }
   void add_event(flatbuffers::Offset<void> event) {
-    fbb_.AddOffset(AuthReply::VT_EVENT, event);
+    fbb_.AddOffset(Reply::VT_EVENT, event);
   }
-  explicit AuthReplyBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit ReplyBuilder(flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  AuthReplyBuilder &operator=(const AuthReplyBuilder &);
-  flatbuffers::Offset<AuthReply> Finish() {
+  ReplyBuilder &operator=(const ReplyBuilder &);
+  flatbuffers::Offset<Reply> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<AuthReply>(end);
+    auto o = flatbuffers::Offset<Reply>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<AuthReply> CreateAuthReply(
+inline flatbuffers::Offset<Reply> CreateReply(
     flatbuffers::FlatBufferBuilder &_fbb,
     uint64_t id = 0,
-    AuthReplies msg_type = AuthReplies::NONE,
+    Replies msg_type = Replies::NONE,
     flatbuffers::Offset<void> msg = 0,
-    AuthEvents event_type = AuthEvents::NONE,
+    Events event_type = Events::NONE,
     flatbuffers::Offset<void> event = 0) {
-  AuthReplyBuilder builder_(_fbb);
+  ReplyBuilder builder_(_fbb);
   builder_.add_id(id);
   builder_.add_event(event);
   builder_.add_msg(msg);
@@ -1349,15 +1359,15 @@ inline flatbuffers::Offset<AuthReply> CreateAuthReply(
   return builder_.Finish();
 }
 
-flatbuffers::Offset<AuthReply> CreateAuthReply(flatbuffers::FlatBufferBuilder &_fbb, const AuthReplyT *_o, const flatbuffers::rehasher_function_t *_rehasher = nullptr);
+flatbuffers::Offset<Reply> CreateReply(flatbuffers::FlatBufferBuilder &_fbb, const ReplyT *_o, const flatbuffers::rehasher_function_t *_rehasher = nullptr);
 
 struct ServerT : public flatbuffers::NativeTable {
   typedef Server TableType;
   static FLATBUFFERS_CONSTEXPR const char *GetFullyQualifiedName() {
     return "nfcdoorz.ipc.auth.ServerT";
   }
-  std::unique_ptr<AuthCallT> call;
-  std::unique_ptr<AuthReplyT> reply;
+  std::unique_ptr<CallT> call;
+  std::unique_ptr<ReplyT> reply;
   ServerT() {
   }
 };
@@ -1374,11 +1384,11 @@ struct Server FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
     VT_CALL = 4,
     VT_REPLY = 6
   };
-  const AuthCall *call() const {
-    return GetPointer<const AuthCall *>(VT_CALL);
+  const Call *call() const {
+    return GetPointer<const Call *>(VT_CALL);
   }
-  const AuthReply *reply() const {
-    return GetPointer<const AuthReply *>(VT_REPLY);
+  const Reply *reply() const {
+    return GetPointer<const Reply *>(VT_REPLY);
   }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
@@ -1396,10 +1406,10 @@ struct Server FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 struct ServerBuilder {
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
-  void add_call(flatbuffers::Offset<AuthCall> call) {
+  void add_call(flatbuffers::Offset<Call> call) {
     fbb_.AddOffset(Server::VT_CALL, call);
   }
-  void add_reply(flatbuffers::Offset<AuthReply> reply) {
+  void add_reply(flatbuffers::Offset<Reply> reply) {
     fbb_.AddOffset(Server::VT_REPLY, reply);
   }
   explicit ServerBuilder(flatbuffers::FlatBufferBuilder &_fbb)
@@ -1416,8 +1426,8 @@ struct ServerBuilder {
 
 inline flatbuffers::Offset<Server> CreateServer(
     flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<AuthCall> call = 0,
-    flatbuffers::Offset<AuthReply> reply = 0) {
+    flatbuffers::Offset<Call> call = 0,
+    flatbuffers::Offset<Reply> reply = 0) {
   ServerBuilder builder_(_fbb);
   builder_.add_reply(reply);
   builder_.add_call(call);
@@ -1510,28 +1520,51 @@ inline flatbuffers::Offset<Key> CreateKey(flatbuffers::FlatBufferBuilder &_fbb, 
       _data);
 }
 
-inline TagResultT *TagResult::UnPack(const flatbuffers::resolver_function_t *_resolver) const {
-  auto _o = new TagResultT();
+inline TagCallT *TagCall::UnPack(const flatbuffers::resolver_function_t *_resolver) const {
+  auto _o = new TagCallT();
   UnPackTo(_o, _resolver);
   return _o;
 }
 
-inline void TagResult::UnPackTo(TagResultT *_o, const flatbuffers::resolver_function_t *_resolver) const {
+inline void TagCall::UnPackTo(TagCallT *_o, const flatbuffers::resolver_function_t *_resolver) const {
+  (void)_o;
+  (void)_resolver;
+}
+
+inline flatbuffers::Offset<TagCall> TagCall::Pack(flatbuffers::FlatBufferBuilder &_fbb, const TagCallT* _o, const flatbuffers::rehasher_function_t *_rehasher) {
+  return CreateTagCall(_fbb, _o, _rehasher);
+}
+
+inline flatbuffers::Offset<TagCall> CreateTagCall(flatbuffers::FlatBufferBuilder &_fbb, const TagCallT *_o, const flatbuffers::rehasher_function_t *_rehasher) {
+  (void)_rehasher;
+  (void)_o;
+  struct _VectorArgs { flatbuffers::FlatBufferBuilder *__fbb; const TagCallT* __o; const flatbuffers::rehasher_function_t *__rehasher; } _va = { &_fbb, _o, _rehasher}; (void)_va;
+  return nfcdoorz::ipc::auth::CreateTagCall(
+      _fbb);
+}
+
+inline TagReplyT *TagReply::UnPack(const flatbuffers::resolver_function_t *_resolver) const {
+  auto _o = new TagReplyT();
+  UnPackTo(_o, _resolver);
+  return _o;
+}
+
+inline void TagReply::UnPackTo(TagReplyT *_o, const flatbuffers::resolver_function_t *_resolver) const {
   (void)_o;
   (void)_resolver;
   { auto _e = uid(); if (_e) { _o->uid.resize(_e->size()); for (flatbuffers::uoffset_t _i = 0; _i < _e->size(); _i++) { _o->uid[_i] = _e->Get(_i); } } };
 }
 
-inline flatbuffers::Offset<TagResult> TagResult::Pack(flatbuffers::FlatBufferBuilder &_fbb, const TagResultT* _o, const flatbuffers::rehasher_function_t *_rehasher) {
-  return CreateTagResult(_fbb, _o, _rehasher);
+inline flatbuffers::Offset<TagReply> TagReply::Pack(flatbuffers::FlatBufferBuilder &_fbb, const TagReplyT* _o, const flatbuffers::rehasher_function_t *_rehasher) {
+  return CreateTagReply(_fbb, _o, _rehasher);
 }
 
-inline flatbuffers::Offset<TagResult> CreateTagResult(flatbuffers::FlatBufferBuilder &_fbb, const TagResultT *_o, const flatbuffers::rehasher_function_t *_rehasher) {
+inline flatbuffers::Offset<TagReply> CreateTagReply(flatbuffers::FlatBufferBuilder &_fbb, const TagReplyT *_o, const flatbuffers::rehasher_function_t *_rehasher) {
   (void)_rehasher;
   (void)_o;
-  struct _VectorArgs { flatbuffers::FlatBufferBuilder *__fbb; const TagResultT* __o; const flatbuffers::rehasher_function_t *__rehasher; } _va = { &_fbb, _o, _rehasher}; (void)_va;
+  struct _VectorArgs { flatbuffers::FlatBufferBuilder *__fbb; const TagReplyT* __o; const flatbuffers::rehasher_function_t *__rehasher; } _va = { &_fbb, _o, _rehasher}; (void)_va;
   auto _uid = _o->uid.size() ? _fbb.CreateVector(_o->uid) : 0;
-  return nfcdoorz::ipc::auth::CreateTagResult(
+  return nfcdoorz::ipc::auth::CreateTagReply(
       _fbb,
       _uid);
 }
@@ -1695,68 +1728,68 @@ inline flatbuffers::Offset<RandomEvent> CreateRandomEvent(flatbuffers::FlatBuffe
       _fbb);
 }
 
-inline AuthCallT *AuthCall::UnPack(const flatbuffers::resolver_function_t *_resolver) const {
-  auto _o = new AuthCallT();
+inline CallT *Call::UnPack(const flatbuffers::resolver_function_t *_resolver) const {
+  auto _o = new CallT();
   UnPackTo(_o, _resolver);
   return _o;
 }
 
-inline void AuthCall::UnPackTo(AuthCallT *_o, const flatbuffers::resolver_function_t *_resolver) const {
+inline void Call::UnPackTo(CallT *_o, const flatbuffers::resolver_function_t *_resolver) const {
   (void)_o;
   (void)_resolver;
   { auto _e = id(); _o->id = _e; };
   { auto _e = msg_type(); _o->msg.type = _e; };
-  { auto _e = msg(); if (_e) _o->msg.value = AuthCallsUnion::UnPack(_e, msg_type(), _resolver); };
+  { auto _e = msg(); if (_e) _o->msg.value = CallsUnion::UnPack(_e, msg_type(), _resolver); };
 }
 
-inline flatbuffers::Offset<AuthCall> AuthCall::Pack(flatbuffers::FlatBufferBuilder &_fbb, const AuthCallT* _o, const flatbuffers::rehasher_function_t *_rehasher) {
-  return CreateAuthCall(_fbb, _o, _rehasher);
+inline flatbuffers::Offset<Call> Call::Pack(flatbuffers::FlatBufferBuilder &_fbb, const CallT* _o, const flatbuffers::rehasher_function_t *_rehasher) {
+  return CreateCall(_fbb, _o, _rehasher);
 }
 
-inline flatbuffers::Offset<AuthCall> CreateAuthCall(flatbuffers::FlatBufferBuilder &_fbb, const AuthCallT *_o, const flatbuffers::rehasher_function_t *_rehasher) {
+inline flatbuffers::Offset<Call> CreateCall(flatbuffers::FlatBufferBuilder &_fbb, const CallT *_o, const flatbuffers::rehasher_function_t *_rehasher) {
   (void)_rehasher;
   (void)_o;
-  struct _VectorArgs { flatbuffers::FlatBufferBuilder *__fbb; const AuthCallT* __o; const flatbuffers::rehasher_function_t *__rehasher; } _va = { &_fbb, _o, _rehasher}; (void)_va;
+  struct _VectorArgs { flatbuffers::FlatBufferBuilder *__fbb; const CallT* __o; const flatbuffers::rehasher_function_t *__rehasher; } _va = { &_fbb, _o, _rehasher}; (void)_va;
   auto _id = _o->id;
   auto _msg_type = _o->msg.type;
   auto _msg = _o->msg.Pack(_fbb);
-  return nfcdoorz::ipc::auth::CreateAuthCall(
+  return nfcdoorz::ipc::auth::CreateCall(
       _fbb,
       _id,
       _msg_type,
       _msg);
 }
 
-inline AuthReplyT *AuthReply::UnPack(const flatbuffers::resolver_function_t *_resolver) const {
-  auto _o = new AuthReplyT();
+inline ReplyT *Reply::UnPack(const flatbuffers::resolver_function_t *_resolver) const {
+  auto _o = new ReplyT();
   UnPackTo(_o, _resolver);
   return _o;
 }
 
-inline void AuthReply::UnPackTo(AuthReplyT *_o, const flatbuffers::resolver_function_t *_resolver) const {
+inline void Reply::UnPackTo(ReplyT *_o, const flatbuffers::resolver_function_t *_resolver) const {
   (void)_o;
   (void)_resolver;
   { auto _e = id(); _o->id = _e; };
   { auto _e = msg_type(); _o->msg.type = _e; };
-  { auto _e = msg(); if (_e) _o->msg.value = AuthRepliesUnion::UnPack(_e, msg_type(), _resolver); };
+  { auto _e = msg(); if (_e) _o->msg.value = RepliesUnion::UnPack(_e, msg_type(), _resolver); };
   { auto _e = event_type(); _o->event.type = _e; };
-  { auto _e = event(); if (_e) _o->event.value = AuthEventsUnion::UnPack(_e, event_type(), _resolver); };
+  { auto _e = event(); if (_e) _o->event.value = EventsUnion::UnPack(_e, event_type(), _resolver); };
 }
 
-inline flatbuffers::Offset<AuthReply> AuthReply::Pack(flatbuffers::FlatBufferBuilder &_fbb, const AuthReplyT* _o, const flatbuffers::rehasher_function_t *_rehasher) {
-  return CreateAuthReply(_fbb, _o, _rehasher);
+inline flatbuffers::Offset<Reply> Reply::Pack(flatbuffers::FlatBufferBuilder &_fbb, const ReplyT* _o, const flatbuffers::rehasher_function_t *_rehasher) {
+  return CreateReply(_fbb, _o, _rehasher);
 }
 
-inline flatbuffers::Offset<AuthReply> CreateAuthReply(flatbuffers::FlatBufferBuilder &_fbb, const AuthReplyT *_o, const flatbuffers::rehasher_function_t *_rehasher) {
+inline flatbuffers::Offset<Reply> CreateReply(flatbuffers::FlatBufferBuilder &_fbb, const ReplyT *_o, const flatbuffers::rehasher_function_t *_rehasher) {
   (void)_rehasher;
   (void)_o;
-  struct _VectorArgs { flatbuffers::FlatBufferBuilder *__fbb; const AuthReplyT* __o; const flatbuffers::rehasher_function_t *__rehasher; } _va = { &_fbb, _o, _rehasher}; (void)_va;
+  struct _VectorArgs { flatbuffers::FlatBufferBuilder *__fbb; const ReplyT* __o; const flatbuffers::rehasher_function_t *__rehasher; } _va = { &_fbb, _o, _rehasher}; (void)_va;
   auto _id = _o->id;
   auto _msg_type = _o->msg.type;
   auto _msg = _o->msg.Pack(_fbb);
   auto _event_type = _o->event.type;
   auto _event = _o->event.Pack(_fbb);
-  return nfcdoorz::ipc::auth::CreateAuthReply(
+  return nfcdoorz::ipc::auth::CreateReply(
       _fbb,
       _id,
       _msg_type,
@@ -1774,8 +1807,8 @@ inline ServerT *Server::UnPack(const flatbuffers::resolver_function_t *_resolver
 inline void Server::UnPackTo(ServerT *_o, const flatbuffers::resolver_function_t *_resolver) const {
   (void)_o;
   (void)_resolver;
-  { auto _e = call(); if (_e) _o->call = std::unique_ptr<AuthCallT>(_e->UnPack(_resolver)); };
-  { auto _e = reply(); if (_e) _o->reply = std::unique_ptr<AuthReplyT>(_e->UnPack(_resolver)); };
+  { auto _e = call(); if (_e) _o->call = std::unique_ptr<CallT>(_e->UnPack(_resolver)); };
+  { auto _e = reply(); if (_e) _o->reply = std::unique_ptr<ReplyT>(_e->UnPack(_resolver)); };
 }
 
 inline flatbuffers::Offset<Server> Server::Pack(flatbuffers::FlatBufferBuilder &_fbb, const ServerT* _o, const flatbuffers::rehasher_function_t *_rehasher) {
@@ -1786,8 +1819,8 @@ inline flatbuffers::Offset<Server> CreateServer(flatbuffers::FlatBufferBuilder &
   (void)_rehasher;
   (void)_o;
   struct _VectorArgs { flatbuffers::FlatBufferBuilder *__fbb; const ServerT* __o; const flatbuffers::rehasher_function_t *__rehasher; } _va = { &_fbb, _o, _rehasher}; (void)_va;
-  auto _call = _o->call ? CreateAuthCall(_fbb, _o->call.get(), _rehasher) : 0;
-  auto _reply = _o->reply ? CreateAuthReply(_fbb, _o->reply.get(), _rehasher) : 0;
+  auto _call = _o->call ? CreateCall(_fbb, _o->call.get(), _rehasher) : 0;
+  auto _reply = _o->reply ? CreateReply(_fbb, _o->reply.get(), _rehasher) : 0;
   return nfcdoorz::ipc::auth::CreateServer(
       _fbb,
       _call,
@@ -1863,71 +1896,55 @@ inline void ResultDataUnion::Reset() {
   type = ResultData::NONE;
 }
 
-inline bool VerifyAuthCalls(flatbuffers::Verifier &verifier, const void *obj, AuthCalls type) {
+inline bool VerifyCalls(flatbuffers::Verifier &verifier, const void *obj, Calls type) {
   switch (type) {
-    case AuthCalls::NONE: {
+    case Calls::NONE: {
       return true;
     }
-    case AuthCalls::TagPresent: {
-      auto ptr = reinterpret_cast<const TagPresent *>(obj);
-      return verifier.VerifyTable(ptr);
-    }
-    case AuthCalls::Result: {
-      auto ptr = reinterpret_cast<const Result *>(obj);
+    case Calls::TagCall: {
+      auto ptr = reinterpret_cast<const TagCall *>(obj);
       return verifier.VerifyTable(ptr);
     }
     default: return false;
   }
 }
 
-inline bool VerifyAuthCallsVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types) {
+inline bool VerifyCallsVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types) {
   if (!values || !types) return !values && !types;
   if (values->size() != types->size()) return false;
   for (flatbuffers::uoffset_t i = 0; i < values->size(); ++i) {
-    if (!VerifyAuthCalls(
-        verifier,  values->Get(i), types->GetEnum<AuthCalls>(i))) {
+    if (!VerifyCalls(
+        verifier,  values->Get(i), types->GetEnum<Calls>(i))) {
       return false;
     }
   }
   return true;
 }
 
-inline void *AuthCallsUnion::UnPack(const void *obj, AuthCalls type, const flatbuffers::resolver_function_t *resolver) {
+inline void *CallsUnion::UnPack(const void *obj, Calls type, const flatbuffers::resolver_function_t *resolver) {
   switch (type) {
-    case AuthCalls::TagPresent: {
-      auto ptr = reinterpret_cast<const TagPresent *>(obj);
-      return ptr->UnPack(resolver);
-    }
-    case AuthCalls::Result: {
-      auto ptr = reinterpret_cast<const Result *>(obj);
+    case Calls::TagCall: {
+      auto ptr = reinterpret_cast<const TagCall *>(obj);
       return ptr->UnPack(resolver);
     }
     default: return nullptr;
   }
 }
 
-inline flatbuffers::Offset<void> AuthCallsUnion::Pack(flatbuffers::FlatBufferBuilder &_fbb, const flatbuffers::rehasher_function_t *_rehasher) const {
+inline flatbuffers::Offset<void> CallsUnion::Pack(flatbuffers::FlatBufferBuilder &_fbb, const flatbuffers::rehasher_function_t *_rehasher) const {
   switch (type) {
-    case AuthCalls::TagPresent: {
-      auto ptr = reinterpret_cast<const TagPresentT *>(value);
-      return CreateTagPresent(_fbb, ptr, _rehasher).Union();
-    }
-    case AuthCalls::Result: {
-      auto ptr = reinterpret_cast<const ResultT *>(value);
-      return CreateResult(_fbb, ptr, _rehasher).Union();
+    case Calls::TagCall: {
+      auto ptr = reinterpret_cast<const TagCallT *>(value);
+      return CreateTagCall(_fbb, ptr, _rehasher).Union();
     }
     default: return 0;
   }
 }
 
-inline AuthCallsUnion::AuthCallsUnion(const AuthCallsUnion &u) FLATBUFFERS_NOEXCEPT : type(u.type), value(nullptr) {
+inline CallsUnion::CallsUnion(const CallsUnion &u) FLATBUFFERS_NOEXCEPT : type(u.type), value(nullptr) {
   switch (type) {
-    case AuthCalls::TagPresent: {
-      value = new TagPresentT(*reinterpret_cast<TagPresentT *>(u.value));
-      break;
-    }
-    case AuthCalls::Result: {
-      value = new ResultT(*reinterpret_cast<ResultT *>(u.value));
+    case Calls::TagCall: {
+      value = new TagCallT(*reinterpret_cast<TagCallT *>(u.value));
       break;
     }
     default:
@@ -1935,89 +1952,68 @@ inline AuthCallsUnion::AuthCallsUnion(const AuthCallsUnion &u) FLATBUFFERS_NOEXC
   }
 }
 
-inline void AuthCallsUnion::Reset() {
+inline void CallsUnion::Reset() {
   switch (type) {
-    case AuthCalls::TagPresent: {
-      auto ptr = reinterpret_cast<TagPresentT *>(value);
-      delete ptr;
-      break;
-    }
-    case AuthCalls::Result: {
-      auto ptr = reinterpret_cast<ResultT *>(value);
+    case Calls::TagCall: {
+      auto ptr = reinterpret_cast<TagCallT *>(value);
       delete ptr;
       break;
     }
     default: break;
   }
   value = nullptr;
-  type = AuthCalls::NONE;
+  type = Calls::NONE;
 }
 
-inline bool VerifyAuthReplies(flatbuffers::Verifier &verifier, const void *obj, AuthReplies type) {
+inline bool VerifyReplies(flatbuffers::Verifier &verifier, const void *obj, Replies type) {
   switch (type) {
-    case AuthReplies::NONE: {
+    case Replies::NONE: {
       return true;
     }
-    case AuthReplies::AuthApp: {
-      auto ptr = reinterpret_cast<const AuthApp *>(obj);
-      return verifier.VerifyTable(ptr);
-    }
-    case AuthReplies::GetUID: {
-      auto ptr = reinterpret_cast<const GetUID *>(obj);
+    case Replies::TagReply: {
+      auto ptr = reinterpret_cast<const TagReply *>(obj);
       return verifier.VerifyTable(ptr);
     }
     default: return false;
   }
 }
 
-inline bool VerifyAuthRepliesVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types) {
+inline bool VerifyRepliesVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types) {
   if (!values || !types) return !values && !types;
   if (values->size() != types->size()) return false;
   for (flatbuffers::uoffset_t i = 0; i < values->size(); ++i) {
-    if (!VerifyAuthReplies(
-        verifier,  values->Get(i), types->GetEnum<AuthReplies>(i))) {
+    if (!VerifyReplies(
+        verifier,  values->Get(i), types->GetEnum<Replies>(i))) {
       return false;
     }
   }
   return true;
 }
 
-inline void *AuthRepliesUnion::UnPack(const void *obj, AuthReplies type, const flatbuffers::resolver_function_t *resolver) {
+inline void *RepliesUnion::UnPack(const void *obj, Replies type, const flatbuffers::resolver_function_t *resolver) {
   switch (type) {
-    case AuthReplies::AuthApp: {
-      auto ptr = reinterpret_cast<const AuthApp *>(obj);
-      return ptr->UnPack(resolver);
-    }
-    case AuthReplies::GetUID: {
-      auto ptr = reinterpret_cast<const GetUID *>(obj);
+    case Replies::TagReply: {
+      auto ptr = reinterpret_cast<const TagReply *>(obj);
       return ptr->UnPack(resolver);
     }
     default: return nullptr;
   }
 }
 
-inline flatbuffers::Offset<void> AuthRepliesUnion::Pack(flatbuffers::FlatBufferBuilder &_fbb, const flatbuffers::rehasher_function_t *_rehasher) const {
+inline flatbuffers::Offset<void> RepliesUnion::Pack(flatbuffers::FlatBufferBuilder &_fbb, const flatbuffers::rehasher_function_t *_rehasher) const {
   switch (type) {
-    case AuthReplies::AuthApp: {
-      auto ptr = reinterpret_cast<const AuthAppT *>(value);
-      return CreateAuthApp(_fbb, ptr, _rehasher).Union();
-    }
-    case AuthReplies::GetUID: {
-      auto ptr = reinterpret_cast<const GetUIDT *>(value);
-      return CreateGetUID(_fbb, ptr, _rehasher).Union();
+    case Replies::TagReply: {
+      auto ptr = reinterpret_cast<const TagReplyT *>(value);
+      return CreateTagReply(_fbb, ptr, _rehasher).Union();
     }
     default: return 0;
   }
 }
 
-inline AuthRepliesUnion::AuthRepliesUnion(const AuthRepliesUnion &u) FLATBUFFERS_NOEXCEPT : type(u.type), value(nullptr) {
+inline RepliesUnion::RepliesUnion(const RepliesUnion &u) FLATBUFFERS_NOEXCEPT : type(u.type), value(nullptr) {
   switch (type) {
-    case AuthReplies::AuthApp: {
-      FLATBUFFERS_ASSERT(false);  // AuthAppT not copyable.
-      break;
-    }
-    case AuthReplies::GetUID: {
-      value = new GetUIDT(*reinterpret_cast<GetUIDT *>(u.value));
+    case Replies::TagReply: {
+      value = new TagReplyT(*reinterpret_cast<TagReplyT *>(u.value));
       break;
     }
     default:
@@ -2025,30 +2021,25 @@ inline AuthRepliesUnion::AuthRepliesUnion(const AuthRepliesUnion &u) FLATBUFFERS
   }
 }
 
-inline void AuthRepliesUnion::Reset() {
+inline void RepliesUnion::Reset() {
   switch (type) {
-    case AuthReplies::AuthApp: {
-      auto ptr = reinterpret_cast<AuthAppT *>(value);
-      delete ptr;
-      break;
-    }
-    case AuthReplies::GetUID: {
-      auto ptr = reinterpret_cast<GetUIDT *>(value);
+    case Replies::TagReply: {
+      auto ptr = reinterpret_cast<TagReplyT *>(value);
       delete ptr;
       break;
     }
     default: break;
   }
   value = nullptr;
-  type = AuthReplies::NONE;
+  type = Replies::NONE;
 }
 
-inline bool VerifyAuthEvents(flatbuffers::Verifier &verifier, const void *obj, AuthEvents type) {
+inline bool VerifyEvents(flatbuffers::Verifier &verifier, const void *obj, Events type) {
   switch (type) {
-    case AuthEvents::NONE: {
+    case Events::NONE: {
       return true;
     }
-    case AuthEvents::RandomEvent: {
+    case Events::RandomEvent: {
       auto ptr = reinterpret_cast<const RandomEvent *>(obj);
       return verifier.VerifyTable(ptr);
     }
@@ -2056,21 +2047,21 @@ inline bool VerifyAuthEvents(flatbuffers::Verifier &verifier, const void *obj, A
   }
 }
 
-inline bool VerifyAuthEventsVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types) {
+inline bool VerifyEventsVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types) {
   if (!values || !types) return !values && !types;
   if (values->size() != types->size()) return false;
   for (flatbuffers::uoffset_t i = 0; i < values->size(); ++i) {
-    if (!VerifyAuthEvents(
-        verifier,  values->Get(i), types->GetEnum<AuthEvents>(i))) {
+    if (!VerifyEvents(
+        verifier,  values->Get(i), types->GetEnum<Events>(i))) {
       return false;
     }
   }
   return true;
 }
 
-inline void *AuthEventsUnion::UnPack(const void *obj, AuthEvents type, const flatbuffers::resolver_function_t *resolver) {
+inline void *EventsUnion::UnPack(const void *obj, Events type, const flatbuffers::resolver_function_t *resolver) {
   switch (type) {
-    case AuthEvents::RandomEvent: {
+    case Events::RandomEvent: {
       auto ptr = reinterpret_cast<const RandomEvent *>(obj);
       return ptr->UnPack(resolver);
     }
@@ -2078,9 +2069,9 @@ inline void *AuthEventsUnion::UnPack(const void *obj, AuthEvents type, const fla
   }
 }
 
-inline flatbuffers::Offset<void> AuthEventsUnion::Pack(flatbuffers::FlatBufferBuilder &_fbb, const flatbuffers::rehasher_function_t *_rehasher) const {
+inline flatbuffers::Offset<void> EventsUnion::Pack(flatbuffers::FlatBufferBuilder &_fbb, const flatbuffers::rehasher_function_t *_rehasher) const {
   switch (type) {
-    case AuthEvents::RandomEvent: {
+    case Events::RandomEvent: {
       auto ptr = reinterpret_cast<const RandomEventT *>(value);
       return CreateRandomEvent(_fbb, ptr, _rehasher).Union();
     }
@@ -2088,9 +2079,9 @@ inline flatbuffers::Offset<void> AuthEventsUnion::Pack(flatbuffers::FlatBufferBu
   }
 }
 
-inline AuthEventsUnion::AuthEventsUnion(const AuthEventsUnion &u) FLATBUFFERS_NOEXCEPT : type(u.type), value(nullptr) {
+inline EventsUnion::EventsUnion(const EventsUnion &u) FLATBUFFERS_NOEXCEPT : type(u.type), value(nullptr) {
   switch (type) {
-    case AuthEvents::RandomEvent: {
+    case Events::RandomEvent: {
       value = new RandomEventT(*reinterpret_cast<RandomEventT *>(u.value));
       break;
     }
@@ -2099,9 +2090,9 @@ inline AuthEventsUnion::AuthEventsUnion(const AuthEventsUnion &u) FLATBUFFERS_NO
   }
 }
 
-inline void AuthEventsUnion::Reset() {
+inline void EventsUnion::Reset() {
   switch (type) {
-    case AuthEvents::RandomEvent: {
+    case Events::RandomEvent: {
       auto ptr = reinterpret_cast<RandomEventT *>(value);
       delete ptr;
       break;
@@ -2109,7 +2100,7 @@ inline void AuthEventsUnion::Reset() {
     default: break;
   }
   value = nullptr;
-  type = AuthEvents::NONE;
+  type = Events::NONE;
 }
 
 inline const flatbuffers::TypeTable *ResultDataTypeTable() {
@@ -2130,49 +2121,43 @@ inline const flatbuffers::TypeTable *ResultDataTypeTable() {
   return &tt;
 }
 
-inline const flatbuffers::TypeTable *AuthCallsTypeTable() {
+inline const flatbuffers::TypeTable *CallsTypeTable() {
   static const flatbuffers::TypeCode type_codes[] = {
     { flatbuffers::ET_SEQUENCE, 0, -1 },
-    { flatbuffers::ET_SEQUENCE, 0, 0 },
-    { flatbuffers::ET_SEQUENCE, 0, 1 }
+    { flatbuffers::ET_SEQUENCE, 0, 0 }
   };
   static const flatbuffers::TypeFunction type_refs[] = {
-    TagPresentTypeTable,
-    ResultTypeTable
+    TagCallTypeTable
   };
   static const char * const names[] = {
     "NONE",
-    "TagPresent",
-    "Result"
+    "TagCall"
   };
   static const flatbuffers::TypeTable tt = {
-    flatbuffers::ST_UNION, 3, type_codes, type_refs, nullptr, names
+    flatbuffers::ST_UNION, 2, type_codes, type_refs, nullptr, names
   };
   return &tt;
 }
 
-inline const flatbuffers::TypeTable *AuthRepliesTypeTable() {
+inline const flatbuffers::TypeTable *RepliesTypeTable() {
   static const flatbuffers::TypeCode type_codes[] = {
     { flatbuffers::ET_SEQUENCE, 0, -1 },
-    { flatbuffers::ET_SEQUENCE, 0, 0 },
-    { flatbuffers::ET_SEQUENCE, 0, 1 }
+    { flatbuffers::ET_SEQUENCE, 0, 0 }
   };
   static const flatbuffers::TypeFunction type_refs[] = {
-    AuthAppTypeTable,
-    GetUIDTypeTable
+    TagReplyTypeTable
   };
   static const char * const names[] = {
     "NONE",
-    "AuthApp",
-    "GetUID"
+    "TagReply"
   };
   static const flatbuffers::TypeTable tt = {
-    flatbuffers::ST_UNION, 3, type_codes, type_refs, nullptr, names
+    flatbuffers::ST_UNION, 2, type_codes, type_refs, nullptr, names
   };
   return &tt;
 }
 
-inline const flatbuffers::TypeTable *AuthEventsTypeTable() {
+inline const flatbuffers::TypeTable *EventsTypeTable() {
   static const flatbuffers::TypeCode type_codes[] = {
     { flatbuffers::ET_SEQUENCE, 0, -1 },
     { flatbuffers::ET_SEQUENCE, 0, 0 }
@@ -2229,7 +2214,14 @@ inline const flatbuffers::TypeTable *KeyTypeTable() {
   return &tt;
 }
 
-inline const flatbuffers::TypeTable *TagResultTypeTable() {
+inline const flatbuffers::TypeTable *TagCallTypeTable() {
+  static const flatbuffers::TypeTable tt = {
+    flatbuffers::ST_TABLE, 0, nullptr, nullptr, nullptr, nullptr
+  };
+  return &tt;
+}
+
+inline const flatbuffers::TypeTable *TagReplyTypeTable() {
   static const flatbuffers::TypeCode type_codes[] = {
     { flatbuffers::ET_UCHAR, 1, -1 }
   };
@@ -2321,14 +2313,14 @@ inline const flatbuffers::TypeTable *RandomEventTypeTable() {
   return &tt;
 }
 
-inline const flatbuffers::TypeTable *AuthCallTypeTable() {
+inline const flatbuffers::TypeTable *CallTypeTable() {
   static const flatbuffers::TypeCode type_codes[] = {
     { flatbuffers::ET_ULONG, 0, -1 },
     { flatbuffers::ET_UTYPE, 0, 0 },
     { flatbuffers::ET_SEQUENCE, 0, 0 }
   };
   static const flatbuffers::TypeFunction type_refs[] = {
-    AuthCallsTypeTable
+    CallsTypeTable
   };
   static const char * const names[] = {
     "id",
@@ -2341,7 +2333,7 @@ inline const flatbuffers::TypeTable *AuthCallTypeTable() {
   return &tt;
 }
 
-inline const flatbuffers::TypeTable *AuthReplyTypeTable() {
+inline const flatbuffers::TypeTable *ReplyTypeTable() {
   static const flatbuffers::TypeCode type_codes[] = {
     { flatbuffers::ET_ULONG, 0, -1 },
     { flatbuffers::ET_UTYPE, 0, 0 },
@@ -2350,8 +2342,8 @@ inline const flatbuffers::TypeTable *AuthReplyTypeTable() {
     { flatbuffers::ET_SEQUENCE, 0, 1 }
   };
   static const flatbuffers::TypeFunction type_refs[] = {
-    AuthRepliesTypeTable,
-    AuthEventsTypeTable
+    RepliesTypeTable,
+    EventsTypeTable
   };
   static const char * const names[] = {
     "id",
@@ -2372,8 +2364,8 @@ inline const flatbuffers::TypeTable *ServerTypeTable() {
     { flatbuffers::ET_SEQUENCE, 0, 1 }
   };
   static const flatbuffers::TypeFunction type_refs[] = {
-    AuthCallTypeTable,
-    AuthReplyTypeTable
+    CallTypeTable,
+    ReplyTypeTable
   };
   static const char * const names[] = {
     "call",

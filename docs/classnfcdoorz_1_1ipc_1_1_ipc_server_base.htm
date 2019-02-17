@@ -93,7 +93,7 @@ Inheritance diagram for nfcdoorz::ipc::IpcServerBase:</div>
 <div class="center"><img src="classnfcdoorz_1_1ipc_1_1_ipc_server_base__inherit__graph.png" border="0" usemap="#nfcdoorz_1_1ipc_1_1_ipc_server_base_inherit__map" alt="Inheritance graph"/></div>
 <map name="nfcdoorz_1_1ipc_1_1_ipc_server_base_inherit__map" id="nfcdoorz_1_1ipc_1_1_ipc_server_base_inherit__map">
 <area shape="rect" id="node3" href="classnfcdoorz_1_1ipc_1_1_ipc_server_multi.htm" title="nfcdoorz::ipc::IpcServer\lMulti\&lt; APIServers \&gt;" alt="" coords="20,155,181,196"/>
-<area shape="rect" id="node2" href="classnfcdoorz_1_1ipc_1_1_ipc_base.htm" title="nfcdoorz::ipc::IpcBase" alt="" coords="24,5,177,32"/>
+<area shape="rect" id="node2" href="classnfcdoorz_1_1ipc_1_1_ipc_base.htm" title="Base of all IPC classes. Contains the common required components for running IPC communications. " alt="" coords="24,5,177,32"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.htm">legend</a>]</span></center></div>
 <div class="dynheader">
@@ -101,7 +101,7 @@ Collaboration diagram for nfcdoorz::ipc::IpcServerBase:</div>
 <div class="dyncontent">
 <div class="center"><img src="classnfcdoorz_1_1ipc_1_1_ipc_server_base__coll__graph.png" border="0" usemap="#nfcdoorz_1_1ipc_1_1_ipc_server_base_coll__map" alt="Collaboration graph"/></div>
 <map name="nfcdoorz_1_1ipc_1_1_ipc_server_base_coll__map" id="nfcdoorz_1_1ipc_1_1_ipc_server_base_coll__map">
-<area shape="rect" id="node2" href="classnfcdoorz_1_1ipc_1_1_ipc_base.htm" title="nfcdoorz::ipc::IpcBase" alt="" coords="24,5,177,32"/>
+<area shape="rect" id="node2" href="classnfcdoorz_1_1ipc_1_1_ipc_base.htm" title="Base of all IPC classes. Contains the common required components for running IPC communications. " alt="" coords="24,5,177,32"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.htm">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -112,10 +112,12 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>listen</b> ()</td></t
 <tr class="separator:aaadcbddb72fb5bee5792f9d1af55e04e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classnfcdoorz_1_1ipc_1_1_ipc_base"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classnfcdoorz_1_1ipc_1_1_ipc_base')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classnfcdoorz_1_1ipc_1_1_ipc_base.htm">nfcdoorz::ipc::IpcBase</a></td></tr>
 <tr class="memitem:a0ab232960400fefb1bcfa9c72a285329 inherit pub_methods_classnfcdoorz_1_1ipc_1_1_ipc_base"><td class="memItemLeft" align="right" valign="top"><a id="a0ab232960400fefb1bcfa9c72a285329"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>open</b> (int fd)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnfcdoorz_1_1ipc_1_1_ipc_base.htm#a0ab232960400fefb1bcfa9c72a285329">open</a> (int fd)</td></tr>
+<tr class="memdesc:a0ab232960400fefb1bcfa9c72a285329 inherit pub_methods_classnfcdoorz_1_1ipc_1_1_ipc_base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Open a file descriptor. As libuv pipe does not support abstract socket opening, we DIY. <br /></td></tr>
 <tr class="separator:a0ab232960400fefb1bcfa9c72a285329 inherit pub_methods_classnfcdoorz_1_1ipc_1_1_ipc_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acaed0b79cc0ea79052a21b583b79bfb6 inherit pub_methods_classnfcdoorz_1_1ipc_1_1_ipc_base"><td class="memItemLeft" align="right" valign="top"><a id="acaed0b79cc0ea79052a21b583b79bfb6"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>run</b> ()</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnfcdoorz_1_1ipc_1_1_ipc_base.htm#acaed0b79cc0ea79052a21b583b79bfb6">run</a> ()</td></tr>
+<tr class="memdesc:acaed0b79cc0ea79052a21b583b79bfb6 inherit pub_methods_classnfcdoorz_1_1ipc_1_1_ipc_base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start event loop. This does not return, see UVW/libuv docs. <br /></td></tr>
 <tr class="separator:acaed0b79cc0ea79052a21b583b79bfb6 inherit pub_methods_classnfcdoorz_1_1ipc_1_1_ipc_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a26f093b1f5a4820032c4ada22262d33c inherit pub_methods_classnfcdoorz_1_1ipc_1_1_ipc_base"><td class="memItemLeft" align="right" valign="top"><a id="a26f093b1f5a4820032c4ada22262d33c"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>registerIdleCall</b> (std::shared_ptr&lt; <a class="el" href="structnfcdoorz_1_1ipc_1_1_ipc_base_1_1_executable.htm">Executable</a> &gt; exec)</td></tr>

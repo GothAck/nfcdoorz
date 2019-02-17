@@ -16,14 +16,14 @@ struct TestCallT;
 struct TestReply;
 struct TestReplyT;
 
-struct PolicyRequestEvent;
-struct PolicyRequestEventT;
+struct RequestEvent;
+struct RequestEventT;
 
-struct PolicyCall;
-struct PolicyCallT;
+struct Call;
+struct CallT;
 
-struct PolicyReply;
-struct PolicyReplyT;
+struct Reply;
+struct ReplyT;
 
 struct Server;
 struct ServerT;
@@ -32,30 +32,30 @@ inline const flatbuffers::TypeTable *TestCallTypeTable();
 
 inline const flatbuffers::TypeTable *TestReplyTypeTable();
 
-inline const flatbuffers::TypeTable *PolicyRequestEventTypeTable();
+inline const flatbuffers::TypeTable *RequestEventTypeTable();
 
-inline const flatbuffers::TypeTable *PolicyCallTypeTable();
+inline const flatbuffers::TypeTable *CallTypeTable();
 
-inline const flatbuffers::TypeTable *PolicyReplyTypeTable();
+inline const flatbuffers::TypeTable *ReplyTypeTable();
 
 inline const flatbuffers::TypeTable *ServerTypeTable();
 
-enum class PolicyCalls : uint8_t {
+enum class Calls : uint8_t {
   NONE = 0,
   TestCall = 1,
   MIN = NONE,
   MAX = TestCall
 };
 
-inline const PolicyCalls (&EnumValuesPolicyCalls())[2] {
-  static const PolicyCalls values[] = {
-    PolicyCalls::NONE,
-    PolicyCalls::TestCall
+inline const Calls (&EnumValuesCalls())[2] {
+  static const Calls values[] = {
+    Calls::NONE,
+    Calls::TestCall
   };
   return values;
 }
 
-inline const char * const *EnumNamesPolicyCalls() {
+inline const char * const *EnumNamesCalls() {
   static const char * const names[] = {
     "NONE",
     "TestCall",
@@ -64,33 +64,33 @@ inline const char * const *EnumNamesPolicyCalls() {
   return names;
 }
 
-inline const char *EnumNamePolicyCalls(PolicyCalls e) {
+inline const char *EnumNameCalls(Calls e) {
   const size_t index = static_cast<int>(e);
-  return EnumNamesPolicyCalls()[index];
+  return EnumNamesCalls()[index];
 }
 
-template<typename T> struct PolicyCallsTraits {
-  static const PolicyCalls enum_value = PolicyCalls::NONE;
+template<typename T> struct CallsTraits {
+  static const Calls enum_value = Calls::NONE;
 };
 
-template<> struct PolicyCallsTraits<TestCall> {
-  static const PolicyCalls enum_value = PolicyCalls::TestCall;
+template<> struct CallsTraits<TestCall> {
+  static const Calls enum_value = Calls::TestCall;
 };
 
-struct PolicyCallsUnion {
-  PolicyCalls type;
+struct CallsUnion {
+  Calls type;
   void *value;
 
-  PolicyCallsUnion() : type(PolicyCalls::NONE), value(nullptr) {}
-  PolicyCallsUnion(PolicyCallsUnion&& u) FLATBUFFERS_NOEXCEPT :
-    type(PolicyCalls::NONE), value(nullptr)
+  CallsUnion() : type(Calls::NONE), value(nullptr) {}
+  CallsUnion(CallsUnion&& u) FLATBUFFERS_NOEXCEPT :
+    type(Calls::NONE), value(nullptr)
     { std::swap(type, u.type); std::swap(value, u.value); }
-  PolicyCallsUnion(const PolicyCallsUnion &) FLATBUFFERS_NOEXCEPT;
-  PolicyCallsUnion &operator=(const PolicyCallsUnion &u) FLATBUFFERS_NOEXCEPT
-    { PolicyCallsUnion t(u); std::swap(type, t.type); std::swap(value, t.value); return *this; }
-  PolicyCallsUnion &operator=(PolicyCallsUnion &&u) FLATBUFFERS_NOEXCEPT
+  CallsUnion(const CallsUnion &) FLATBUFFERS_NOEXCEPT;
+  CallsUnion &operator=(const CallsUnion &u) FLATBUFFERS_NOEXCEPT
+    { CallsUnion t(u); std::swap(type, t.type); std::swap(value, t.value); return *this; }
+  CallsUnion &operator=(CallsUnion &&u) FLATBUFFERS_NOEXCEPT
     { std::swap(type, u.type); std::swap(value, u.value); return *this; }
-  ~PolicyCallsUnion() { Reset(); }
+  ~CallsUnion() { Reset(); }
 
   void Reset();
 
@@ -98,45 +98,45 @@ struct PolicyCallsUnion {
   template <typename T>
   void Set(T&& val) {
     Reset();
-    type = PolicyCallsTraits<typename T::TableType>::enum_value;
-    if (type != PolicyCalls::NONE) {
+    type = CallsTraits<typename T::TableType>::enum_value;
+    if (type != Calls::NONE) {
       value = new T(std::forward<T>(val));
     }
   }
 #endif  // FLATBUFFERS_CPP98_STL
 
-  static void *UnPack(const void *obj, PolicyCalls type, const flatbuffers::resolver_function_t *resolver);
+  static void *UnPack(const void *obj, Calls type, const flatbuffers::resolver_function_t *resolver);
   flatbuffers::Offset<void> Pack(flatbuffers::FlatBufferBuilder &_fbb, const flatbuffers::rehasher_function_t *_rehasher = nullptr) const;
 
   TestCallT *AsTestCall() {
-    return type == PolicyCalls::TestCall ?
+    return type == Calls::TestCall ?
       reinterpret_cast<TestCallT *>(value) : nullptr;
   }
   const TestCallT *AsTestCall() const {
-    return type == PolicyCalls::TestCall ?
+    return type == Calls::TestCall ?
       reinterpret_cast<const TestCallT *>(value) : nullptr;
   }
 };
 
-bool VerifyPolicyCalls(flatbuffers::Verifier &verifier, const void *obj, PolicyCalls type);
-bool VerifyPolicyCallsVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types);
+bool VerifyCalls(flatbuffers::Verifier &verifier, const void *obj, Calls type);
+bool VerifyCallsVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types);
 
-enum class PolicyReplies : uint8_t {
+enum class Replies : uint8_t {
   NONE = 0,
   TestReply = 1,
   MIN = NONE,
   MAX = TestReply
 };
 
-inline const PolicyReplies (&EnumValuesPolicyReplies())[2] {
-  static const PolicyReplies values[] = {
-    PolicyReplies::NONE,
-    PolicyReplies::TestReply
+inline const Replies (&EnumValuesReplies())[2] {
+  static const Replies values[] = {
+    Replies::NONE,
+    Replies::TestReply
   };
   return values;
 }
 
-inline const char * const *EnumNamesPolicyReplies() {
+inline const char * const *EnumNamesReplies() {
   static const char * const names[] = {
     "NONE",
     "TestReply",
@@ -145,33 +145,33 @@ inline const char * const *EnumNamesPolicyReplies() {
   return names;
 }
 
-inline const char *EnumNamePolicyReplies(PolicyReplies e) {
+inline const char *EnumNameReplies(Replies e) {
   const size_t index = static_cast<int>(e);
-  return EnumNamesPolicyReplies()[index];
+  return EnumNamesReplies()[index];
 }
 
-template<typename T> struct PolicyRepliesTraits {
-  static const PolicyReplies enum_value = PolicyReplies::NONE;
+template<typename T> struct RepliesTraits {
+  static const Replies enum_value = Replies::NONE;
 };
 
-template<> struct PolicyRepliesTraits<TestReply> {
-  static const PolicyReplies enum_value = PolicyReplies::TestReply;
+template<> struct RepliesTraits<TestReply> {
+  static const Replies enum_value = Replies::TestReply;
 };
 
-struct PolicyRepliesUnion {
-  PolicyReplies type;
+struct RepliesUnion {
+  Replies type;
   void *value;
 
-  PolicyRepliesUnion() : type(PolicyReplies::NONE), value(nullptr) {}
-  PolicyRepliesUnion(PolicyRepliesUnion&& u) FLATBUFFERS_NOEXCEPT :
-    type(PolicyReplies::NONE), value(nullptr)
+  RepliesUnion() : type(Replies::NONE), value(nullptr) {}
+  RepliesUnion(RepliesUnion&& u) FLATBUFFERS_NOEXCEPT :
+    type(Replies::NONE), value(nullptr)
     { std::swap(type, u.type); std::swap(value, u.value); }
-  PolicyRepliesUnion(const PolicyRepliesUnion &) FLATBUFFERS_NOEXCEPT;
-  PolicyRepliesUnion &operator=(const PolicyRepliesUnion &u) FLATBUFFERS_NOEXCEPT
-    { PolicyRepliesUnion t(u); std::swap(type, t.type); std::swap(value, t.value); return *this; }
-  PolicyRepliesUnion &operator=(PolicyRepliesUnion &&u) FLATBUFFERS_NOEXCEPT
+  RepliesUnion(const RepliesUnion &) FLATBUFFERS_NOEXCEPT;
+  RepliesUnion &operator=(const RepliesUnion &u) FLATBUFFERS_NOEXCEPT
+    { RepliesUnion t(u); std::swap(type, t.type); std::swap(value, t.value); return *this; }
+  RepliesUnion &operator=(RepliesUnion &&u) FLATBUFFERS_NOEXCEPT
     { std::swap(type, u.type); std::swap(value, u.value); return *this; }
-  ~PolicyRepliesUnion() { Reset(); }
+  ~RepliesUnion() { Reset(); }
 
   void Reset();
 
@@ -179,80 +179,80 @@ struct PolicyRepliesUnion {
   template <typename T>
   void Set(T&& val) {
     Reset();
-    type = PolicyRepliesTraits<typename T::TableType>::enum_value;
-    if (type != PolicyReplies::NONE) {
+    type = RepliesTraits<typename T::TableType>::enum_value;
+    if (type != Replies::NONE) {
       value = new T(std::forward<T>(val));
     }
   }
 #endif  // FLATBUFFERS_CPP98_STL
 
-  static void *UnPack(const void *obj, PolicyReplies type, const flatbuffers::resolver_function_t *resolver);
+  static void *UnPack(const void *obj, Replies type, const flatbuffers::resolver_function_t *resolver);
   flatbuffers::Offset<void> Pack(flatbuffers::FlatBufferBuilder &_fbb, const flatbuffers::rehasher_function_t *_rehasher = nullptr) const;
 
   TestReplyT *AsTestReply() {
-    return type == PolicyReplies::TestReply ?
+    return type == Replies::TestReply ?
       reinterpret_cast<TestReplyT *>(value) : nullptr;
   }
   const TestReplyT *AsTestReply() const {
-    return type == PolicyReplies::TestReply ?
+    return type == Replies::TestReply ?
       reinterpret_cast<const TestReplyT *>(value) : nullptr;
   }
 };
 
-bool VerifyPolicyReplies(flatbuffers::Verifier &verifier, const void *obj, PolicyReplies type);
-bool VerifyPolicyRepliesVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types);
+bool VerifyReplies(flatbuffers::Verifier &verifier, const void *obj, Replies type);
+bool VerifyRepliesVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types);
 
-enum class PolicyEvents : uint8_t {
+enum class Events : uint8_t {
   NONE = 0,
-  PolicyRequestEvent = 1,
+  RequestEvent = 1,
   MIN = NONE,
-  MAX = PolicyRequestEvent
+  MAX = RequestEvent
 };
 
-inline const PolicyEvents (&EnumValuesPolicyEvents())[2] {
-  static const PolicyEvents values[] = {
-    PolicyEvents::NONE,
-    PolicyEvents::PolicyRequestEvent
+inline const Events (&EnumValuesEvents())[2] {
+  static const Events values[] = {
+    Events::NONE,
+    Events::RequestEvent
   };
   return values;
 }
 
-inline const char * const *EnumNamesPolicyEvents() {
+inline const char * const *EnumNamesEvents() {
   static const char * const names[] = {
     "NONE",
-    "PolicyRequestEvent",
+    "RequestEvent",
     nullptr
   };
   return names;
 }
 
-inline const char *EnumNamePolicyEvents(PolicyEvents e) {
+inline const char *EnumNameEvents(Events e) {
   const size_t index = static_cast<int>(e);
-  return EnumNamesPolicyEvents()[index];
+  return EnumNamesEvents()[index];
 }
 
-template<typename T> struct PolicyEventsTraits {
-  static const PolicyEvents enum_value = PolicyEvents::NONE;
+template<typename T> struct EventsTraits {
+  static const Events enum_value = Events::NONE;
 };
 
-template<> struct PolicyEventsTraits<PolicyRequestEvent> {
-  static const PolicyEvents enum_value = PolicyEvents::PolicyRequestEvent;
+template<> struct EventsTraits<RequestEvent> {
+  static const Events enum_value = Events::RequestEvent;
 };
 
-struct PolicyEventsUnion {
-  PolicyEvents type;
+struct EventsUnion {
+  Events type;
   void *value;
 
-  PolicyEventsUnion() : type(PolicyEvents::NONE), value(nullptr) {}
-  PolicyEventsUnion(PolicyEventsUnion&& u) FLATBUFFERS_NOEXCEPT :
-    type(PolicyEvents::NONE), value(nullptr)
+  EventsUnion() : type(Events::NONE), value(nullptr) {}
+  EventsUnion(EventsUnion&& u) FLATBUFFERS_NOEXCEPT :
+    type(Events::NONE), value(nullptr)
     { std::swap(type, u.type); std::swap(value, u.value); }
-  PolicyEventsUnion(const PolicyEventsUnion &) FLATBUFFERS_NOEXCEPT;
-  PolicyEventsUnion &operator=(const PolicyEventsUnion &u) FLATBUFFERS_NOEXCEPT
-    { PolicyEventsUnion t(u); std::swap(type, t.type); std::swap(value, t.value); return *this; }
-  PolicyEventsUnion &operator=(PolicyEventsUnion &&u) FLATBUFFERS_NOEXCEPT
+  EventsUnion(const EventsUnion &) FLATBUFFERS_NOEXCEPT;
+  EventsUnion &operator=(const EventsUnion &u) FLATBUFFERS_NOEXCEPT
+    { EventsUnion t(u); std::swap(type, t.type); std::swap(value, t.value); return *this; }
+  EventsUnion &operator=(EventsUnion &&u) FLATBUFFERS_NOEXCEPT
     { std::swap(type, u.type); std::swap(value, u.value); return *this; }
-  ~PolicyEventsUnion() { Reset(); }
+  ~EventsUnion() { Reset(); }
 
   void Reset();
 
@@ -260,28 +260,28 @@ struct PolicyEventsUnion {
   template <typename T>
   void Set(T&& val) {
     Reset();
-    type = PolicyEventsTraits<typename T::TableType>::enum_value;
-    if (type != PolicyEvents::NONE) {
+    type = EventsTraits<typename T::TableType>::enum_value;
+    if (type != Events::NONE) {
       value = new T(std::forward<T>(val));
     }
   }
 #endif  // FLATBUFFERS_CPP98_STL
 
-  static void *UnPack(const void *obj, PolicyEvents type, const flatbuffers::resolver_function_t *resolver);
+  static void *UnPack(const void *obj, Events type, const flatbuffers::resolver_function_t *resolver);
   flatbuffers::Offset<void> Pack(flatbuffers::FlatBufferBuilder &_fbb, const flatbuffers::rehasher_function_t *_rehasher = nullptr) const;
 
-  PolicyRequestEventT *AsPolicyRequestEvent() {
-    return type == PolicyEvents::PolicyRequestEvent ?
-      reinterpret_cast<PolicyRequestEventT *>(value) : nullptr;
+  RequestEventT *AsRequestEvent() {
+    return type == Events::RequestEvent ?
+      reinterpret_cast<RequestEventT *>(value) : nullptr;
   }
-  const PolicyRequestEventT *AsPolicyRequestEvent() const {
-    return type == PolicyEvents::PolicyRequestEvent ?
-      reinterpret_cast<const PolicyRequestEventT *>(value) : nullptr;
+  const RequestEventT *AsRequestEvent() const {
+    return type == Events::RequestEvent ?
+      reinterpret_cast<const RequestEventT *>(value) : nullptr;
   }
 };
 
-bool VerifyPolicyEvents(flatbuffers::Verifier &verifier, const void *obj, PolicyEvents type);
-bool VerifyPolicyEventsVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types);
+bool VerifyEvents(flatbuffers::Verifier &verifier, const void *obj, Events type);
+bool VerifyEventsVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types);
 
 struct TestCallT : public flatbuffers::NativeTable {
   typedef TestCall TableType;
@@ -381,24 +381,24 @@ inline flatbuffers::Offset<TestReply> CreateTestReply(
 
 flatbuffers::Offset<TestReply> CreateTestReply(flatbuffers::FlatBufferBuilder &_fbb, const TestReplyT *_o, const flatbuffers::rehasher_function_t *_rehasher = nullptr);
 
-struct PolicyRequestEventT : public flatbuffers::NativeTable {
-  typedef PolicyRequestEvent TableType;
+struct RequestEventT : public flatbuffers::NativeTable {
+  typedef RequestEvent TableType;
   static FLATBUFFERS_CONSTEXPR const char *GetFullyQualifiedName() {
-    return "nfcdoorz.ipc.policy.PolicyRequestEventT";
+    return "nfcdoorz.ipc.policy.RequestEventT";
   }
   std::string deviceID;
   std::vector<uint8_t> cardUID;
-  PolicyRequestEventT() {
+  RequestEventT() {
   }
 };
 
-struct PolicyRequestEvent FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
-  typedef PolicyRequestEventT NativeTableType;
+struct RequestEvent FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  typedef RequestEventT NativeTableType;
   static const flatbuffers::TypeTable *MiniReflectTypeTable() {
-    return PolicyRequestEventTypeTable();
+    return RequestEventTypeTable();
   }
   static FLATBUFFERS_CONSTEXPR const char *GetFullyQualifiedName() {
-    return "nfcdoorz.ipc.policy.PolicyRequestEvent";
+    return "nfcdoorz.ipc.policy.RequestEvent";
   }
   enum {
     VT_DEVICEID = 4,
@@ -418,73 +418,73 @@ struct PolicyRequestEvent FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
            verifier.VerifyVector(cardUID()) &&
            verifier.EndTable();
   }
-  PolicyRequestEventT *UnPack(const flatbuffers::resolver_function_t *_resolver = nullptr) const;
-  void UnPackTo(PolicyRequestEventT *_o, const flatbuffers::resolver_function_t *_resolver = nullptr) const;
-  static flatbuffers::Offset<PolicyRequestEvent> Pack(flatbuffers::FlatBufferBuilder &_fbb, const PolicyRequestEventT* _o, const flatbuffers::rehasher_function_t *_rehasher = nullptr);
+  RequestEventT *UnPack(const flatbuffers::resolver_function_t *_resolver = nullptr) const;
+  void UnPackTo(RequestEventT *_o, const flatbuffers::resolver_function_t *_resolver = nullptr) const;
+  static flatbuffers::Offset<RequestEvent> Pack(flatbuffers::FlatBufferBuilder &_fbb, const RequestEventT* _o, const flatbuffers::rehasher_function_t *_rehasher = nullptr);
 };
 
-struct PolicyRequestEventBuilder {
+struct RequestEventBuilder {
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
   void add_deviceID(flatbuffers::Offset<flatbuffers::String> deviceID) {
-    fbb_.AddOffset(PolicyRequestEvent::VT_DEVICEID, deviceID);
+    fbb_.AddOffset(RequestEvent::VT_DEVICEID, deviceID);
   }
   void add_cardUID(flatbuffers::Offset<flatbuffers::Vector<uint8_t>> cardUID) {
-    fbb_.AddOffset(PolicyRequestEvent::VT_CARDUID, cardUID);
+    fbb_.AddOffset(RequestEvent::VT_CARDUID, cardUID);
   }
-  explicit PolicyRequestEventBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit RequestEventBuilder(flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  PolicyRequestEventBuilder &operator=(const PolicyRequestEventBuilder &);
-  flatbuffers::Offset<PolicyRequestEvent> Finish() {
+  RequestEventBuilder &operator=(const RequestEventBuilder &);
+  flatbuffers::Offset<RequestEvent> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<PolicyRequestEvent>(end);
+    auto o = flatbuffers::Offset<RequestEvent>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<PolicyRequestEvent> CreatePolicyRequestEvent(
+inline flatbuffers::Offset<RequestEvent> CreateRequestEvent(
     flatbuffers::FlatBufferBuilder &_fbb,
     flatbuffers::Offset<flatbuffers::String> deviceID = 0,
     flatbuffers::Offset<flatbuffers::Vector<uint8_t>> cardUID = 0) {
-  PolicyRequestEventBuilder builder_(_fbb);
+  RequestEventBuilder builder_(_fbb);
   builder_.add_cardUID(cardUID);
   builder_.add_deviceID(deviceID);
   return builder_.Finish();
 }
 
-inline flatbuffers::Offset<PolicyRequestEvent> CreatePolicyRequestEventDirect(
+inline flatbuffers::Offset<RequestEvent> CreateRequestEventDirect(
     flatbuffers::FlatBufferBuilder &_fbb,
     const char *deviceID = nullptr,
     const std::vector<uint8_t> *cardUID = nullptr) {
-  return nfcdoorz::ipc::policy::CreatePolicyRequestEvent(
+  return nfcdoorz::ipc::policy::CreateRequestEvent(
       _fbb,
       deviceID ? _fbb.CreateString(deviceID) : 0,
       cardUID ? _fbb.CreateVector<uint8_t>(*cardUID) : 0);
 }
 
-flatbuffers::Offset<PolicyRequestEvent> CreatePolicyRequestEvent(flatbuffers::FlatBufferBuilder &_fbb, const PolicyRequestEventT *_o, const flatbuffers::rehasher_function_t *_rehasher = nullptr);
+flatbuffers::Offset<RequestEvent> CreateRequestEvent(flatbuffers::FlatBufferBuilder &_fbb, const RequestEventT *_o, const flatbuffers::rehasher_function_t *_rehasher = nullptr);
 
-struct PolicyCallT : public flatbuffers::NativeTable {
-  typedef PolicyCall TableType;
+struct CallT : public flatbuffers::NativeTable {
+  typedef Call TableType;
   static FLATBUFFERS_CONSTEXPR const char *GetFullyQualifiedName() {
-    return "nfcdoorz.ipc.policy.PolicyCallT";
+    return "nfcdoorz.ipc.policy.CallT";
   }
   uint64_t id;
-  PolicyCallsUnion msg;
-  PolicyCallT()
+  CallsUnion msg;
+  CallT()
       : id(0) {
   }
 };
 
-struct PolicyCall FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
-  typedef PolicyCallT NativeTableType;
+struct Call FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  typedef CallT NativeTableType;
   static const flatbuffers::TypeTable *MiniReflectTypeTable() {
-    return PolicyCallTypeTable();
+    return CallTypeTable();
   }
   static FLATBUFFERS_CONSTEXPR const char *GetFullyQualifiedName() {
-    return "nfcdoorz.ipc.policy.PolicyCall";
+    return "nfcdoorz.ipc.policy.Call";
   }
   enum {
     VT_ID = 4,
@@ -494,91 +494,91 @@ struct PolicyCall FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   uint64_t id() const {
     return GetField<uint64_t>(VT_ID, 0);
   }
-  PolicyCalls msg_type() const {
-    return static_cast<PolicyCalls>(GetField<uint8_t>(VT_MSG_TYPE, 0));
+  Calls msg_type() const {
+    return static_cast<Calls>(GetField<uint8_t>(VT_MSG_TYPE, 0));
   }
   const void *msg() const {
     return GetPointer<const void *>(VT_MSG);
   }
   template<typename T> const T *msg_as() const;
   const TestCall *msg_as_TestCall() const {
-    return msg_type() == PolicyCalls::TestCall ? static_cast<const TestCall *>(msg()) : nullptr;
+    return msg_type() == Calls::TestCall ? static_cast<const TestCall *>(msg()) : nullptr;
   }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<uint64_t>(verifier, VT_ID) &&
            VerifyField<uint8_t>(verifier, VT_MSG_TYPE) &&
            VerifyOffset(verifier, VT_MSG) &&
-           VerifyPolicyCalls(verifier, msg(), msg_type()) &&
+           VerifyCalls(verifier, msg(), msg_type()) &&
            verifier.EndTable();
   }
-  PolicyCallT *UnPack(const flatbuffers::resolver_function_t *_resolver = nullptr) const;
-  void UnPackTo(PolicyCallT *_o, const flatbuffers::resolver_function_t *_resolver = nullptr) const;
-  static flatbuffers::Offset<PolicyCall> Pack(flatbuffers::FlatBufferBuilder &_fbb, const PolicyCallT* _o, const flatbuffers::rehasher_function_t *_rehasher = nullptr);
+  CallT *UnPack(const flatbuffers::resolver_function_t *_resolver = nullptr) const;
+  void UnPackTo(CallT *_o, const flatbuffers::resolver_function_t *_resolver = nullptr) const;
+  static flatbuffers::Offset<Call> Pack(flatbuffers::FlatBufferBuilder &_fbb, const CallT* _o, const flatbuffers::rehasher_function_t *_rehasher = nullptr);
 };
 
-template<> inline const TestCall *PolicyCall::msg_as<TestCall>() const {
+template<> inline const TestCall *Call::msg_as<TestCall>() const {
   return msg_as_TestCall();
 }
 
-struct PolicyCallBuilder {
+struct CallBuilder {
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
   void add_id(uint64_t id) {
-    fbb_.AddElement<uint64_t>(PolicyCall::VT_ID, id, 0);
+    fbb_.AddElement<uint64_t>(Call::VT_ID, id, 0);
   }
-  void add_msg_type(PolicyCalls msg_type) {
-    fbb_.AddElement<uint8_t>(PolicyCall::VT_MSG_TYPE, static_cast<uint8_t>(msg_type), 0);
+  void add_msg_type(Calls msg_type) {
+    fbb_.AddElement<uint8_t>(Call::VT_MSG_TYPE, static_cast<uint8_t>(msg_type), 0);
   }
   void add_msg(flatbuffers::Offset<void> msg) {
-    fbb_.AddOffset(PolicyCall::VT_MSG, msg);
+    fbb_.AddOffset(Call::VT_MSG, msg);
   }
-  explicit PolicyCallBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit CallBuilder(flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  PolicyCallBuilder &operator=(const PolicyCallBuilder &);
-  flatbuffers::Offset<PolicyCall> Finish() {
+  CallBuilder &operator=(const CallBuilder &);
+  flatbuffers::Offset<Call> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<PolicyCall>(end);
+    auto o = flatbuffers::Offset<Call>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<PolicyCall> CreatePolicyCall(
+inline flatbuffers::Offset<Call> CreateCall(
     flatbuffers::FlatBufferBuilder &_fbb,
     uint64_t id = 0,
-    PolicyCalls msg_type = PolicyCalls::NONE,
+    Calls msg_type = Calls::NONE,
     flatbuffers::Offset<void> msg = 0) {
-  PolicyCallBuilder builder_(_fbb);
+  CallBuilder builder_(_fbb);
   builder_.add_id(id);
   builder_.add_msg(msg);
   builder_.add_msg_type(msg_type);
   return builder_.Finish();
 }
 
-flatbuffers::Offset<PolicyCall> CreatePolicyCall(flatbuffers::FlatBufferBuilder &_fbb, const PolicyCallT *_o, const flatbuffers::rehasher_function_t *_rehasher = nullptr);
+flatbuffers::Offset<Call> CreateCall(flatbuffers::FlatBufferBuilder &_fbb, const CallT *_o, const flatbuffers::rehasher_function_t *_rehasher = nullptr);
 
-struct PolicyReplyT : public flatbuffers::NativeTable {
-  typedef PolicyReply TableType;
+struct ReplyT : public flatbuffers::NativeTable {
+  typedef Reply TableType;
   static FLATBUFFERS_CONSTEXPR const char *GetFullyQualifiedName() {
-    return "nfcdoorz.ipc.policy.PolicyReplyT";
+    return "nfcdoorz.ipc.policy.ReplyT";
   }
   uint64_t id;
-  PolicyRepliesUnion msg;
-  PolicyEventsUnion event;
-  PolicyReplyT()
+  RepliesUnion msg;
+  EventsUnion event;
+  ReplyT()
       : id(0) {
   }
 };
 
-struct PolicyReply FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
-  typedef PolicyReplyT NativeTableType;
+struct Reply FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  typedef ReplyT NativeTableType;
   static const flatbuffers::TypeTable *MiniReflectTypeTable() {
-    return PolicyReplyTypeTable();
+    return ReplyTypeTable();
   }
   static FLATBUFFERS_CONSTEXPR const char *GetFullyQualifiedName() {
-    return "nfcdoorz.ipc.policy.PolicyReply";
+    return "nfcdoorz.ipc.policy.Reply";
   }
   enum {
     VT_ID = 4,
@@ -590,88 +590,88 @@ struct PolicyReply FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   uint64_t id() const {
     return GetField<uint64_t>(VT_ID, 0);
   }
-  PolicyReplies msg_type() const {
-    return static_cast<PolicyReplies>(GetField<uint8_t>(VT_MSG_TYPE, 0));
+  Replies msg_type() const {
+    return static_cast<Replies>(GetField<uint8_t>(VT_MSG_TYPE, 0));
   }
   const void *msg() const {
     return GetPointer<const void *>(VT_MSG);
   }
   template<typename T> const T *msg_as() const;
   const TestReply *msg_as_TestReply() const {
-    return msg_type() == PolicyReplies::TestReply ? static_cast<const TestReply *>(msg()) : nullptr;
+    return msg_type() == Replies::TestReply ? static_cast<const TestReply *>(msg()) : nullptr;
   }
-  PolicyEvents event_type() const {
-    return static_cast<PolicyEvents>(GetField<uint8_t>(VT_EVENT_TYPE, 0));
+  Events event_type() const {
+    return static_cast<Events>(GetField<uint8_t>(VT_EVENT_TYPE, 0));
   }
   const void *event() const {
     return GetPointer<const void *>(VT_EVENT);
   }
   template<typename T> const T *event_as() const;
-  const PolicyRequestEvent *event_as_PolicyRequestEvent() const {
-    return event_type() == PolicyEvents::PolicyRequestEvent ? static_cast<const PolicyRequestEvent *>(event()) : nullptr;
+  const RequestEvent *event_as_RequestEvent() const {
+    return event_type() == Events::RequestEvent ? static_cast<const RequestEvent *>(event()) : nullptr;
   }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<uint64_t>(verifier, VT_ID) &&
            VerifyField<uint8_t>(verifier, VT_MSG_TYPE) &&
            VerifyOffset(verifier, VT_MSG) &&
-           VerifyPolicyReplies(verifier, msg(), msg_type()) &&
+           VerifyReplies(verifier, msg(), msg_type()) &&
            VerifyField<uint8_t>(verifier, VT_EVENT_TYPE) &&
            VerifyOffset(verifier, VT_EVENT) &&
-           VerifyPolicyEvents(verifier, event(), event_type()) &&
+           VerifyEvents(verifier, event(), event_type()) &&
            verifier.EndTable();
   }
-  PolicyReplyT *UnPack(const flatbuffers::resolver_function_t *_resolver = nullptr) const;
-  void UnPackTo(PolicyReplyT *_o, const flatbuffers::resolver_function_t *_resolver = nullptr) const;
-  static flatbuffers::Offset<PolicyReply> Pack(flatbuffers::FlatBufferBuilder &_fbb, const PolicyReplyT* _o, const flatbuffers::rehasher_function_t *_rehasher = nullptr);
+  ReplyT *UnPack(const flatbuffers::resolver_function_t *_resolver = nullptr) const;
+  void UnPackTo(ReplyT *_o, const flatbuffers::resolver_function_t *_resolver = nullptr) const;
+  static flatbuffers::Offset<Reply> Pack(flatbuffers::FlatBufferBuilder &_fbb, const ReplyT* _o, const flatbuffers::rehasher_function_t *_rehasher = nullptr);
 };
 
-template<> inline const TestReply *PolicyReply::msg_as<TestReply>() const {
+template<> inline const TestReply *Reply::msg_as<TestReply>() const {
   return msg_as_TestReply();
 }
 
-template<> inline const PolicyRequestEvent *PolicyReply::event_as<PolicyRequestEvent>() const {
-  return event_as_PolicyRequestEvent();
+template<> inline const RequestEvent *Reply::event_as<RequestEvent>() const {
+  return event_as_RequestEvent();
 }
 
-struct PolicyReplyBuilder {
+struct ReplyBuilder {
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
   void add_id(uint64_t id) {
-    fbb_.AddElement<uint64_t>(PolicyReply::VT_ID, id, 0);
+    fbb_.AddElement<uint64_t>(Reply::VT_ID, id, 0);
   }
-  void add_msg_type(PolicyReplies msg_type) {
-    fbb_.AddElement<uint8_t>(PolicyReply::VT_MSG_TYPE, static_cast<uint8_t>(msg_type), 0);
+  void add_msg_type(Replies msg_type) {
+    fbb_.AddElement<uint8_t>(Reply::VT_MSG_TYPE, static_cast<uint8_t>(msg_type), 0);
   }
   void add_msg(flatbuffers::Offset<void> msg) {
-    fbb_.AddOffset(PolicyReply::VT_MSG, msg);
+    fbb_.AddOffset(Reply::VT_MSG, msg);
   }
-  void add_event_type(PolicyEvents event_type) {
-    fbb_.AddElement<uint8_t>(PolicyReply::VT_EVENT_TYPE, static_cast<uint8_t>(event_type), 0);
+  void add_event_type(Events event_type) {
+    fbb_.AddElement<uint8_t>(Reply::VT_EVENT_TYPE, static_cast<uint8_t>(event_type), 0);
   }
   void add_event(flatbuffers::Offset<void> event) {
-    fbb_.AddOffset(PolicyReply::VT_EVENT, event);
+    fbb_.AddOffset(Reply::VT_EVENT, event);
   }
-  explicit PolicyReplyBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit ReplyBuilder(flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  PolicyReplyBuilder &operator=(const PolicyReplyBuilder &);
-  flatbuffers::Offset<PolicyReply> Finish() {
+  ReplyBuilder &operator=(const ReplyBuilder &);
+  flatbuffers::Offset<Reply> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<PolicyReply>(end);
+    auto o = flatbuffers::Offset<Reply>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<PolicyReply> CreatePolicyReply(
+inline flatbuffers::Offset<Reply> CreateReply(
     flatbuffers::FlatBufferBuilder &_fbb,
     uint64_t id = 0,
-    PolicyReplies msg_type = PolicyReplies::NONE,
+    Replies msg_type = Replies::NONE,
     flatbuffers::Offset<void> msg = 0,
-    PolicyEvents event_type = PolicyEvents::NONE,
+    Events event_type = Events::NONE,
     flatbuffers::Offset<void> event = 0) {
-  PolicyReplyBuilder builder_(_fbb);
+  ReplyBuilder builder_(_fbb);
   builder_.add_id(id);
   builder_.add_event(event);
   builder_.add_msg(msg);
@@ -680,15 +680,15 @@ inline flatbuffers::Offset<PolicyReply> CreatePolicyReply(
   return builder_.Finish();
 }
 
-flatbuffers::Offset<PolicyReply> CreatePolicyReply(flatbuffers::FlatBufferBuilder &_fbb, const PolicyReplyT *_o, const flatbuffers::rehasher_function_t *_rehasher = nullptr);
+flatbuffers::Offset<Reply> CreateReply(flatbuffers::FlatBufferBuilder &_fbb, const ReplyT *_o, const flatbuffers::rehasher_function_t *_rehasher = nullptr);
 
 struct ServerT : public flatbuffers::NativeTable {
   typedef Server TableType;
   static FLATBUFFERS_CONSTEXPR const char *GetFullyQualifiedName() {
     return "nfcdoorz.ipc.policy.ServerT";
   }
-  std::unique_ptr<PolicyCallT> call;
-  std::unique_ptr<PolicyReplyT> reply;
+  std::unique_ptr<CallT> call;
+  std::unique_ptr<ReplyT> reply;
   ServerT() {
   }
 };
@@ -705,11 +705,11 @@ struct Server FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
     VT_CALL = 4,
     VT_REPLY = 6
   };
-  const PolicyCall *call() const {
-    return GetPointer<const PolicyCall *>(VT_CALL);
+  const Call *call() const {
+    return GetPointer<const Call *>(VT_CALL);
   }
-  const PolicyReply *reply() const {
-    return GetPointer<const PolicyReply *>(VT_REPLY);
+  const Reply *reply() const {
+    return GetPointer<const Reply *>(VT_REPLY);
   }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
@@ -727,10 +727,10 @@ struct Server FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 struct ServerBuilder {
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
-  void add_call(flatbuffers::Offset<PolicyCall> call) {
+  void add_call(flatbuffers::Offset<Call> call) {
     fbb_.AddOffset(Server::VT_CALL, call);
   }
-  void add_reply(flatbuffers::Offset<PolicyReply> reply) {
+  void add_reply(flatbuffers::Offset<Reply> reply) {
     fbb_.AddOffset(Server::VT_REPLY, reply);
   }
   explicit ServerBuilder(flatbuffers::FlatBufferBuilder &_fbb)
@@ -747,8 +747,8 @@ struct ServerBuilder {
 
 inline flatbuffers::Offset<Server> CreateServer(
     flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<PolicyCall> call = 0,
-    flatbuffers::Offset<PolicyReply> reply = 0) {
+    flatbuffers::Offset<Call> call = 0,
+    flatbuffers::Offset<Reply> reply = 0) {
   ServerBuilder builder_(_fbb);
   builder_.add_reply(reply);
   builder_.add_call(call);
@@ -803,97 +803,97 @@ inline flatbuffers::Offset<TestReply> CreateTestReply(flatbuffers::FlatBufferBui
       _fbb);
 }
 
-inline PolicyRequestEventT *PolicyRequestEvent::UnPack(const flatbuffers::resolver_function_t *_resolver) const {
-  auto _o = new PolicyRequestEventT();
+inline RequestEventT *RequestEvent::UnPack(const flatbuffers::resolver_function_t *_resolver) const {
+  auto _o = new RequestEventT();
   UnPackTo(_o, _resolver);
   return _o;
 }
 
-inline void PolicyRequestEvent::UnPackTo(PolicyRequestEventT *_o, const flatbuffers::resolver_function_t *_resolver) const {
+inline void RequestEvent::UnPackTo(RequestEventT *_o, const flatbuffers::resolver_function_t *_resolver) const {
   (void)_o;
   (void)_resolver;
   { auto _e = deviceID(); if (_e) _o->deviceID = _e->str(); };
   { auto _e = cardUID(); if (_e) { _o->cardUID.resize(_e->size()); for (flatbuffers::uoffset_t _i = 0; _i < _e->size(); _i++) { _o->cardUID[_i] = _e->Get(_i); } } };
 }
 
-inline flatbuffers::Offset<PolicyRequestEvent> PolicyRequestEvent::Pack(flatbuffers::FlatBufferBuilder &_fbb, const PolicyRequestEventT* _o, const flatbuffers::rehasher_function_t *_rehasher) {
-  return CreatePolicyRequestEvent(_fbb, _o, _rehasher);
+inline flatbuffers::Offset<RequestEvent> RequestEvent::Pack(flatbuffers::FlatBufferBuilder &_fbb, const RequestEventT* _o, const flatbuffers::rehasher_function_t *_rehasher) {
+  return CreateRequestEvent(_fbb, _o, _rehasher);
 }
 
-inline flatbuffers::Offset<PolicyRequestEvent> CreatePolicyRequestEvent(flatbuffers::FlatBufferBuilder &_fbb, const PolicyRequestEventT *_o, const flatbuffers::rehasher_function_t *_rehasher) {
+inline flatbuffers::Offset<RequestEvent> CreateRequestEvent(flatbuffers::FlatBufferBuilder &_fbb, const RequestEventT *_o, const flatbuffers::rehasher_function_t *_rehasher) {
   (void)_rehasher;
   (void)_o;
-  struct _VectorArgs { flatbuffers::FlatBufferBuilder *__fbb; const PolicyRequestEventT* __o; const flatbuffers::rehasher_function_t *__rehasher; } _va = { &_fbb, _o, _rehasher}; (void)_va;
+  struct _VectorArgs { flatbuffers::FlatBufferBuilder *__fbb; const RequestEventT* __o; const flatbuffers::rehasher_function_t *__rehasher; } _va = { &_fbb, _o, _rehasher}; (void)_va;
   auto _deviceID = _o->deviceID.empty() ? 0 : _fbb.CreateString(_o->deviceID);
   auto _cardUID = _o->cardUID.size() ? _fbb.CreateVector(_o->cardUID) : 0;
-  return nfcdoorz::ipc::policy::CreatePolicyRequestEvent(
+  return nfcdoorz::ipc::policy::CreateRequestEvent(
       _fbb,
       _deviceID,
       _cardUID);
 }
 
-inline PolicyCallT *PolicyCall::UnPack(const flatbuffers::resolver_function_t *_resolver) const {
-  auto _o = new PolicyCallT();
+inline CallT *Call::UnPack(const flatbuffers::resolver_function_t *_resolver) const {
+  auto _o = new CallT();
   UnPackTo(_o, _resolver);
   return _o;
 }
 
-inline void PolicyCall::UnPackTo(PolicyCallT *_o, const flatbuffers::resolver_function_t *_resolver) const {
+inline void Call::UnPackTo(CallT *_o, const flatbuffers::resolver_function_t *_resolver) const {
   (void)_o;
   (void)_resolver;
   { auto _e = id(); _o->id = _e; };
   { auto _e = msg_type(); _o->msg.type = _e; };
-  { auto _e = msg(); if (_e) _o->msg.value = PolicyCallsUnion::UnPack(_e, msg_type(), _resolver); };
+  { auto _e = msg(); if (_e) _o->msg.value = CallsUnion::UnPack(_e, msg_type(), _resolver); };
 }
 
-inline flatbuffers::Offset<PolicyCall> PolicyCall::Pack(flatbuffers::FlatBufferBuilder &_fbb, const PolicyCallT* _o, const flatbuffers::rehasher_function_t *_rehasher) {
-  return CreatePolicyCall(_fbb, _o, _rehasher);
+inline flatbuffers::Offset<Call> Call::Pack(flatbuffers::FlatBufferBuilder &_fbb, const CallT* _o, const flatbuffers::rehasher_function_t *_rehasher) {
+  return CreateCall(_fbb, _o, _rehasher);
 }
 
-inline flatbuffers::Offset<PolicyCall> CreatePolicyCall(flatbuffers::FlatBufferBuilder &_fbb, const PolicyCallT *_o, const flatbuffers::rehasher_function_t *_rehasher) {
+inline flatbuffers::Offset<Call> CreateCall(flatbuffers::FlatBufferBuilder &_fbb, const CallT *_o, const flatbuffers::rehasher_function_t *_rehasher) {
   (void)_rehasher;
   (void)_o;
-  struct _VectorArgs { flatbuffers::FlatBufferBuilder *__fbb; const PolicyCallT* __o; const flatbuffers::rehasher_function_t *__rehasher; } _va = { &_fbb, _o, _rehasher}; (void)_va;
+  struct _VectorArgs { flatbuffers::FlatBufferBuilder *__fbb; const CallT* __o; const flatbuffers::rehasher_function_t *__rehasher; } _va = { &_fbb, _o, _rehasher}; (void)_va;
   auto _id = _o->id;
   auto _msg_type = _o->msg.type;
   auto _msg = _o->msg.Pack(_fbb);
-  return nfcdoorz::ipc::policy::CreatePolicyCall(
+  return nfcdoorz::ipc::policy::CreateCall(
       _fbb,
       _id,
       _msg_type,
       _msg);
 }
 
-inline PolicyReplyT *PolicyReply::UnPack(const flatbuffers::resolver_function_t *_resolver) const {
-  auto _o = new PolicyReplyT();
+inline ReplyT *Reply::UnPack(const flatbuffers::resolver_function_t *_resolver) const {
+  auto _o = new ReplyT();
   UnPackTo(_o, _resolver);
   return _o;
 }
 
-inline void PolicyReply::UnPackTo(PolicyReplyT *_o, const flatbuffers::resolver_function_t *_resolver) const {
+inline void Reply::UnPackTo(ReplyT *_o, const flatbuffers::resolver_function_t *_resolver) const {
   (void)_o;
   (void)_resolver;
   { auto _e = id(); _o->id = _e; };
   { auto _e = msg_type(); _o->msg.type = _e; };
-  { auto _e = msg(); if (_e) _o->msg.value = PolicyRepliesUnion::UnPack(_e, msg_type(), _resolver); };
+  { auto _e = msg(); if (_e) _o->msg.value = RepliesUnion::UnPack(_e, msg_type(), _resolver); };
   { auto _e = event_type(); _o->event.type = _e; };
-  { auto _e = event(); if (_e) _o->event.value = PolicyEventsUnion::UnPack(_e, event_type(), _resolver); };
+  { auto _e = event(); if (_e) _o->event.value = EventsUnion::UnPack(_e, event_type(), _resolver); };
 }
 
-inline flatbuffers::Offset<PolicyReply> PolicyReply::Pack(flatbuffers::FlatBufferBuilder &_fbb, const PolicyReplyT* _o, const flatbuffers::rehasher_function_t *_rehasher) {
-  return CreatePolicyReply(_fbb, _o, _rehasher);
+inline flatbuffers::Offset<Reply> Reply::Pack(flatbuffers::FlatBufferBuilder &_fbb, const ReplyT* _o, const flatbuffers::rehasher_function_t *_rehasher) {
+  return CreateReply(_fbb, _o, _rehasher);
 }
 
-inline flatbuffers::Offset<PolicyReply> CreatePolicyReply(flatbuffers::FlatBufferBuilder &_fbb, const PolicyReplyT *_o, const flatbuffers::rehasher_function_t *_rehasher) {
+inline flatbuffers::Offset<Reply> CreateReply(flatbuffers::FlatBufferBuilder &_fbb, const ReplyT *_o, const flatbuffers::rehasher_function_t *_rehasher) {
   (void)_rehasher;
   (void)_o;
-  struct _VectorArgs { flatbuffers::FlatBufferBuilder *__fbb; const PolicyReplyT* __o; const flatbuffers::rehasher_function_t *__rehasher; } _va = { &_fbb, _o, _rehasher}; (void)_va;
+  struct _VectorArgs { flatbuffers::FlatBufferBuilder *__fbb; const ReplyT* __o; const flatbuffers::rehasher_function_t *__rehasher; } _va = { &_fbb, _o, _rehasher}; (void)_va;
   auto _id = _o->id;
   auto _msg_type = _o->msg.type;
   auto _msg = _o->msg.Pack(_fbb);
   auto _event_type = _o->event.type;
   auto _event = _o->event.Pack(_fbb);
-  return nfcdoorz::ipc::policy::CreatePolicyReply(
+  return nfcdoorz::ipc::policy::CreateReply(
       _fbb,
       _id,
       _msg_type,
@@ -911,8 +911,8 @@ inline ServerT *Server::UnPack(const flatbuffers::resolver_function_t *_resolver
 inline void Server::UnPackTo(ServerT *_o, const flatbuffers::resolver_function_t *_resolver) const {
   (void)_o;
   (void)_resolver;
-  { auto _e = call(); if (_e) _o->call = std::unique_ptr<PolicyCallT>(_e->UnPack(_resolver)); };
-  { auto _e = reply(); if (_e) _o->reply = std::unique_ptr<PolicyReplyT>(_e->UnPack(_resolver)); };
+  { auto _e = call(); if (_e) _o->call = std::unique_ptr<CallT>(_e->UnPack(_resolver)); };
+  { auto _e = reply(); if (_e) _o->reply = std::unique_ptr<ReplyT>(_e->UnPack(_resolver)); };
 }
 
 inline flatbuffers::Offset<Server> Server::Pack(flatbuffers::FlatBufferBuilder &_fbb, const ServerT* _o, const flatbuffers::rehasher_function_t *_rehasher) {
@@ -923,20 +923,20 @@ inline flatbuffers::Offset<Server> CreateServer(flatbuffers::FlatBufferBuilder &
   (void)_rehasher;
   (void)_o;
   struct _VectorArgs { flatbuffers::FlatBufferBuilder *__fbb; const ServerT* __o; const flatbuffers::rehasher_function_t *__rehasher; } _va = { &_fbb, _o, _rehasher}; (void)_va;
-  auto _call = _o->call ? CreatePolicyCall(_fbb, _o->call.get(), _rehasher) : 0;
-  auto _reply = _o->reply ? CreatePolicyReply(_fbb, _o->reply.get(), _rehasher) : 0;
+  auto _call = _o->call ? CreateCall(_fbb, _o->call.get(), _rehasher) : 0;
+  auto _reply = _o->reply ? CreateReply(_fbb, _o->reply.get(), _rehasher) : 0;
   return nfcdoorz::ipc::policy::CreateServer(
       _fbb,
       _call,
       _reply);
 }
 
-inline bool VerifyPolicyCalls(flatbuffers::Verifier &verifier, const void *obj, PolicyCalls type) {
+inline bool VerifyCalls(flatbuffers::Verifier &verifier, const void *obj, Calls type) {
   switch (type) {
-    case PolicyCalls::NONE: {
+    case Calls::NONE: {
       return true;
     }
-    case PolicyCalls::TestCall: {
+    case Calls::TestCall: {
       auto ptr = reinterpret_cast<const TestCall *>(obj);
       return verifier.VerifyTable(ptr);
     }
@@ -944,21 +944,21 @@ inline bool VerifyPolicyCalls(flatbuffers::Verifier &verifier, const void *obj, 
   }
 }
 
-inline bool VerifyPolicyCallsVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types) {
+inline bool VerifyCallsVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types) {
   if (!values || !types) return !values && !types;
   if (values->size() != types->size()) return false;
   for (flatbuffers::uoffset_t i = 0; i < values->size(); ++i) {
-    if (!VerifyPolicyCalls(
-        verifier,  values->Get(i), types->GetEnum<PolicyCalls>(i))) {
+    if (!VerifyCalls(
+        verifier,  values->Get(i), types->GetEnum<Calls>(i))) {
       return false;
     }
   }
   return true;
 }
 
-inline void *PolicyCallsUnion::UnPack(const void *obj, PolicyCalls type, const flatbuffers::resolver_function_t *resolver) {
+inline void *CallsUnion::UnPack(const void *obj, Calls type, const flatbuffers::resolver_function_t *resolver) {
   switch (type) {
-    case PolicyCalls::TestCall: {
+    case Calls::TestCall: {
       auto ptr = reinterpret_cast<const TestCall *>(obj);
       return ptr->UnPack(resolver);
     }
@@ -966,9 +966,9 @@ inline void *PolicyCallsUnion::UnPack(const void *obj, PolicyCalls type, const f
   }
 }
 
-inline flatbuffers::Offset<void> PolicyCallsUnion::Pack(flatbuffers::FlatBufferBuilder &_fbb, const flatbuffers::rehasher_function_t *_rehasher) const {
+inline flatbuffers::Offset<void> CallsUnion::Pack(flatbuffers::FlatBufferBuilder &_fbb, const flatbuffers::rehasher_function_t *_rehasher) const {
   switch (type) {
-    case PolicyCalls::TestCall: {
+    case Calls::TestCall: {
       auto ptr = reinterpret_cast<const TestCallT *>(value);
       return CreateTestCall(_fbb, ptr, _rehasher).Union();
     }
@@ -976,9 +976,9 @@ inline flatbuffers::Offset<void> PolicyCallsUnion::Pack(flatbuffers::FlatBufferB
   }
 }
 
-inline PolicyCallsUnion::PolicyCallsUnion(const PolicyCallsUnion &u) FLATBUFFERS_NOEXCEPT : type(u.type), value(nullptr) {
+inline CallsUnion::CallsUnion(const CallsUnion &u) FLATBUFFERS_NOEXCEPT : type(u.type), value(nullptr) {
   switch (type) {
-    case PolicyCalls::TestCall: {
+    case Calls::TestCall: {
       value = new TestCallT(*reinterpret_cast<TestCallT *>(u.value));
       break;
     }
@@ -987,9 +987,9 @@ inline PolicyCallsUnion::PolicyCallsUnion(const PolicyCallsUnion &u) FLATBUFFERS
   }
 }
 
-inline void PolicyCallsUnion::Reset() {
+inline void CallsUnion::Reset() {
   switch (type) {
-    case PolicyCalls::TestCall: {
+    case Calls::TestCall: {
       auto ptr = reinterpret_cast<TestCallT *>(value);
       delete ptr;
       break;
@@ -997,15 +997,15 @@ inline void PolicyCallsUnion::Reset() {
     default: break;
   }
   value = nullptr;
-  type = PolicyCalls::NONE;
+  type = Calls::NONE;
 }
 
-inline bool VerifyPolicyReplies(flatbuffers::Verifier &verifier, const void *obj, PolicyReplies type) {
+inline bool VerifyReplies(flatbuffers::Verifier &verifier, const void *obj, Replies type) {
   switch (type) {
-    case PolicyReplies::NONE: {
+    case Replies::NONE: {
       return true;
     }
-    case PolicyReplies::TestReply: {
+    case Replies::TestReply: {
       auto ptr = reinterpret_cast<const TestReply *>(obj);
       return verifier.VerifyTable(ptr);
     }
@@ -1013,21 +1013,21 @@ inline bool VerifyPolicyReplies(flatbuffers::Verifier &verifier, const void *obj
   }
 }
 
-inline bool VerifyPolicyRepliesVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types) {
+inline bool VerifyRepliesVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types) {
   if (!values || !types) return !values && !types;
   if (values->size() != types->size()) return false;
   for (flatbuffers::uoffset_t i = 0; i < values->size(); ++i) {
-    if (!VerifyPolicyReplies(
-        verifier,  values->Get(i), types->GetEnum<PolicyReplies>(i))) {
+    if (!VerifyReplies(
+        verifier,  values->Get(i), types->GetEnum<Replies>(i))) {
       return false;
     }
   }
   return true;
 }
 
-inline void *PolicyRepliesUnion::UnPack(const void *obj, PolicyReplies type, const flatbuffers::resolver_function_t *resolver) {
+inline void *RepliesUnion::UnPack(const void *obj, Replies type, const flatbuffers::resolver_function_t *resolver) {
   switch (type) {
-    case PolicyReplies::TestReply: {
+    case Replies::TestReply: {
       auto ptr = reinterpret_cast<const TestReply *>(obj);
       return ptr->UnPack(resolver);
     }
@@ -1035,9 +1035,9 @@ inline void *PolicyRepliesUnion::UnPack(const void *obj, PolicyReplies type, con
   }
 }
 
-inline flatbuffers::Offset<void> PolicyRepliesUnion::Pack(flatbuffers::FlatBufferBuilder &_fbb, const flatbuffers::rehasher_function_t *_rehasher) const {
+inline flatbuffers::Offset<void> RepliesUnion::Pack(flatbuffers::FlatBufferBuilder &_fbb, const flatbuffers::rehasher_function_t *_rehasher) const {
   switch (type) {
-    case PolicyReplies::TestReply: {
+    case Replies::TestReply: {
       auto ptr = reinterpret_cast<const TestReplyT *>(value);
       return CreateTestReply(_fbb, ptr, _rehasher).Union();
     }
@@ -1045,9 +1045,9 @@ inline flatbuffers::Offset<void> PolicyRepliesUnion::Pack(flatbuffers::FlatBuffe
   }
 }
 
-inline PolicyRepliesUnion::PolicyRepliesUnion(const PolicyRepliesUnion &u) FLATBUFFERS_NOEXCEPT : type(u.type), value(nullptr) {
+inline RepliesUnion::RepliesUnion(const RepliesUnion &u) FLATBUFFERS_NOEXCEPT : type(u.type), value(nullptr) {
   switch (type) {
-    case PolicyReplies::TestReply: {
+    case Replies::TestReply: {
       value = new TestReplyT(*reinterpret_cast<TestReplyT *>(u.value));
       break;
     }
@@ -1056,9 +1056,9 @@ inline PolicyRepliesUnion::PolicyRepliesUnion(const PolicyRepliesUnion &u) FLATB
   }
 }
 
-inline void PolicyRepliesUnion::Reset() {
+inline void RepliesUnion::Reset() {
   switch (type) {
-    case PolicyReplies::TestReply: {
+    case Replies::TestReply: {
       auto ptr = reinterpret_cast<TestReplyT *>(value);
       delete ptr;
       break;
@@ -1066,58 +1066,58 @@ inline void PolicyRepliesUnion::Reset() {
     default: break;
   }
   value = nullptr;
-  type = PolicyReplies::NONE;
+  type = Replies::NONE;
 }
 
-inline bool VerifyPolicyEvents(flatbuffers::Verifier &verifier, const void *obj, PolicyEvents type) {
+inline bool VerifyEvents(flatbuffers::Verifier &verifier, const void *obj, Events type) {
   switch (type) {
-    case PolicyEvents::NONE: {
+    case Events::NONE: {
       return true;
     }
-    case PolicyEvents::PolicyRequestEvent: {
-      auto ptr = reinterpret_cast<const PolicyRequestEvent *>(obj);
+    case Events::RequestEvent: {
+      auto ptr = reinterpret_cast<const RequestEvent *>(obj);
       return verifier.VerifyTable(ptr);
     }
     default: return false;
   }
 }
 
-inline bool VerifyPolicyEventsVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types) {
+inline bool VerifyEventsVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types) {
   if (!values || !types) return !values && !types;
   if (values->size() != types->size()) return false;
   for (flatbuffers::uoffset_t i = 0; i < values->size(); ++i) {
-    if (!VerifyPolicyEvents(
-        verifier,  values->Get(i), types->GetEnum<PolicyEvents>(i))) {
+    if (!VerifyEvents(
+        verifier,  values->Get(i), types->GetEnum<Events>(i))) {
       return false;
     }
   }
   return true;
 }
 
-inline void *PolicyEventsUnion::UnPack(const void *obj, PolicyEvents type, const flatbuffers::resolver_function_t *resolver) {
+inline void *EventsUnion::UnPack(const void *obj, Events type, const flatbuffers::resolver_function_t *resolver) {
   switch (type) {
-    case PolicyEvents::PolicyRequestEvent: {
-      auto ptr = reinterpret_cast<const PolicyRequestEvent *>(obj);
+    case Events::RequestEvent: {
+      auto ptr = reinterpret_cast<const RequestEvent *>(obj);
       return ptr->UnPack(resolver);
     }
     default: return nullptr;
   }
 }
 
-inline flatbuffers::Offset<void> PolicyEventsUnion::Pack(flatbuffers::FlatBufferBuilder &_fbb, const flatbuffers::rehasher_function_t *_rehasher) const {
+inline flatbuffers::Offset<void> EventsUnion::Pack(flatbuffers::FlatBufferBuilder &_fbb, const flatbuffers::rehasher_function_t *_rehasher) const {
   switch (type) {
-    case PolicyEvents::PolicyRequestEvent: {
-      auto ptr = reinterpret_cast<const PolicyRequestEventT *>(value);
-      return CreatePolicyRequestEvent(_fbb, ptr, _rehasher).Union();
+    case Events::RequestEvent: {
+      auto ptr = reinterpret_cast<const RequestEventT *>(value);
+      return CreateRequestEvent(_fbb, ptr, _rehasher).Union();
     }
     default: return 0;
   }
 }
 
-inline PolicyEventsUnion::PolicyEventsUnion(const PolicyEventsUnion &u) FLATBUFFERS_NOEXCEPT : type(u.type), value(nullptr) {
+inline EventsUnion::EventsUnion(const EventsUnion &u) FLATBUFFERS_NOEXCEPT : type(u.type), value(nullptr) {
   switch (type) {
-    case PolicyEvents::PolicyRequestEvent: {
-      value = new PolicyRequestEventT(*reinterpret_cast<PolicyRequestEventT *>(u.value));
+    case Events::RequestEvent: {
+      value = new RequestEventT(*reinterpret_cast<RequestEventT *>(u.value));
       break;
     }
     default:
@@ -1125,20 +1125,20 @@ inline PolicyEventsUnion::PolicyEventsUnion(const PolicyEventsUnion &u) FLATBUFF
   }
 }
 
-inline void PolicyEventsUnion::Reset() {
+inline void EventsUnion::Reset() {
   switch (type) {
-    case PolicyEvents::PolicyRequestEvent: {
-      auto ptr = reinterpret_cast<PolicyRequestEventT *>(value);
+    case Events::RequestEvent: {
+      auto ptr = reinterpret_cast<RequestEventT *>(value);
       delete ptr;
       break;
     }
     default: break;
   }
   value = nullptr;
-  type = PolicyEvents::NONE;
+  type = Events::NONE;
 }
 
-inline const flatbuffers::TypeTable *PolicyCallsTypeTable() {
+inline const flatbuffers::TypeTable *CallsTypeTable() {
   static const flatbuffers::TypeCode type_codes[] = {
     { flatbuffers::ET_SEQUENCE, 0, -1 },
     { flatbuffers::ET_SEQUENCE, 0, 0 }
@@ -1156,7 +1156,7 @@ inline const flatbuffers::TypeTable *PolicyCallsTypeTable() {
   return &tt;
 }
 
-inline const flatbuffers::TypeTable *PolicyRepliesTypeTable() {
+inline const flatbuffers::TypeTable *RepliesTypeTable() {
   static const flatbuffers::TypeCode type_codes[] = {
     { flatbuffers::ET_SEQUENCE, 0, -1 },
     { flatbuffers::ET_SEQUENCE, 0, 0 }
@@ -1174,17 +1174,17 @@ inline const flatbuffers::TypeTable *PolicyRepliesTypeTable() {
   return &tt;
 }
 
-inline const flatbuffers::TypeTable *PolicyEventsTypeTable() {
+inline const flatbuffers::TypeTable *EventsTypeTable() {
   static const flatbuffers::TypeCode type_codes[] = {
     { flatbuffers::ET_SEQUENCE, 0, -1 },
     { flatbuffers::ET_SEQUENCE, 0, 0 }
   };
   static const flatbuffers::TypeFunction type_refs[] = {
-    PolicyRequestEventTypeTable
+    RequestEventTypeTable
   };
   static const char * const names[] = {
     "NONE",
-    "PolicyRequestEvent"
+    "RequestEvent"
   };
   static const flatbuffers::TypeTable tt = {
     flatbuffers::ST_UNION, 2, type_codes, type_refs, nullptr, names
@@ -1206,7 +1206,7 @@ inline const flatbuffers::TypeTable *TestReplyTypeTable() {
   return &tt;
 }
 
-inline const flatbuffers::TypeTable *PolicyRequestEventTypeTable() {
+inline const flatbuffers::TypeTable *RequestEventTypeTable() {
   static const flatbuffers::TypeCode type_codes[] = {
     { flatbuffers::ET_STRING, 0, -1 },
     { flatbuffers::ET_UCHAR, 1, -1 }
@@ -1221,14 +1221,14 @@ inline const flatbuffers::TypeTable *PolicyRequestEventTypeTable() {
   return &tt;
 }
 
-inline const flatbuffers::TypeTable *PolicyCallTypeTable() {
+inline const flatbuffers::TypeTable *CallTypeTable() {
   static const flatbuffers::TypeCode type_codes[] = {
     { flatbuffers::ET_ULONG, 0, -1 },
     { flatbuffers::ET_UTYPE, 0, 0 },
     { flatbuffers::ET_SEQUENCE, 0, 0 }
   };
   static const flatbuffers::TypeFunction type_refs[] = {
-    PolicyCallsTypeTable
+    CallsTypeTable
   };
   static const char * const names[] = {
     "id",
@@ -1241,7 +1241,7 @@ inline const flatbuffers::TypeTable *PolicyCallTypeTable() {
   return &tt;
 }
 
-inline const flatbuffers::TypeTable *PolicyReplyTypeTable() {
+inline const flatbuffers::TypeTable *ReplyTypeTable() {
   static const flatbuffers::TypeCode type_codes[] = {
     { flatbuffers::ET_ULONG, 0, -1 },
     { flatbuffers::ET_UTYPE, 0, 0 },
@@ -1250,8 +1250,8 @@ inline const flatbuffers::TypeTable *PolicyReplyTypeTable() {
     { flatbuffers::ET_SEQUENCE, 0, 1 }
   };
   static const flatbuffers::TypeFunction type_refs[] = {
-    PolicyRepliesTypeTable,
-    PolicyEventsTypeTable
+    RepliesTypeTable,
+    EventsTypeTable
   };
   static const char * const names[] = {
     "id",
@@ -1272,8 +1272,8 @@ inline const flatbuffers::TypeTable *ServerTypeTable() {
     { flatbuffers::ET_SEQUENCE, 0, 1 }
   };
   static const flatbuffers::TypeFunction type_refs[] = {
-    PolicyCallTypeTable,
-    PolicyReplyTypeTable
+    CallTypeTable,
+    ReplyTypeTable
   };
   static const char * const names[] = {
     "call",
