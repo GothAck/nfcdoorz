@@ -1,4 +1,6 @@
 <map id="nfcdoorz::config::File" name="nfcdoorz::config::File">
-<area shape="rect" id="node2" href="$structnfcdoorz_1_1config_1_1_node.htm" title="nfcdoorz::config::Node" alt="" coords="5,5,160,32"/>
-<area shape="rect" id="node3" href="$structnfcdoorz_1_1config_1_1_access_rights.htm" title="nfcdoorz::config::Access\lRights" alt="" coords="105,81,271,123"/>
+<area shape="rect" id="node2" href="$structnfcdoorz_1_1config_1_1_node.htm" title="nfcdoorz::config::Node" alt="" coords="5,13,160,39"/>
+<area shape="rect" id="node3" href="$structnfcdoorz_1_1config_1_1_access_rights.htm" title="nfcdoorz::config::Access\lRights" alt="" coords="69,96,235,137"/>
+<area shape="rect" id="node4" title="STL class. " alt="" coords="260,103,340,130"/>
+<area shape="rect" id="node5" title="STL class. " alt="" coords="237,5,363,47"/>
 </map>

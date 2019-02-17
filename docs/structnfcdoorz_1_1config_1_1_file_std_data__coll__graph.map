@@ -1,5 +1,7 @@
 <map id="nfcdoorz::config::FileStdData" name="nfcdoorz::config::FileStdData">
-<area shape="rect" id="node2" href="$structnfcdoorz_1_1config_1_1_file.htm" title="nfcdoorz::config::File" alt="" coords="29,185,173,212"/>
-<area shape="rect" id="node3" href="$structnfcdoorz_1_1config_1_1_node.htm" title="nfcdoorz::config::Node" alt="" coords="19,5,173,32"/>
-<area shape="rect" id="node4" href="$structnfcdoorz_1_1config_1_1_access_rights.htm" title="nfcdoorz::config::Access\lRights" alt="" coords="118,81,285,123"/>
+<area shape="rect" id="node2" href="$structnfcdoorz_1_1config_1_1_file.htm" title="nfcdoorz::config::File" alt="" coords="80,200,224,227"/>
+<area shape="rect" id="node3" href="$structnfcdoorz_1_1config_1_1_node.htm" title="nfcdoorz::config::Node" alt="" coords="5,13,160,39"/>
+<area shape="rect" id="node4" href="$structnfcdoorz_1_1config_1_1_access_rights.htm" title="nfcdoorz::config::Access\lRights" alt="" coords="69,96,235,137"/>
+<area shape="rect" id="node5" title="STL class. " alt="" coords="260,103,340,130"/>
+<area shape="rect" id="node6" title="STL class. " alt="" coords="237,5,363,47"/>
 </map>

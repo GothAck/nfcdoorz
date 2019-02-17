@@ -1,6 +1,8 @@
 <map id="nfcdoorz::config::KeyDES" name="nfcdoorz::config::KeyDES">
-<area shape="rect" id="node2" href="$structnfcdoorz_1_1config_1_1_key.htm" title="nfcdoorz::config::Key" alt="" coords="9,80,156,107"/>
-<area shape="rect" id="node3" href="$structnfcdoorz_1_1config_1_1_node.htm" title="nfcdoorz::config::Node" alt="" coords="5,5,160,32"/>
-<area shape="rect" id="node4" href="$structnfcdoorz_1_1nfc_1_1_key_d_e_s.htm" title="nfcdoorz::nfc::KeyDES" alt="" coords="180,80,337,107"/>
-<area shape="rect" id="node5" href="$structnfcdoorz_1_1nfc_1_1_key.htm" title="nfcdoorz::nfc::Key" alt="" coords="194,5,323,32"/>
+<area shape="rect" id="node2" href="$structnfcdoorz_1_1config_1_1_key.htm" title="nfcdoorz::config::Key" alt="" coords="123,200,269,227"/>
+<area shape="rect" id="node3" href="$structnfcdoorz_1_1config_1_1_node.htm" title="nfcdoorz::config::Node" alt="" coords="5,103,160,130"/>
+<area shape="rect" id="node4" title="STL class. " alt="" coords="184,103,264,130"/>
+<area shape="rect" id="node5" title="STL class. " alt="" coords="161,5,287,47"/>
+<area shape="rect" id="node6" href="$structnfcdoorz_1_1nfc_1_1_key_d_e_s.htm" title="nfcdoorz::nfc::KeyDES" alt="" coords="293,200,451,227"/>
+<area shape="rect" id="node7" href="$structnfcdoorz_1_1nfc_1_1_key.htm" title="nfcdoorz::nfc::Key" alt="" coords="301,103,430,130"/>
 </map>

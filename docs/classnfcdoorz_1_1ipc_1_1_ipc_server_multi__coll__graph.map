@@ -1,4 +1,6 @@
 <map id="nfcdoorz::ipc::IpcServerMulti&lt; APIServers &gt;" name="nfcdoorz::ipc::IpcServerMulti&lt; APIServers &gt;">
-<area shape="rect" id="node2" href="$classnfcdoorz_1_1ipc_1_1_ipc_server_base.htm" title="nfcdoorz::ipc::IpcServerBase" alt="" coords="207,31,397,57"/>
-<area shape="rect" id="node3" href="$classnfcdoorz_1_1ipc_1_1_ipc_base.htm" title="Base of all IPC classes. Contains the common required components for running IPC communications. " alt="" coords="5,5,159,32"/>
+<area shape="rect" id="node2" href="$classnfcdoorz_1_1ipc_1_1_ipc_server_base.htm" title="nfcdoorz::ipc::IpcServerBase" alt="" coords="557,49,748,76"/>
+<area shape="rect" id="node3" href="$classnfcdoorz_1_1ipc_1_1_ipc_base.htm" title="Base of all IPC classes. Contains the common required components for running IPC communications. " alt="" coords="299,20,452,47"/>
+<area shape="rect" id="node7" title="STL class. " alt="" coords="335,225,415,252"/>
+<area shape="rect" id="node8" title="STL class. " alt="" coords="35,218,162,259"/>
 </map>

@@ -7,6 +7,12 @@ var hierarchy =
     [ "enable_shared_from_this", null, [
       [ "nfcdoorz::ipc::IpcServerMulti< APIServers >", "classnfcdoorz_1_1ipc_1_1_ipc_server_multi.htm", null ]
     ] ],
+    [ "std::exception", null, [
+      [ "std::runtime_error", null, [
+        [ "ConversionException", "class_conversion_exception.htm", null ],
+        [ "nfcdoorz::config::ValidationException", "classnfcdoorz_1_1config_1_1_validation_exception.htm", null ]
+      ] ]
+    ] ],
     [ "nfcdoorz::ipc::IpcBase::Executable", "structnfcdoorz_1_1ipc_1_1_ipc_base_1_1_executable.htm", [
       [ "nfcdoorz::ipc::IpcServerMulti< APIServers >::IpcServiceHandler< APIServer >::CallReplyCallback", "structnfcdoorz_1_1ipc_1_1_ipc_server_multi_1_1_ipc_service_handler_1_1_call_reply_callback.htm", null ]
     ] ],
@@ -14,9 +20,21 @@ var hierarchy =
     [ "Handler", null, [
       [ "nfcdoorz::apps::api::TtySockHandler", "classnfcdoorz_1_1apps_1_1api_1_1_tty_sock_handler.htm", null ]
     ] ],
+    [ "std::ios_base", null, [
+      [ "std::basic_ios< Char >", null, [
+        [ "std::basic_ostream< Char >", null, [
+          [ "std::ostream", null, [
+            [ "widthstream", "classwidthstream.htm", null ]
+          ] ]
+        ] ]
+      ] ]
+    ] ],
     [ "nfcdoorz::ipc::IpcBase", "classnfcdoorz_1_1ipc_1_1_ipc_base.htm", [
       [ "nfcdoorz::ipc::IpcClient< ipc::api::Server >", "classnfcdoorz_1_1ipc_1_1_ipc_client.htm", [
         [ "nfcdoorz::ipc::IpcClientAPI", "structnfcdoorz_1_1ipc_1_1_ipc_client_a_p_i.htm", null ]
+      ] ],
+      [ "nfcdoorz::ipc::IpcClient< ipc::auth::Server >", "classnfcdoorz_1_1ipc_1_1_ipc_client.htm", [
+        [ "nfcdoorz::ipc::IpcClientAuth", "structnfcdoorz_1_1ipc_1_1_ipc_client_auth.htm", null ]
       ] ],
       [ "nfcdoorz::ipc::IpcClient< ipc::policy::Server >", "classnfcdoorz_1_1ipc_1_1_ipc_client.htm", [
         [ "nfcdoorz::ipc::IpcClientPolicy", "structnfcdoorz_1_1ipc_1_1_ipc_client_policy.htm", null ]
@@ -24,6 +42,7 @@ var hierarchy =
       [ "nfcdoorz::ipc::IpcClient< APIServer >", "classnfcdoorz_1_1ipc_1_1_ipc_client.htm", null ],
       [ "nfcdoorz::ipc::IpcClientBase", "classnfcdoorz_1_1ipc_1_1_ipc_client_base.htm", [
         [ "nfcdoorz::ipc::IpcClient< ipc::api::Server >", "classnfcdoorz_1_1ipc_1_1_ipc_client.htm", null ],
+        [ "nfcdoorz::ipc::IpcClient< ipc::auth::Server >", "classnfcdoorz_1_1ipc_1_1_ipc_client.htm", null ],
         [ "nfcdoorz::ipc::IpcClient< ipc::policy::Server >", "classnfcdoorz_1_1ipc_1_1_ipc_client.htm", null ],
         [ "nfcdoorz::ipc::IpcClient< APIServer >", "classnfcdoorz_1_1ipc_1_1_ipc_client.htm", null ]
       ] ],
@@ -72,9 +91,6 @@ var hierarchy =
       ] ],
       [ "nfcdoorz::config::PICC", "structnfcdoorz_1_1config_1_1_p_i_c_c.htm", null ]
     ] ],
-    [ "ostream", null, [
-      [ "widthstream", "classwidthstream.htm", null ]
-    ] ],
     [ "PageHandler", null, [
       [ "nfcdoorz::apps::api::MyPageHandler", "classnfcdoorz_1_1apps_1_1api_1_1_my_page_handler.htm", null ]
     ] ],
@@ -82,10 +98,6 @@ var hierarchy =
     [ "nfcdoorz::manager::proc::ProcManager", "classnfcdoorz_1_1manager_1_1proc_1_1_proc_manager.htm", null ],
     [ "Runnable", null, [
       [ "nfcdoorz::apps::api::TtySockHandler::Runnable", "structnfcdoorz_1_1apps_1_1api_1_1_tty_sock_handler_1_1_runnable.htm", null ]
-    ] ],
-    [ "runtime_error", null, [
-      [ "ConversionException", "class_conversion_exception.htm", null ],
-      [ "nfcdoorz::config::ValidationException", "classnfcdoorz_1_1config_1_1_validation_exception.htm", null ]
     ] ],
     [ "streambuf", null, [
       [ "widthbuf", "classwidthbuf.htm", null ]

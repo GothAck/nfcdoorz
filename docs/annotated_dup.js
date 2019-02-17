@@ -31,6 +31,7 @@ var annotated_dup =
         [ "IpcBase", "classnfcdoorz_1_1ipc_1_1_ipc_base.htm", "classnfcdoorz_1_1ipc_1_1_ipc_base" ],
         [ "IpcClient", "classnfcdoorz_1_1ipc_1_1_ipc_client.htm", "classnfcdoorz_1_1ipc_1_1_ipc_client" ],
         [ "IpcClientAPI", "structnfcdoorz_1_1ipc_1_1_ipc_client_a_p_i.htm", "structnfcdoorz_1_1ipc_1_1_ipc_client_a_p_i" ],
+        [ "IpcClientAuth", "structnfcdoorz_1_1ipc_1_1_ipc_client_auth.htm", "structnfcdoorz_1_1ipc_1_1_ipc_client_auth" ],
         [ "IpcClientBase", "classnfcdoorz_1_1ipc_1_1_ipc_client_base.htm", "classnfcdoorz_1_1ipc_1_1_ipc_client_base" ],
         [ "IpcClientPolicy", "structnfcdoorz_1_1ipc_1_1_ipc_client_policy.htm", null ],
         [ "IpcServerBase", "classnfcdoorz_1_1ipc_1_1_ipc_server_base.htm", "classnfcdoorz_1_1ipc_1_1_ipc_server_base" ],

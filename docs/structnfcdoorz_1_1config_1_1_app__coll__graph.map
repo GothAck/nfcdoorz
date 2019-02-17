@@ -1,4 +1,6 @@
 <map id="nfcdoorz::config::App" name="nfcdoorz::config::App">
 <area shape="rect" id="node2" href="$structnfcdoorz_1_1config_1_1_node.htm" title="nfcdoorz::config::Node" alt="" coords="5,5,160,32"/>
-<area shape="rect" id="node3" href="$structnfcdoorz_1_1config_1_1_app_settings.htm" title="nfcdoorz::config::AppSettings" alt="" coords="104,81,299,108"/>
+<area shape="rect" id="node4" href="$structnfcdoorz_1_1config_1_1_app_settings.htm" title="nfcdoorz::config::AppSettings" alt="" coords="209,39,404,65"/>
+<area shape="rect" id="node6" title="STL class. " alt="" coords="267,191,347,217"/>
+<area shape="rect" id="node7" title="STL class. " alt="" coords="19,183,146,225"/>
 </map>

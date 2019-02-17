@@ -1,3 +1,7 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node2" href="$classwidthstream.htm" title="widthstream" alt="" coords="123,5,216,32"/>
+<area shape="rect" id="node1" title="STL class. " alt="" coords="5,13,105,39"/>
+<area shape="rect" id="node2" title="STL class. " alt="" coords="153,13,308,39"/>
+<area shape="rect" id="node3" title="STL class. " alt="" coords="356,5,489,47"/>
+<area shape="rect" id="node4" title="STL class. " alt="" coords="537,13,632,39"/>
+<area shape="rect" id="node5" href="$classwidthstream.htm" title="widthstream" alt="" coords="680,13,773,39"/>
 </map>
