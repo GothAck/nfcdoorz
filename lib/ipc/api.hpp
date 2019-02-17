@@ -5,6 +5,9 @@
 namespace nfcdoorz::ipc {
 
   struct IpcClientAPI : IpcClient<ipc::api::Server> {
+    inline auto getConfigCall() {
+      return getCall<common::ConfigCallT, common::ConfigReplyT>();
+    }
     inline auto getStatusCall() {
       return getCall<ipc::api::StatusCallT, ipc::api::StatusReplyT>();
     }

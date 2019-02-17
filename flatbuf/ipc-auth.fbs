@@ -1,3 +1,5 @@
+include "ipc-common.fbs";
+
 namespace nfcdoorz.ipc.auth;
 
 table Ping {}
@@ -11,12 +13,6 @@ table AppID {
 table Key {
   type: string;
   data: [ubyte];
-}
-
-table TagCall {}
-
-table TagReply {
-  uid: [ubyte];
 }
 
 table AuthApp {
@@ -41,10 +37,18 @@ table Result {
   data: ResultData;
 }
 
+table TagThing {}
+
+table TagCall {
+  uid: [ubyte];
+}
+
+table TagReply {}
+
 table RandomEvent {}
 
-union Calls { TagCall }
-union Replies { TagReply }
+union Calls { nfcdoorz.ipc.common.ConfigCall, TagCall }
+union Replies { nfcdoorz.ipc.common.ConfigReply, TagReply }
 union Events { RandomEvent }
 
 table Call {

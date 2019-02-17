@@ -26,6 +26,7 @@
 #include "lib/logging.hpp"
 #include "lib/types.hpp"
 
+#include "flatbuf/ipc-common_generated.h"
 #include "flatbuf/ipc-auth_generated.h"
 #include "flatbuf/ipc-api_generated.h"
 #include "flatbuf/ipc-policy_generated.h"

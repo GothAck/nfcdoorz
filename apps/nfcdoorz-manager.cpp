@@ -126,10 +126,34 @@ int main(int argc, const char *argv[]) {
       )->run();
   }
 
-  ipc::server->registerServiceHandler<ipc::auth::Server>();
-  ipc::server->registerServiceHandler<ipc::policy::Server>();
+  ipc::server->registerServiceHandler<ipc::auth::Server>()
+  ->registerHandler(
+    ipc::auth::Calls::nfcdoorz_ipc_common_ConfigCall,
+    [&args, &config](auto self, const ipc::auth::CallT &msg, auto reply, uvw::PipeHandle &pipe) -> auto {
+    reply->msg.Set(ipc::common::ConfigReplyT());
+    auto s = reply->msg.Asnfcdoorz_ipc_common_ConfigReply();
+    s->config = config.stringify();
+    return reply;
+  });
+  ipc::server->registerServiceHandler<ipc::policy::Server>()
+  ->registerHandler(
+    ipc::policy::Calls::nfcdoorz_ipc_common_ConfigCall,
+    [&args, &config](auto self, const ipc::policy::CallT &msg, auto reply, uvw::PipeHandle &pipe) -> auto {
+    reply->msg.Set(ipc::common::ConfigReplyT());
+    auto s = reply->msg.Asnfcdoorz_ipc_common_ConfigReply();
+    s->config = config.stringify();
+    return reply;
+  });
 
   ipc::server->registerServiceHandler<ipc::api::Server>()
+  ->registerHandler(
+    ipc::api::Calls::nfcdoorz_ipc_common_ConfigCall,
+    [&args, &config](auto self, const ipc::api::CallT &msg, auto reply, uvw::PipeHandle &pipe) -> auto {
+    reply->msg.Set(ipc::common::ConfigReplyT());
+    auto s = reply->msg.Asnfcdoorz_ipc_common_ConfigReply();
+    s->config = config.stringify();
+    return reply;
+  })
   ->registerHandler(
     ipc::api::Calls::StatusCall,
     [](auto self, const ipc::api::CallT &msg, auto reply, uvw::PipeHandle &) -> auto {
@@ -145,8 +169,7 @@ int main(int argc, const char *argv[]) {
       s->processes.push_back(move(proc));
     }
     return reply;
-  }
-    )
+  })
   ->registerHandler(
     ipc::api::Calls::CreateAuthenticatorCall,
     [&args](auto self, const ipc::api::CallT &msg, auto reply, uvw::PipeHandle &pipe) -> auto {

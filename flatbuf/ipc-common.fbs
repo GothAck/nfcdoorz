@@ -1,0 +1,6 @@
+namespace nfcdoorz.ipc.common;
+
+table ConfigCall {}
+table ConfigReply {
+  config: string;
+}

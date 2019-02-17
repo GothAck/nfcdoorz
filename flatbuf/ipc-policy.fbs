@@ -1,3 +1,5 @@
+include "ipc-common.fbs";
+
 namespace nfcdoorz.ipc.policy;
 
 table TestCall {}
@@ -9,8 +11,8 @@ table RequestEvent {
   cardUID: [uint8];
 }
 
-union Calls { TestCall }
-union Replies { TestReply }
+union Calls { nfcdoorz.ipc.common.ConfigCall, TestCall }
+union Replies { nfcdoorz.ipc.common.ConfigReply, TestReply }
 union Events { RequestEvent }
 
 table Call {

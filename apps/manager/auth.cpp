@@ -19,7 +19,7 @@
 #include "lib/signals.h"
 #include "lib/nfc.hpp"
 #include "lib/adapter.hpp"
-#include "lib/ipc/client.hpp"
+#include "lib/ipc/auth.hpp"
 
 using namespace std;
 using namespace nfcdoorz;
@@ -43,6 +43,8 @@ static const char USAGE[] =
 
 #define CHECK_BOOL(call, err_str) if (!call) { errx(9, err_str); }
 
+ipc::IpcClientAuth client;
+
 nfc::KeyDES null_key_des;
 nfc::KeyAES null_key_aes;
 
@@ -58,6 +60,13 @@ int main(int argc, char *argv[]) {
 
 
   logging::init(args);
+
+  client.connect(args["--ipc-connect"].asString());
+  client.runThread();
+
+  auto config = client.getConfigCall().gen().get();
+
+  cout << config->config << endl;
 
   nfc::Context context;
   if (!context.init()) {

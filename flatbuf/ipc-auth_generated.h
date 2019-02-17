@@ -6,6 +6,8 @@
 
 #include "flatbuffers/flatbuffers.h"
 
+#include "ipc-common_generated.h"
+
 namespace nfcdoorz {
 namespace ipc {
 namespace auth {
@@ -18,12 +20,6 @@ struct AppIDT;
 
 struct Key;
 struct KeyT;
-
-struct TagCall;
-struct TagCallT;
-
-struct TagReply;
-struct TagReplyT;
 
 struct AuthApp;
 struct AuthAppT;
@@ -39,6 +35,15 @@ struct TagUIDResultT;
 
 struct Result;
 struct ResultT;
+
+struct TagThing;
+struct TagThingT;
+
+struct TagCall;
+struct TagCallT;
+
+struct TagReply;
+struct TagReplyT;
 
 struct RandomEvent;
 struct RandomEventT;
@@ -58,10 +63,6 @@ inline const flatbuffers::TypeTable *AppIDTypeTable();
 
 inline const flatbuffers::TypeTable *KeyTypeTable();
 
-inline const flatbuffers::TypeTable *TagCallTypeTable();
-
-inline const flatbuffers::TypeTable *TagReplyTypeTable();
-
 inline const flatbuffers::TypeTable *AuthAppTypeTable();
 
 inline const flatbuffers::TypeTable *GetUIDTypeTable();
@@ -71,6 +72,12 @@ inline const flatbuffers::TypeTable *TagPresentTypeTable();
 inline const flatbuffers::TypeTable *TagUIDResultTypeTable();
 
 inline const flatbuffers::TypeTable *ResultTypeTable();
+
+inline const flatbuffers::TypeTable *TagThingTypeTable();
+
+inline const flatbuffers::TypeTable *TagCallTypeTable();
+
+inline const flatbuffers::TypeTable *TagReplyTypeTable();
 
 inline const flatbuffers::TypeTable *RandomEventTypeTable();
 
@@ -163,14 +170,16 @@ bool VerifyResultDataVector(flatbuffers::Verifier &verifier, const flatbuffers::
 
 enum class Calls : uint8_t {
   NONE = 0,
-  TagCall = 1,
+  nfcdoorz_ipc_common_ConfigCall = 1,
+  TagCall = 2,
   MIN = NONE,
   MAX = TagCall
 };
 
-inline const Calls (&EnumValuesCalls())[2] {
+inline const Calls (&EnumValuesCalls())[3] {
   static const Calls values[] = {
     Calls::NONE,
+    Calls::nfcdoorz_ipc_common_ConfigCall,
     Calls::TagCall
   };
   return values;
@@ -179,6 +188,7 @@ inline const Calls (&EnumValuesCalls())[2] {
 inline const char * const *EnumNamesCalls() {
   static const char * const names[] = {
     "NONE",
+    "nfcdoorz_ipc_common_ConfigCall",
     "TagCall",
     nullptr
   };
@@ -192,6 +202,10 @@ inline const char *EnumNameCalls(Calls e) {
 
 template<typename T> struct CallsTraits {
   static const Calls enum_value = Calls::NONE;
+};
+
+template<> struct CallsTraits<nfcdoorz::ipc::common::ConfigCall> {
+  static const Calls enum_value = Calls::nfcdoorz_ipc_common_ConfigCall;
 };
 
 template<> struct CallsTraits<TagCall> {
@@ -229,6 +243,14 @@ struct CallsUnion {
   static void *UnPack(const void *obj, Calls type, const flatbuffers::resolver_function_t *resolver);
   flatbuffers::Offset<void> Pack(flatbuffers::FlatBufferBuilder &_fbb, const flatbuffers::rehasher_function_t *_rehasher = nullptr) const;
 
+  nfcdoorz::ipc::common::ConfigCallT *Asnfcdoorz_ipc_common_ConfigCall() {
+    return type == Calls::nfcdoorz_ipc_common_ConfigCall ?
+      reinterpret_cast<nfcdoorz::ipc::common::ConfigCallT *>(value) : nullptr;
+  }
+  const nfcdoorz::ipc::common::ConfigCallT *Asnfcdoorz_ipc_common_ConfigCall() const {
+    return type == Calls::nfcdoorz_ipc_common_ConfigCall ?
+      reinterpret_cast<const nfcdoorz::ipc::common::ConfigCallT *>(value) : nullptr;
+  }
   TagCallT *AsTagCall() {
     return type == Calls::TagCall ?
       reinterpret_cast<TagCallT *>(value) : nullptr;
@@ -244,14 +266,16 @@ bool VerifyCallsVector(flatbuffers::Verifier &verifier, const flatbuffers::Vecto
 
 enum class Replies : uint8_t {
   NONE = 0,
-  TagReply = 1,
+  nfcdoorz_ipc_common_ConfigReply = 1,
+  TagReply = 2,
   MIN = NONE,
   MAX = TagReply
 };
 
-inline const Replies (&EnumValuesReplies())[2] {
+inline const Replies (&EnumValuesReplies())[3] {
   static const Replies values[] = {
     Replies::NONE,
+    Replies::nfcdoorz_ipc_common_ConfigReply,
     Replies::TagReply
   };
   return values;
@@ -260,6 +284,7 @@ inline const Replies (&EnumValuesReplies())[2] {
 inline const char * const *EnumNamesReplies() {
   static const char * const names[] = {
     "NONE",
+    "nfcdoorz_ipc_common_ConfigReply",
     "TagReply",
     nullptr
   };
@@ -273,6 +298,10 @@ inline const char *EnumNameReplies(Replies e) {
 
 template<typename T> struct RepliesTraits {
   static const Replies enum_value = Replies::NONE;
+};
+
+template<> struct RepliesTraits<nfcdoorz::ipc::common::ConfigReply> {
+  static const Replies enum_value = Replies::nfcdoorz_ipc_common_ConfigReply;
 };
 
 template<> struct RepliesTraits<TagReply> {
@@ -310,6 +339,14 @@ struct RepliesUnion {
   static void *UnPack(const void *obj, Replies type, const flatbuffers::resolver_function_t *resolver);
   flatbuffers::Offset<void> Pack(flatbuffers::FlatBufferBuilder &_fbb, const flatbuffers::rehasher_function_t *_rehasher = nullptr) const;
 
+  nfcdoorz::ipc::common::ConfigReplyT *Asnfcdoorz_ipc_common_ConfigReply() {
+    return type == Replies::nfcdoorz_ipc_common_ConfigReply ?
+      reinterpret_cast<nfcdoorz::ipc::common::ConfigReplyT *>(value) : nullptr;
+  }
+  const nfcdoorz::ipc::common::ConfigReplyT *Asnfcdoorz_ipc_common_ConfigReply() const {
+    return type == Replies::nfcdoorz_ipc_common_ConfigReply ?
+      reinterpret_cast<const nfcdoorz::ipc::common::ConfigReplyT *>(value) : nullptr;
+  }
   TagReplyT *AsTagReply() {
     return type == Replies::TagReply ?
       reinterpret_cast<TagReplyT *>(value) : nullptr;
@@ -624,126 +661,6 @@ inline flatbuffers::Offset<Key> CreateKeyDirect(
 }
 
 flatbuffers::Offset<Key> CreateKey(flatbuffers::FlatBufferBuilder &_fbb, const KeyT *_o, const flatbuffers::rehasher_function_t *_rehasher = nullptr);
-
-struct TagCallT : public flatbuffers::NativeTable {
-  typedef TagCall TableType;
-  static FLATBUFFERS_CONSTEXPR const char *GetFullyQualifiedName() {
-    return "nfcdoorz.ipc.auth.TagCallT";
-  }
-  TagCallT() {
-  }
-};
-
-struct TagCall FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
-  typedef TagCallT NativeTableType;
-  static const flatbuffers::TypeTable *MiniReflectTypeTable() {
-    return TagCallTypeTable();
-  }
-  static FLATBUFFERS_CONSTEXPR const char *GetFullyQualifiedName() {
-    return "nfcdoorz.ipc.auth.TagCall";
-  }
-  bool Verify(flatbuffers::Verifier &verifier) const {
-    return VerifyTableStart(verifier) &&
-           verifier.EndTable();
-  }
-  TagCallT *UnPack(const flatbuffers::resolver_function_t *_resolver = nullptr) const;
-  void UnPackTo(TagCallT *_o, const flatbuffers::resolver_function_t *_resolver = nullptr) const;
-  static flatbuffers::Offset<TagCall> Pack(flatbuffers::FlatBufferBuilder &_fbb, const TagCallT* _o, const flatbuffers::rehasher_function_t *_rehasher = nullptr);
-};
-
-struct TagCallBuilder {
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
-  explicit TagCallBuilder(flatbuffers::FlatBufferBuilder &_fbb)
-        : fbb_(_fbb) {
-    start_ = fbb_.StartTable();
-  }
-  TagCallBuilder &operator=(const TagCallBuilder &);
-  flatbuffers::Offset<TagCall> Finish() {
-    const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<TagCall>(end);
-    return o;
-  }
-};
-
-inline flatbuffers::Offset<TagCall> CreateTagCall(
-    flatbuffers::FlatBufferBuilder &_fbb) {
-  TagCallBuilder builder_(_fbb);
-  return builder_.Finish();
-}
-
-flatbuffers::Offset<TagCall> CreateTagCall(flatbuffers::FlatBufferBuilder &_fbb, const TagCallT *_o, const flatbuffers::rehasher_function_t *_rehasher = nullptr);
-
-struct TagReplyT : public flatbuffers::NativeTable {
-  typedef TagReply TableType;
-  static FLATBUFFERS_CONSTEXPR const char *GetFullyQualifiedName() {
-    return "nfcdoorz.ipc.auth.TagReplyT";
-  }
-  std::vector<uint8_t> uid;
-  TagReplyT() {
-  }
-};
-
-struct TagReply FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
-  typedef TagReplyT NativeTableType;
-  static const flatbuffers::TypeTable *MiniReflectTypeTable() {
-    return TagReplyTypeTable();
-  }
-  static FLATBUFFERS_CONSTEXPR const char *GetFullyQualifiedName() {
-    return "nfcdoorz.ipc.auth.TagReply";
-  }
-  enum {
-    VT_UID = 4
-  };
-  const flatbuffers::Vector<uint8_t> *uid() const {
-    return GetPointer<const flatbuffers::Vector<uint8_t> *>(VT_UID);
-  }
-  bool Verify(flatbuffers::Verifier &verifier) const {
-    return VerifyTableStart(verifier) &&
-           VerifyOffset(verifier, VT_UID) &&
-           verifier.VerifyVector(uid()) &&
-           verifier.EndTable();
-  }
-  TagReplyT *UnPack(const flatbuffers::resolver_function_t *_resolver = nullptr) const;
-  void UnPackTo(TagReplyT *_o, const flatbuffers::resolver_function_t *_resolver = nullptr) const;
-  static flatbuffers::Offset<TagReply> Pack(flatbuffers::FlatBufferBuilder &_fbb, const TagReplyT* _o, const flatbuffers::rehasher_function_t *_rehasher = nullptr);
-};
-
-struct TagReplyBuilder {
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
-  void add_uid(flatbuffers::Offset<flatbuffers::Vector<uint8_t>> uid) {
-    fbb_.AddOffset(TagReply::VT_UID, uid);
-  }
-  explicit TagReplyBuilder(flatbuffers::FlatBufferBuilder &_fbb)
-        : fbb_(_fbb) {
-    start_ = fbb_.StartTable();
-  }
-  TagReplyBuilder &operator=(const TagReplyBuilder &);
-  flatbuffers::Offset<TagReply> Finish() {
-    const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<TagReply>(end);
-    return o;
-  }
-};
-
-inline flatbuffers::Offset<TagReply> CreateTagReply(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::Vector<uint8_t>> uid = 0) {
-  TagReplyBuilder builder_(_fbb);
-  builder_.add_uid(uid);
-  return builder_.Finish();
-}
-
-inline flatbuffers::Offset<TagReply> CreateTagReplyDirect(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    const std::vector<uint8_t> *uid = nullptr) {
-  return nfcdoorz::ipc::auth::CreateTagReply(
-      _fbb,
-      uid ? _fbb.CreateVector<uint8_t>(*uid) : 0);
-}
-
-flatbuffers::Offset<TagReply> CreateTagReply(flatbuffers::FlatBufferBuilder &_fbb, const TagReplyT *_o, const flatbuffers::rehasher_function_t *_rehasher = nullptr);
 
 struct AuthAppT : public flatbuffers::NativeTable {
   typedef AuthApp TableType;
@@ -1096,6 +1013,175 @@ inline flatbuffers::Offset<Result> CreateResult(
 
 flatbuffers::Offset<Result> CreateResult(flatbuffers::FlatBufferBuilder &_fbb, const ResultT *_o, const flatbuffers::rehasher_function_t *_rehasher = nullptr);
 
+struct TagThingT : public flatbuffers::NativeTable {
+  typedef TagThing TableType;
+  static FLATBUFFERS_CONSTEXPR const char *GetFullyQualifiedName() {
+    return "nfcdoorz.ipc.auth.TagThingT";
+  }
+  TagThingT() {
+  }
+};
+
+struct TagThing FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  typedef TagThingT NativeTableType;
+  static const flatbuffers::TypeTable *MiniReflectTypeTable() {
+    return TagThingTypeTable();
+  }
+  static FLATBUFFERS_CONSTEXPR const char *GetFullyQualifiedName() {
+    return "nfcdoorz.ipc.auth.TagThing";
+  }
+  bool Verify(flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           verifier.EndTable();
+  }
+  TagThingT *UnPack(const flatbuffers::resolver_function_t *_resolver = nullptr) const;
+  void UnPackTo(TagThingT *_o, const flatbuffers::resolver_function_t *_resolver = nullptr) const;
+  static flatbuffers::Offset<TagThing> Pack(flatbuffers::FlatBufferBuilder &_fbb, const TagThingT* _o, const flatbuffers::rehasher_function_t *_rehasher = nullptr);
+};
+
+struct TagThingBuilder {
+  flatbuffers::FlatBufferBuilder &fbb_;
+  flatbuffers::uoffset_t start_;
+  explicit TagThingBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  TagThingBuilder &operator=(const TagThingBuilder &);
+  flatbuffers::Offset<TagThing> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = flatbuffers::Offset<TagThing>(end);
+    return o;
+  }
+};
+
+inline flatbuffers::Offset<TagThing> CreateTagThing(
+    flatbuffers::FlatBufferBuilder &_fbb) {
+  TagThingBuilder builder_(_fbb);
+  return builder_.Finish();
+}
+
+flatbuffers::Offset<TagThing> CreateTagThing(flatbuffers::FlatBufferBuilder &_fbb, const TagThingT *_o, const flatbuffers::rehasher_function_t *_rehasher = nullptr);
+
+struct TagCallT : public flatbuffers::NativeTable {
+  typedef TagCall TableType;
+  static FLATBUFFERS_CONSTEXPR const char *GetFullyQualifiedName() {
+    return "nfcdoorz.ipc.auth.TagCallT";
+  }
+  std::vector<uint8_t> uid;
+  TagCallT() {
+  }
+};
+
+struct TagCall FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  typedef TagCallT NativeTableType;
+  static const flatbuffers::TypeTable *MiniReflectTypeTable() {
+    return TagCallTypeTable();
+  }
+  static FLATBUFFERS_CONSTEXPR const char *GetFullyQualifiedName() {
+    return "nfcdoorz.ipc.auth.TagCall";
+  }
+  enum {
+    VT_UID = 4
+  };
+  const flatbuffers::Vector<uint8_t> *uid() const {
+    return GetPointer<const flatbuffers::Vector<uint8_t> *>(VT_UID);
+  }
+  bool Verify(flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyOffset(verifier, VT_UID) &&
+           verifier.VerifyVector(uid()) &&
+           verifier.EndTable();
+  }
+  TagCallT *UnPack(const flatbuffers::resolver_function_t *_resolver = nullptr) const;
+  void UnPackTo(TagCallT *_o, const flatbuffers::resolver_function_t *_resolver = nullptr) const;
+  static flatbuffers::Offset<TagCall> Pack(flatbuffers::FlatBufferBuilder &_fbb, const TagCallT* _o, const flatbuffers::rehasher_function_t *_rehasher = nullptr);
+};
+
+struct TagCallBuilder {
+  flatbuffers::FlatBufferBuilder &fbb_;
+  flatbuffers::uoffset_t start_;
+  void add_uid(flatbuffers::Offset<flatbuffers::Vector<uint8_t>> uid) {
+    fbb_.AddOffset(TagCall::VT_UID, uid);
+  }
+  explicit TagCallBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  TagCallBuilder &operator=(const TagCallBuilder &);
+  flatbuffers::Offset<TagCall> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = flatbuffers::Offset<TagCall>(end);
+    return o;
+  }
+};
+
+inline flatbuffers::Offset<TagCall> CreateTagCall(
+    flatbuffers::FlatBufferBuilder &_fbb,
+    flatbuffers::Offset<flatbuffers::Vector<uint8_t>> uid = 0) {
+  TagCallBuilder builder_(_fbb);
+  builder_.add_uid(uid);
+  return builder_.Finish();
+}
+
+inline flatbuffers::Offset<TagCall> CreateTagCallDirect(
+    flatbuffers::FlatBufferBuilder &_fbb,
+    const std::vector<uint8_t> *uid = nullptr) {
+  return nfcdoorz::ipc::auth::CreateTagCall(
+      _fbb,
+      uid ? _fbb.CreateVector<uint8_t>(*uid) : 0);
+}
+
+flatbuffers::Offset<TagCall> CreateTagCall(flatbuffers::FlatBufferBuilder &_fbb, const TagCallT *_o, const flatbuffers::rehasher_function_t *_rehasher = nullptr);
+
+struct TagReplyT : public flatbuffers::NativeTable {
+  typedef TagReply TableType;
+  static FLATBUFFERS_CONSTEXPR const char *GetFullyQualifiedName() {
+    return "nfcdoorz.ipc.auth.TagReplyT";
+  }
+  TagReplyT() {
+  }
+};
+
+struct TagReply FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  typedef TagReplyT NativeTableType;
+  static const flatbuffers::TypeTable *MiniReflectTypeTable() {
+    return TagReplyTypeTable();
+  }
+  static FLATBUFFERS_CONSTEXPR const char *GetFullyQualifiedName() {
+    return "nfcdoorz.ipc.auth.TagReply";
+  }
+  bool Verify(flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           verifier.EndTable();
+  }
+  TagReplyT *UnPack(const flatbuffers::resolver_function_t *_resolver = nullptr) const;
+  void UnPackTo(TagReplyT *_o, const flatbuffers::resolver_function_t *_resolver = nullptr) const;
+  static flatbuffers::Offset<TagReply> Pack(flatbuffers::FlatBufferBuilder &_fbb, const TagReplyT* _o, const flatbuffers::rehasher_function_t *_rehasher = nullptr);
+};
+
+struct TagReplyBuilder {
+  flatbuffers::FlatBufferBuilder &fbb_;
+  flatbuffers::uoffset_t start_;
+  explicit TagReplyBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  TagReplyBuilder &operator=(const TagReplyBuilder &);
+  flatbuffers::Offset<TagReply> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = flatbuffers::Offset<TagReply>(end);
+    return o;
+  }
+};
+
+inline flatbuffers::Offset<TagReply> CreateTagReply(
+    flatbuffers::FlatBufferBuilder &_fbb) {
+  TagReplyBuilder builder_(_fbb);
+  return builder_.Finish();
+}
+
+flatbuffers::Offset<TagReply> CreateTagReply(flatbuffers::FlatBufferBuilder &_fbb, const TagReplyT *_o, const flatbuffers::rehasher_function_t *_rehasher = nullptr);
+
 struct RandomEventT : public flatbuffers::NativeTable {
   typedef RandomEvent TableType;
   static FLATBUFFERS_CONSTEXPR const char *GetFullyQualifiedName() {
@@ -1180,6 +1266,9 @@ struct Call FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
     return GetPointer<const void *>(VT_MSG);
   }
   template<typename T> const T *msg_as() const;
+  const nfcdoorz::ipc::common::ConfigCall *msg_as_nfcdoorz_ipc_common_ConfigCall() const {
+    return msg_type() == Calls::nfcdoorz_ipc_common_ConfigCall ? static_cast<const nfcdoorz::ipc::common::ConfigCall *>(msg()) : nullptr;
+  }
   const TagCall *msg_as_TagCall() const {
     return msg_type() == Calls::TagCall ? static_cast<const TagCall *>(msg()) : nullptr;
   }
@@ -1195,6 +1284,10 @@ struct Call FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   void UnPackTo(CallT *_o, const flatbuffers::resolver_function_t *_resolver = nullptr) const;
   static flatbuffers::Offset<Call> Pack(flatbuffers::FlatBufferBuilder &_fbb, const CallT* _o, const flatbuffers::rehasher_function_t *_rehasher = nullptr);
 };
+
+template<> inline const nfcdoorz::ipc::common::ConfigCall *Call::msg_as<nfcdoorz::ipc::common::ConfigCall>() const {
+  return msg_as_nfcdoorz_ipc_common_ConfigCall();
+}
 
 template<> inline const TagCall *Call::msg_as<TagCall>() const {
   return msg_as_TagCall();
@@ -1276,6 +1369,9 @@ struct Reply FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
     return GetPointer<const void *>(VT_MSG);
   }
   template<typename T> const T *msg_as() const;
+  const nfcdoorz::ipc::common::ConfigReply *msg_as_nfcdoorz_ipc_common_ConfigReply() const {
+    return msg_type() == Replies::nfcdoorz_ipc_common_ConfigReply ? static_cast<const nfcdoorz::ipc::common::ConfigReply *>(msg()) : nullptr;
+  }
   const TagReply *msg_as_TagReply() const {
     return msg_type() == Replies::TagReply ? static_cast<const TagReply *>(msg()) : nullptr;
   }
@@ -1304,6 +1400,10 @@ struct Reply FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   void UnPackTo(ReplyT *_o, const flatbuffers::resolver_function_t *_resolver = nullptr) const;
   static flatbuffers::Offset<Reply> Pack(flatbuffers::FlatBufferBuilder &_fbb, const ReplyT* _o, const flatbuffers::rehasher_function_t *_rehasher = nullptr);
 };
+
+template<> inline const nfcdoorz::ipc::common::ConfigReply *Reply::msg_as<nfcdoorz::ipc::common::ConfigReply>() const {
+  return msg_as_nfcdoorz_ipc_common_ConfigReply();
+}
 
 template<> inline const TagReply *Reply::msg_as<TagReply>() const {
   return msg_as_TagReply();
@@ -1520,55 +1620,6 @@ inline flatbuffers::Offset<Key> CreateKey(flatbuffers::FlatBufferBuilder &_fbb, 
       _data);
 }
 
-inline TagCallT *TagCall::UnPack(const flatbuffers::resolver_function_t *_resolver) const {
-  auto _o = new TagCallT();
-  UnPackTo(_o, _resolver);
-  return _o;
-}
-
-inline void TagCall::UnPackTo(TagCallT *_o, const flatbuffers::resolver_function_t *_resolver) const {
-  (void)_o;
-  (void)_resolver;
-}
-
-inline flatbuffers::Offset<TagCall> TagCall::Pack(flatbuffers::FlatBufferBuilder &_fbb, const TagCallT* _o, const flatbuffers::rehasher_function_t *_rehasher) {
-  return CreateTagCall(_fbb, _o, _rehasher);
-}
-
-inline flatbuffers::Offset<TagCall> CreateTagCall(flatbuffers::FlatBufferBuilder &_fbb, const TagCallT *_o, const flatbuffers::rehasher_function_t *_rehasher) {
-  (void)_rehasher;
-  (void)_o;
-  struct _VectorArgs { flatbuffers::FlatBufferBuilder *__fbb; const TagCallT* __o; const flatbuffers::rehasher_function_t *__rehasher; } _va = { &_fbb, _o, _rehasher}; (void)_va;
-  return nfcdoorz::ipc::auth::CreateTagCall(
-      _fbb);
-}
-
-inline TagReplyT *TagReply::UnPack(const flatbuffers::resolver_function_t *_resolver) const {
-  auto _o = new TagReplyT();
-  UnPackTo(_o, _resolver);
-  return _o;
-}
-
-inline void TagReply::UnPackTo(TagReplyT *_o, const flatbuffers::resolver_function_t *_resolver) const {
-  (void)_o;
-  (void)_resolver;
-  { auto _e = uid(); if (_e) { _o->uid.resize(_e->size()); for (flatbuffers::uoffset_t _i = 0; _i < _e->size(); _i++) { _o->uid[_i] = _e->Get(_i); } } };
-}
-
-inline flatbuffers::Offset<TagReply> TagReply::Pack(flatbuffers::FlatBufferBuilder &_fbb, const TagReplyT* _o, const flatbuffers::rehasher_function_t *_rehasher) {
-  return CreateTagReply(_fbb, _o, _rehasher);
-}
-
-inline flatbuffers::Offset<TagReply> CreateTagReply(flatbuffers::FlatBufferBuilder &_fbb, const TagReplyT *_o, const flatbuffers::rehasher_function_t *_rehasher) {
-  (void)_rehasher;
-  (void)_o;
-  struct _VectorArgs { flatbuffers::FlatBufferBuilder *__fbb; const TagReplyT* __o; const flatbuffers::rehasher_function_t *__rehasher; } _va = { &_fbb, _o, _rehasher}; (void)_va;
-  auto _uid = _o->uid.size() ? _fbb.CreateVector(_o->uid) : 0;
-  return nfcdoorz::ipc::auth::CreateTagReply(
-      _fbb,
-      _uid);
-}
-
 inline AuthAppT *AuthApp::UnPack(const flatbuffers::resolver_function_t *_resolver) const {
   auto _o = new AuthAppT();
   UnPackTo(_o, _resolver);
@@ -1703,6 +1754,78 @@ inline flatbuffers::Offset<Result> CreateResult(flatbuffers::FlatBufferBuilder &
       _ok,
       _data_type,
       _data);
+}
+
+inline TagThingT *TagThing::UnPack(const flatbuffers::resolver_function_t *_resolver) const {
+  auto _o = new TagThingT();
+  UnPackTo(_o, _resolver);
+  return _o;
+}
+
+inline void TagThing::UnPackTo(TagThingT *_o, const flatbuffers::resolver_function_t *_resolver) const {
+  (void)_o;
+  (void)_resolver;
+}
+
+inline flatbuffers::Offset<TagThing> TagThing::Pack(flatbuffers::FlatBufferBuilder &_fbb, const TagThingT* _o, const flatbuffers::rehasher_function_t *_rehasher) {
+  return CreateTagThing(_fbb, _o, _rehasher);
+}
+
+inline flatbuffers::Offset<TagThing> CreateTagThing(flatbuffers::FlatBufferBuilder &_fbb, const TagThingT *_o, const flatbuffers::rehasher_function_t *_rehasher) {
+  (void)_rehasher;
+  (void)_o;
+  struct _VectorArgs { flatbuffers::FlatBufferBuilder *__fbb; const TagThingT* __o; const flatbuffers::rehasher_function_t *__rehasher; } _va = { &_fbb, _o, _rehasher}; (void)_va;
+  return nfcdoorz::ipc::auth::CreateTagThing(
+      _fbb);
+}
+
+inline TagCallT *TagCall::UnPack(const flatbuffers::resolver_function_t *_resolver) const {
+  auto _o = new TagCallT();
+  UnPackTo(_o, _resolver);
+  return _o;
+}
+
+inline void TagCall::UnPackTo(TagCallT *_o, const flatbuffers::resolver_function_t *_resolver) const {
+  (void)_o;
+  (void)_resolver;
+  { auto _e = uid(); if (_e) { _o->uid.resize(_e->size()); for (flatbuffers::uoffset_t _i = 0; _i < _e->size(); _i++) { _o->uid[_i] = _e->Get(_i); } } };
+}
+
+inline flatbuffers::Offset<TagCall> TagCall::Pack(flatbuffers::FlatBufferBuilder &_fbb, const TagCallT* _o, const flatbuffers::rehasher_function_t *_rehasher) {
+  return CreateTagCall(_fbb, _o, _rehasher);
+}
+
+inline flatbuffers::Offset<TagCall> CreateTagCall(flatbuffers::FlatBufferBuilder &_fbb, const TagCallT *_o, const flatbuffers::rehasher_function_t *_rehasher) {
+  (void)_rehasher;
+  (void)_o;
+  struct _VectorArgs { flatbuffers::FlatBufferBuilder *__fbb; const TagCallT* __o; const flatbuffers::rehasher_function_t *__rehasher; } _va = { &_fbb, _o, _rehasher}; (void)_va;
+  auto _uid = _o->uid.size() ? _fbb.CreateVector(_o->uid) : 0;
+  return nfcdoorz::ipc::auth::CreateTagCall(
+      _fbb,
+      _uid);
+}
+
+inline TagReplyT *TagReply::UnPack(const flatbuffers::resolver_function_t *_resolver) const {
+  auto _o = new TagReplyT();
+  UnPackTo(_o, _resolver);
+  return _o;
+}
+
+inline void TagReply::UnPackTo(TagReplyT *_o, const flatbuffers::resolver_function_t *_resolver) const {
+  (void)_o;
+  (void)_resolver;
+}
+
+inline flatbuffers::Offset<TagReply> TagReply::Pack(flatbuffers::FlatBufferBuilder &_fbb, const TagReplyT* _o, const flatbuffers::rehasher_function_t *_rehasher) {
+  return CreateTagReply(_fbb, _o, _rehasher);
+}
+
+inline flatbuffers::Offset<TagReply> CreateTagReply(flatbuffers::FlatBufferBuilder &_fbb, const TagReplyT *_o, const flatbuffers::rehasher_function_t *_rehasher) {
+  (void)_rehasher;
+  (void)_o;
+  struct _VectorArgs { flatbuffers::FlatBufferBuilder *__fbb; const TagReplyT* __o; const flatbuffers::rehasher_function_t *__rehasher; } _va = { &_fbb, _o, _rehasher}; (void)_va;
+  return nfcdoorz::ipc::auth::CreateTagReply(
+      _fbb);
 }
 
 inline RandomEventT *RandomEvent::UnPack(const flatbuffers::resolver_function_t *_resolver) const {
@@ -1901,6 +2024,10 @@ inline bool VerifyCalls(flatbuffers::Verifier &verifier, const void *obj, Calls 
     case Calls::NONE: {
       return true;
     }
+    case Calls::nfcdoorz_ipc_common_ConfigCall: {
+      auto ptr = reinterpret_cast<const nfcdoorz::ipc::common::ConfigCall *>(obj);
+      return verifier.VerifyTable(ptr);
+    }
     case Calls::TagCall: {
       auto ptr = reinterpret_cast<const TagCall *>(obj);
       return verifier.VerifyTable(ptr);
@@ -1923,6 +2050,10 @@ inline bool VerifyCallsVector(flatbuffers::Verifier &verifier, const flatbuffers
 
 inline void *CallsUnion::UnPack(const void *obj, Calls type, const flatbuffers::resolver_function_t *resolver) {
   switch (type) {
+    case Calls::nfcdoorz_ipc_common_ConfigCall: {
+      auto ptr = reinterpret_cast<const nfcdoorz::ipc::common::ConfigCall *>(obj);
+      return ptr->UnPack(resolver);
+    }
     case Calls::TagCall: {
       auto ptr = reinterpret_cast<const TagCall *>(obj);
       return ptr->UnPack(resolver);
@@ -1933,6 +2064,10 @@ inline void *CallsUnion::UnPack(const void *obj, Calls type, const flatbuffers::
 
 inline flatbuffers::Offset<void> CallsUnion::Pack(flatbuffers::FlatBufferBuilder &_fbb, const flatbuffers::rehasher_function_t *_rehasher) const {
   switch (type) {
+    case Calls::nfcdoorz_ipc_common_ConfigCall: {
+      auto ptr = reinterpret_cast<const nfcdoorz::ipc::common::ConfigCallT *>(value);
+      return CreateConfigCall(_fbb, ptr, _rehasher).Union();
+    }
     case Calls::TagCall: {
       auto ptr = reinterpret_cast<const TagCallT *>(value);
       return CreateTagCall(_fbb, ptr, _rehasher).Union();
@@ -1943,6 +2078,10 @@ inline flatbuffers::Offset<void> CallsUnion::Pack(flatbuffers::FlatBufferBuilder
 
 inline CallsUnion::CallsUnion(const CallsUnion &u) FLATBUFFERS_NOEXCEPT : type(u.type), value(nullptr) {
   switch (type) {
+    case Calls::nfcdoorz_ipc_common_ConfigCall: {
+      value = new nfcdoorz::ipc::common::ConfigCallT(*reinterpret_cast<nfcdoorz::ipc::common::ConfigCallT *>(u.value));
+      break;
+    }
     case Calls::TagCall: {
       value = new TagCallT(*reinterpret_cast<TagCallT *>(u.value));
       break;
@@ -1954,6 +2093,11 @@ inline CallsUnion::CallsUnion(const CallsUnion &u) FLATBUFFERS_NOEXCEPT : type(u
 
 inline void CallsUnion::Reset() {
   switch (type) {
+    case Calls::nfcdoorz_ipc_common_ConfigCall: {
+      auto ptr = reinterpret_cast<nfcdoorz::ipc::common::ConfigCallT *>(value);
+      delete ptr;
+      break;
+    }
     case Calls::TagCall: {
       auto ptr = reinterpret_cast<TagCallT *>(value);
       delete ptr;
@@ -1969,6 +2113,10 @@ inline bool VerifyReplies(flatbuffers::Verifier &verifier, const void *obj, Repl
   switch (type) {
     case Replies::NONE: {
       return true;
+    }
+    case Replies::nfcdoorz_ipc_common_ConfigReply: {
+      auto ptr = reinterpret_cast<const nfcdoorz::ipc::common::ConfigReply *>(obj);
+      return verifier.VerifyTable(ptr);
     }
     case Replies::TagReply: {
       auto ptr = reinterpret_cast<const TagReply *>(obj);
@@ -1992,6 +2140,10 @@ inline bool VerifyRepliesVector(flatbuffers::Verifier &verifier, const flatbuffe
 
 inline void *RepliesUnion::UnPack(const void *obj, Replies type, const flatbuffers::resolver_function_t *resolver) {
   switch (type) {
+    case Replies::nfcdoorz_ipc_common_ConfigReply: {
+      auto ptr = reinterpret_cast<const nfcdoorz::ipc::common::ConfigReply *>(obj);
+      return ptr->UnPack(resolver);
+    }
     case Replies::TagReply: {
       auto ptr = reinterpret_cast<const TagReply *>(obj);
       return ptr->UnPack(resolver);
@@ -2002,6 +2154,10 @@ inline void *RepliesUnion::UnPack(const void *obj, Replies type, const flatbuffe
 
 inline flatbuffers::Offset<void> RepliesUnion::Pack(flatbuffers::FlatBufferBuilder &_fbb, const flatbuffers::rehasher_function_t *_rehasher) const {
   switch (type) {
+    case Replies::nfcdoorz_ipc_common_ConfigReply: {
+      auto ptr = reinterpret_cast<const nfcdoorz::ipc::common::ConfigReplyT *>(value);
+      return CreateConfigReply(_fbb, ptr, _rehasher).Union();
+    }
     case Replies::TagReply: {
       auto ptr = reinterpret_cast<const TagReplyT *>(value);
       return CreateTagReply(_fbb, ptr, _rehasher).Union();
@@ -2012,6 +2168,10 @@ inline flatbuffers::Offset<void> RepliesUnion::Pack(flatbuffers::FlatBufferBuild
 
 inline RepliesUnion::RepliesUnion(const RepliesUnion &u) FLATBUFFERS_NOEXCEPT : type(u.type), value(nullptr) {
   switch (type) {
+    case Replies::nfcdoorz_ipc_common_ConfigReply: {
+      value = new nfcdoorz::ipc::common::ConfigReplyT(*reinterpret_cast<nfcdoorz::ipc::common::ConfigReplyT *>(u.value));
+      break;
+    }
     case Replies::TagReply: {
       value = new TagReplyT(*reinterpret_cast<TagReplyT *>(u.value));
       break;
@@ -2023,6 +2183,11 @@ inline RepliesUnion::RepliesUnion(const RepliesUnion &u) FLATBUFFERS_NOEXCEPT : 
 
 inline void RepliesUnion::Reset() {
   switch (type) {
+    case Replies::nfcdoorz_ipc_common_ConfigReply: {
+      auto ptr = reinterpret_cast<nfcdoorz::ipc::common::ConfigReplyT *>(value);
+      delete ptr;
+      break;
+    }
     case Replies::TagReply: {
       auto ptr = reinterpret_cast<TagReplyT *>(value);
       delete ptr;
@@ -2124,17 +2289,20 @@ inline const flatbuffers::TypeTable *ResultDataTypeTable() {
 inline const flatbuffers::TypeTable *CallsTypeTable() {
   static const flatbuffers::TypeCode type_codes[] = {
     { flatbuffers::ET_SEQUENCE, 0, -1 },
-    { flatbuffers::ET_SEQUENCE, 0, 0 }
+    { flatbuffers::ET_SEQUENCE, 0, 0 },
+    { flatbuffers::ET_SEQUENCE, 0, 1 }
   };
   static const flatbuffers::TypeFunction type_refs[] = {
+    nfcdoorz::ipc::common::ConfigCallTypeTable,
     TagCallTypeTable
   };
   static const char * const names[] = {
     "NONE",
+    "nfcdoorz_ipc_common_ConfigCall",
     "TagCall"
   };
   static const flatbuffers::TypeTable tt = {
-    flatbuffers::ST_UNION, 2, type_codes, type_refs, nullptr, names
+    flatbuffers::ST_UNION, 3, type_codes, type_refs, nullptr, names
   };
   return &tt;
 }
@@ -2142,17 +2310,20 @@ inline const flatbuffers::TypeTable *CallsTypeTable() {
 inline const flatbuffers::TypeTable *RepliesTypeTable() {
   static const flatbuffers::TypeCode type_codes[] = {
     { flatbuffers::ET_SEQUENCE, 0, -1 },
-    { flatbuffers::ET_SEQUENCE, 0, 0 }
+    { flatbuffers::ET_SEQUENCE, 0, 0 },
+    { flatbuffers::ET_SEQUENCE, 0, 1 }
   };
   static const flatbuffers::TypeFunction type_refs[] = {
+    nfcdoorz::ipc::common::ConfigReplyTypeTable,
     TagReplyTypeTable
   };
   static const char * const names[] = {
     "NONE",
+    "nfcdoorz_ipc_common_ConfigReply",
     "TagReply"
   };
   static const flatbuffers::TypeTable tt = {
-    flatbuffers::ST_UNION, 2, type_codes, type_refs, nullptr, names
+    flatbuffers::ST_UNION, 3, type_codes, type_refs, nullptr, names
   };
   return &tt;
 }
@@ -2210,26 +2381,6 @@ inline const flatbuffers::TypeTable *KeyTypeTable() {
   };
   static const flatbuffers::TypeTable tt = {
     flatbuffers::ST_TABLE, 2, type_codes, nullptr, nullptr, names
-  };
-  return &tt;
-}
-
-inline const flatbuffers::TypeTable *TagCallTypeTable() {
-  static const flatbuffers::TypeTable tt = {
-    flatbuffers::ST_TABLE, 0, nullptr, nullptr, nullptr, nullptr
-  };
-  return &tt;
-}
-
-inline const flatbuffers::TypeTable *TagReplyTypeTable() {
-  static const flatbuffers::TypeCode type_codes[] = {
-    { flatbuffers::ET_UCHAR, 1, -1 }
-  };
-  static const char * const names[] = {
-    "uid"
-  };
-  static const flatbuffers::TypeTable tt = {
-    flatbuffers::ST_TABLE, 1, type_codes, nullptr, nullptr, names
   };
   return &tt;
 }
@@ -2302,6 +2453,33 @@ inline const flatbuffers::TypeTable *ResultTypeTable() {
   };
   static const flatbuffers::TypeTable tt = {
     flatbuffers::ST_TABLE, 3, type_codes, type_refs, nullptr, names
+  };
+  return &tt;
+}
+
+inline const flatbuffers::TypeTable *TagThingTypeTable() {
+  static const flatbuffers::TypeTable tt = {
+    flatbuffers::ST_TABLE, 0, nullptr, nullptr, nullptr, nullptr
+  };
+  return &tt;
+}
+
+inline const flatbuffers::TypeTable *TagCallTypeTable() {
+  static const flatbuffers::TypeCode type_codes[] = {
+    { flatbuffers::ET_UCHAR, 1, -1 }
+  };
+  static const char * const names[] = {
+    "uid"
+  };
+  static const flatbuffers::TypeTable tt = {
+    flatbuffers::ST_TABLE, 1, type_codes, nullptr, nullptr, names
+  };
+  return &tt;
+}
+
+inline const flatbuffers::TypeTable *TagReplyTypeTable() {
+  static const flatbuffers::TypeTable tt = {
+    flatbuffers::ST_TABLE, 0, nullptr, nullptr, nullptr, nullptr
   };
   return &tt;
 }

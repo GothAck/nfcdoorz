@@ -17,6 +17,7 @@
 #include <seasocks/Server.h>
 #include "lib/seasocks-plog.hpp"
 
+#include "lib/config.hpp"
 #include "lib/types.hpp"
 #include "lib/logging.hpp"
 #include "lib/ipc/api.hpp"
@@ -59,8 +60,14 @@ int main(int argc, const char *argv[]) {
     );
   logging::init(args, plog::info);
 
+  config::Config config;
+
   client.connect(args["--ipc-connect"].asString());
   client.runThread();
+
+  auto configString = client.getConfigCall().gen().get()->config;
+
+  config.parse(configString);
 
   server.addPageHandler(std::make_shared<MyPageHandler>(client));
   server.addWebSocketHandler("/tty", make_shared<TtySockHandler>(client, server));

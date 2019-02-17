@@ -6,6 +6,8 @@
 
 #include "flatbuffers/flatbuffers.h"
 
+#include "ipc-common_generated.h"
+
 namespace nfcdoorz {
 namespace ipc {
 namespace policy {
@@ -42,14 +44,16 @@ inline const flatbuffers::TypeTable *ServerTypeTable();
 
 enum class Calls : uint8_t {
   NONE = 0,
-  TestCall = 1,
+  nfcdoorz_ipc_common_ConfigCall = 1,
+  TestCall = 2,
   MIN = NONE,
   MAX = TestCall
 };
 
-inline const Calls (&EnumValuesCalls())[2] {
+inline const Calls (&EnumValuesCalls())[3] {
   static const Calls values[] = {
     Calls::NONE,
+    Calls::nfcdoorz_ipc_common_ConfigCall,
     Calls::TestCall
   };
   return values;
@@ -58,6 +62,7 @@ inline const Calls (&EnumValuesCalls())[2] {
 inline const char * const *EnumNamesCalls() {
   static const char * const names[] = {
     "NONE",
+    "nfcdoorz_ipc_common_ConfigCall",
     "TestCall",
     nullptr
   };
@@ -71,6 +76,10 @@ inline const char *EnumNameCalls(Calls e) {
 
 template<typename T> struct CallsTraits {
   static const Calls enum_value = Calls::NONE;
+};
+
+template<> struct CallsTraits<nfcdoorz::ipc::common::ConfigCall> {
+  static const Calls enum_value = Calls::nfcdoorz_ipc_common_ConfigCall;
 };
 
 template<> struct CallsTraits<TestCall> {
@@ -108,6 +117,14 @@ struct CallsUnion {
   static void *UnPack(const void *obj, Calls type, const flatbuffers::resolver_function_t *resolver);
   flatbuffers::Offset<void> Pack(flatbuffers::FlatBufferBuilder &_fbb, const flatbuffers::rehasher_function_t *_rehasher = nullptr) const;
 
+  nfcdoorz::ipc::common::ConfigCallT *Asnfcdoorz_ipc_common_ConfigCall() {
+    return type == Calls::nfcdoorz_ipc_common_ConfigCall ?
+      reinterpret_cast<nfcdoorz::ipc::common::ConfigCallT *>(value) : nullptr;
+  }
+  const nfcdoorz::ipc::common::ConfigCallT *Asnfcdoorz_ipc_common_ConfigCall() const {
+    return type == Calls::nfcdoorz_ipc_common_ConfigCall ?
+      reinterpret_cast<const nfcdoorz::ipc::common::ConfigCallT *>(value) : nullptr;
+  }
   TestCallT *AsTestCall() {
     return type == Calls::TestCall ?
       reinterpret_cast<TestCallT *>(value) : nullptr;
@@ -123,14 +140,16 @@ bool VerifyCallsVector(flatbuffers::Verifier &verifier, const flatbuffers::Vecto
 
 enum class Replies : uint8_t {
   NONE = 0,
-  TestReply = 1,
+  nfcdoorz_ipc_common_ConfigReply = 1,
+  TestReply = 2,
   MIN = NONE,
   MAX = TestReply
 };
 
-inline const Replies (&EnumValuesReplies())[2] {
+inline const Replies (&EnumValuesReplies())[3] {
   static const Replies values[] = {
     Replies::NONE,
+    Replies::nfcdoorz_ipc_common_ConfigReply,
     Replies::TestReply
   };
   return values;
@@ -139,6 +158,7 @@ inline const Replies (&EnumValuesReplies())[2] {
 inline const char * const *EnumNamesReplies() {
   static const char * const names[] = {
     "NONE",
+    "nfcdoorz_ipc_common_ConfigReply",
     "TestReply",
     nullptr
   };
@@ -152,6 +172,10 @@ inline const char *EnumNameReplies(Replies e) {
 
 template<typename T> struct RepliesTraits {
   static const Replies enum_value = Replies::NONE;
+};
+
+template<> struct RepliesTraits<nfcdoorz::ipc::common::ConfigReply> {
+  static const Replies enum_value = Replies::nfcdoorz_ipc_common_ConfigReply;
 };
 
 template<> struct RepliesTraits<TestReply> {
@@ -189,6 +213,14 @@ struct RepliesUnion {
   static void *UnPack(const void *obj, Replies type, const flatbuffers::resolver_function_t *resolver);
   flatbuffers::Offset<void> Pack(flatbuffers::FlatBufferBuilder &_fbb, const flatbuffers::rehasher_function_t *_rehasher = nullptr) const;
 
+  nfcdoorz::ipc::common::ConfigReplyT *Asnfcdoorz_ipc_common_ConfigReply() {
+    return type == Replies::nfcdoorz_ipc_common_ConfigReply ?
+      reinterpret_cast<nfcdoorz::ipc::common::ConfigReplyT *>(value) : nullptr;
+  }
+  const nfcdoorz::ipc::common::ConfigReplyT *Asnfcdoorz_ipc_common_ConfigReply() const {
+    return type == Replies::nfcdoorz_ipc_common_ConfigReply ?
+      reinterpret_cast<const nfcdoorz::ipc::common::ConfigReplyT *>(value) : nullptr;
+  }
   TestReplyT *AsTestReply() {
     return type == Replies::TestReply ?
       reinterpret_cast<TestReplyT *>(value) : nullptr;
@@ -501,6 +533,9 @@ struct Call FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
     return GetPointer<const void *>(VT_MSG);
   }
   template<typename T> const T *msg_as() const;
+  const nfcdoorz::ipc::common::ConfigCall *msg_as_nfcdoorz_ipc_common_ConfigCall() const {
+    return msg_type() == Calls::nfcdoorz_ipc_common_ConfigCall ? static_cast<const nfcdoorz::ipc::common::ConfigCall *>(msg()) : nullptr;
+  }
   const TestCall *msg_as_TestCall() const {
     return msg_type() == Calls::TestCall ? static_cast<const TestCall *>(msg()) : nullptr;
   }
@@ -516,6 +551,10 @@ struct Call FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   void UnPackTo(CallT *_o, const flatbuffers::resolver_function_t *_resolver = nullptr) const;
   static flatbuffers::Offset<Call> Pack(flatbuffers::FlatBufferBuilder &_fbb, const CallT* _o, const flatbuffers::rehasher_function_t *_rehasher = nullptr);
 };
+
+template<> inline const nfcdoorz::ipc::common::ConfigCall *Call::msg_as<nfcdoorz::ipc::common::ConfigCall>() const {
+  return msg_as_nfcdoorz_ipc_common_ConfigCall();
+}
 
 template<> inline const TestCall *Call::msg_as<TestCall>() const {
   return msg_as_TestCall();
@@ -597,6 +636,9 @@ struct Reply FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
     return GetPointer<const void *>(VT_MSG);
   }
   template<typename T> const T *msg_as() const;
+  const nfcdoorz::ipc::common::ConfigReply *msg_as_nfcdoorz_ipc_common_ConfigReply() const {
+    return msg_type() == Replies::nfcdoorz_ipc_common_ConfigReply ? static_cast<const nfcdoorz::ipc::common::ConfigReply *>(msg()) : nullptr;
+  }
   const TestReply *msg_as_TestReply() const {
     return msg_type() == Replies::TestReply ? static_cast<const TestReply *>(msg()) : nullptr;
   }
@@ -625,6 +667,10 @@ struct Reply FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   void UnPackTo(ReplyT *_o, const flatbuffers::resolver_function_t *_resolver = nullptr) const;
   static flatbuffers::Offset<Reply> Pack(flatbuffers::FlatBufferBuilder &_fbb, const ReplyT* _o, const flatbuffers::rehasher_function_t *_rehasher = nullptr);
 };
+
+template<> inline const nfcdoorz::ipc::common::ConfigReply *Reply::msg_as<nfcdoorz::ipc::common::ConfigReply>() const {
+  return msg_as_nfcdoorz_ipc_common_ConfigReply();
+}
 
 template<> inline const TestReply *Reply::msg_as<TestReply>() const {
   return msg_as_TestReply();
@@ -936,6 +982,10 @@ inline bool VerifyCalls(flatbuffers::Verifier &verifier, const void *obj, Calls 
     case Calls::NONE: {
       return true;
     }
+    case Calls::nfcdoorz_ipc_common_ConfigCall: {
+      auto ptr = reinterpret_cast<const nfcdoorz::ipc::common::ConfigCall *>(obj);
+      return verifier.VerifyTable(ptr);
+    }
     case Calls::TestCall: {
       auto ptr = reinterpret_cast<const TestCall *>(obj);
       return verifier.VerifyTable(ptr);
@@ -958,6 +1008,10 @@ inline bool VerifyCallsVector(flatbuffers::Verifier &verifier, const flatbuffers
 
 inline void *CallsUnion::UnPack(const void *obj, Calls type, const flatbuffers::resolver_function_t *resolver) {
   switch (type) {
+    case Calls::nfcdoorz_ipc_common_ConfigCall: {
+      auto ptr = reinterpret_cast<const nfcdoorz::ipc::common::ConfigCall *>(obj);
+      return ptr->UnPack(resolver);
+    }
     case Calls::TestCall: {
       auto ptr = reinterpret_cast<const TestCall *>(obj);
       return ptr->UnPack(resolver);
@@ -968,6 +1022,10 @@ inline void *CallsUnion::UnPack(const void *obj, Calls type, const flatbuffers::
 
 inline flatbuffers::Offset<void> CallsUnion::Pack(flatbuffers::FlatBufferBuilder &_fbb, const flatbuffers::rehasher_function_t *_rehasher) const {
   switch (type) {
+    case Calls::nfcdoorz_ipc_common_ConfigCall: {
+      auto ptr = reinterpret_cast<const nfcdoorz::ipc::common::ConfigCallT *>(value);
+      return CreateConfigCall(_fbb, ptr, _rehasher).Union();
+    }
     case Calls::TestCall: {
       auto ptr = reinterpret_cast<const TestCallT *>(value);
       return CreateTestCall(_fbb, ptr, _rehasher).Union();
@@ -978,6 +1036,10 @@ inline flatbuffers::Offset<void> CallsUnion::Pack(flatbuffers::FlatBufferBuilder
 
 inline CallsUnion::CallsUnion(const CallsUnion &u) FLATBUFFERS_NOEXCEPT : type(u.type), value(nullptr) {
   switch (type) {
+    case Calls::nfcdoorz_ipc_common_ConfigCall: {
+      value = new nfcdoorz::ipc::common::ConfigCallT(*reinterpret_cast<nfcdoorz::ipc::common::ConfigCallT *>(u.value));
+      break;
+    }
     case Calls::TestCall: {
       value = new TestCallT(*reinterpret_cast<TestCallT *>(u.value));
       break;
@@ -989,6 +1051,11 @@ inline CallsUnion::CallsUnion(const CallsUnion &u) FLATBUFFERS_NOEXCEPT : type(u
 
 inline void CallsUnion::Reset() {
   switch (type) {
+    case Calls::nfcdoorz_ipc_common_ConfigCall: {
+      auto ptr = reinterpret_cast<nfcdoorz::ipc::common::ConfigCallT *>(value);
+      delete ptr;
+      break;
+    }
     case Calls::TestCall: {
       auto ptr = reinterpret_cast<TestCallT *>(value);
       delete ptr;
@@ -1004,6 +1071,10 @@ inline bool VerifyReplies(flatbuffers::Verifier &verifier, const void *obj, Repl
   switch (type) {
     case Replies::NONE: {
       return true;
+    }
+    case Replies::nfcdoorz_ipc_common_ConfigReply: {
+      auto ptr = reinterpret_cast<const nfcdoorz::ipc::common::ConfigReply *>(obj);
+      return verifier.VerifyTable(ptr);
     }
     case Replies::TestReply: {
       auto ptr = reinterpret_cast<const TestReply *>(obj);
@@ -1027,6 +1098,10 @@ inline bool VerifyRepliesVector(flatbuffers::Verifier &verifier, const flatbuffe
 
 inline void *RepliesUnion::UnPack(const void *obj, Replies type, const flatbuffers::resolver_function_t *resolver) {
   switch (type) {
+    case Replies::nfcdoorz_ipc_common_ConfigReply: {
+      auto ptr = reinterpret_cast<const nfcdoorz::ipc::common::ConfigReply *>(obj);
+      return ptr->UnPack(resolver);
+    }
     case Replies::TestReply: {
       auto ptr = reinterpret_cast<const TestReply *>(obj);
       return ptr->UnPack(resolver);
@@ -1037,6 +1112,10 @@ inline void *RepliesUnion::UnPack(const void *obj, Replies type, const flatbuffe
 
 inline flatbuffers::Offset<void> RepliesUnion::Pack(flatbuffers::FlatBufferBuilder &_fbb, const flatbuffers::rehasher_function_t *_rehasher) const {
   switch (type) {
+    case Replies::nfcdoorz_ipc_common_ConfigReply: {
+      auto ptr = reinterpret_cast<const nfcdoorz::ipc::common::ConfigReplyT *>(value);
+      return CreateConfigReply(_fbb, ptr, _rehasher).Union();
+    }
     case Replies::TestReply: {
       auto ptr = reinterpret_cast<const TestReplyT *>(value);
       return CreateTestReply(_fbb, ptr, _rehasher).Union();
@@ -1047,6 +1126,10 @@ inline flatbuffers::Offset<void> RepliesUnion::Pack(flatbuffers::FlatBufferBuild
 
 inline RepliesUnion::RepliesUnion(const RepliesUnion &u) FLATBUFFERS_NOEXCEPT : type(u.type), value(nullptr) {
   switch (type) {
+    case Replies::nfcdoorz_ipc_common_ConfigReply: {
+      value = new nfcdoorz::ipc::common::ConfigReplyT(*reinterpret_cast<nfcdoorz::ipc::common::ConfigReplyT *>(u.value));
+      break;
+    }
     case Replies::TestReply: {
       value = new TestReplyT(*reinterpret_cast<TestReplyT *>(u.value));
       break;
@@ -1058,6 +1141,11 @@ inline RepliesUnion::RepliesUnion(const RepliesUnion &u) FLATBUFFERS_NOEXCEPT : 
 
 inline void RepliesUnion::Reset() {
   switch (type) {
+    case Replies::nfcdoorz_ipc_common_ConfigReply: {
+      auto ptr = reinterpret_cast<nfcdoorz::ipc::common::ConfigReplyT *>(value);
+      delete ptr;
+      break;
+    }
     case Replies::TestReply: {
       auto ptr = reinterpret_cast<TestReplyT *>(value);
       delete ptr;
@@ -1141,17 +1229,20 @@ inline void EventsUnion::Reset() {
 inline const flatbuffers::TypeTable *CallsTypeTable() {
   static const flatbuffers::TypeCode type_codes[] = {
     { flatbuffers::ET_SEQUENCE, 0, -1 },
-    { flatbuffers::ET_SEQUENCE, 0, 0 }
+    { flatbuffers::ET_SEQUENCE, 0, 0 },
+    { flatbuffers::ET_SEQUENCE, 0, 1 }
   };
   static const flatbuffers::TypeFunction type_refs[] = {
+    nfcdoorz::ipc::common::ConfigCallTypeTable,
     TestCallTypeTable
   };
   static const char * const names[] = {
     "NONE",
+    "nfcdoorz_ipc_common_ConfigCall",
     "TestCall"
   };
   static const flatbuffers::TypeTable tt = {
-    flatbuffers::ST_UNION, 2, type_codes, type_refs, nullptr, names
+    flatbuffers::ST_UNION, 3, type_codes, type_refs, nullptr, names
   };
   return &tt;
 }
@@ -1159,17 +1250,20 @@ inline const flatbuffers::TypeTable *CallsTypeTable() {
 inline const flatbuffers::TypeTable *RepliesTypeTable() {
   static const flatbuffers::TypeCode type_codes[] = {
     { flatbuffers::ET_SEQUENCE, 0, -1 },
-    { flatbuffers::ET_SEQUENCE, 0, 0 }
+    { flatbuffers::ET_SEQUENCE, 0, 0 },
+    { flatbuffers::ET_SEQUENCE, 0, 1 }
   };
   static const flatbuffers::TypeFunction type_refs[] = {
+    nfcdoorz::ipc::common::ConfigReplyTypeTable,
     TestReplyTypeTable
   };
   static const char * const names[] = {
     "NONE",
+    "nfcdoorz_ipc_common_ConfigReply",
     "TestReply"
   };
   static const flatbuffers::TypeTable tt = {
-    flatbuffers::ST_UNION, 2, type_codes, type_refs, nullptr, names
+    flatbuffers::ST_UNION, 3, type_codes, type_refs, nullptr, names
   };
   return &tt;
 }
