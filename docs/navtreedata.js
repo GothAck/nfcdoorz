@@ -20,7 +20,7 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 ".htm",
-"structnfcdoorz_1_1config_1_1_app_settings.htm"
+"structnfcdoorz_1_1config_1_1_app.htm#ae31d9ab639bf707876e8f3ad81ba23f4"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

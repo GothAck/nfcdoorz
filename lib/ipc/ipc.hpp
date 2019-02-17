@@ -53,8 +53,8 @@ public:
      */
     void open(int fd);
     /*! \brief Start event loop.
-    *  This does not return, see UVW/libuv docs.
-    */
+     *  This does not return, see UVW/libuv docs.
+     */
     void run();
 
     /*! \brief Base for executables run in event loop idle.
@@ -64,7 +64,7 @@ public:
      *  until run() returns true.
      */
     struct Executable {
-        friend class IpcBase;
+      friend class IpcBase;
       /*! \brief Set callback timeout.
        *  Override default timeout of this Executable.
        */
@@ -76,7 +76,7 @@ public:
 private:
       virtual bool runWithTimeout() final;
       std::chrono::time_point<std::chrono::system_clock> start =
-      std::chrono::system_clock::now();
+        std::chrono::system_clock::now();
       uint32_t timeout = 500;
     };
 

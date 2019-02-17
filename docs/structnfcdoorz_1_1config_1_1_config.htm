@@ -109,15 +109,21 @@ Collaboration diagram for nfcdoorz::config::Config:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:af9b63c5410edf8d51d617338e38c904f"><td class="memItemLeft" align="right" valign="top"><a id="af9b63c5410edf8d51d617338e38c904f"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>decode</b> (const YAML::Node &amp;node)</td></tr>
-<tr class="separator:af9b63c5410edf8d51d617338e38c904f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab61f0c96ed5d68416fc25d0ded3bec1b"><td class="memItemLeft" align="right" valign="top"><a id="ab61f0c96ed5d68416fc25d0ded3bec1b"></a>
+virtual YAML::Node&#160;</td><td class="memItemRight" valign="bottom"><b>encode</b> () override</td></tr>
+<tr class="separator:ab61f0c96ed5d68416fc25d0ded3bec1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a99161e84be0c5e5256647053b58efb86"><td class="memItemLeft" align="right" valign="top"><a id="a99161e84be0c5e5256647053b58efb86"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>decode</b> (const YAML::Node &amp;node) override</td></tr>
+<tr class="separator:a99161e84be0c5e5256647053b58efb86"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ed2c406936ccc2a9542b82d52fe4cf3"><td class="memItemLeft" align="right" valign="top"><a id="a9ed2c406936ccc2a9542b82d52fe4cf3"></a>
+std::string&#160;</td><td class="memItemRight" valign="bottom"><b>stringify</b> ()</td></tr>
+<tr class="separator:a9ed2c406936ccc2a9542b82d52fe4cf3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:ad885e08e36efd917095d1c15d13d01d1"><td class="memItemLeft" align="right" valign="top"><a id="ad885e08e36efd917095d1c15d13d01d1"></a>
+<tr class="memitem:a821037ea575b021b1996d56f878af705"><td class="memItemLeft" align="right" valign="top"><a id="a821037ea575b021b1996d56f878af705"></a>
 static <a class="el" href="structnfcdoorz_1_1config_1_1_config.htm">Config</a>&#160;</td><td class="memItemRight" valign="bottom"><b>load</b> (std::map&lt; std::string, docopt::value &gt; args)</td></tr>
-<tr class="separator:ad885e08e36efd917095d1c15d13d01d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a821037ea575b021b1996d56f878af705"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab4382e9d12de0b6b5255d43050e6e6fa"><td class="memItemLeft" align="right" valign="top"><a id="ab4382e9d12de0b6b5255d43050e6e6fa"></a>
 static <a class="el" href="structnfcdoorz_1_1config_1_1_config.htm">Config</a>&#160;</td><td class="memItemRight" valign="bottom"><b>load</b> (std::string filename)</td></tr>
 <tr class="separator:ab4382e9d12de0b6b5255d43050e6e6fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -142,7 +148,7 @@ static constexpr const char *&#160;</td><td class="memItemRight" valign="bottom"
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p class="definition">Definition at line <a class="el" href="config_8hpp_source.htm#l00375">375</a> of file <a class="el" href="config_8hpp_source.htm">config.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="config_8hpp_source.htm#l00292">292</a> of file <a class="el" href="config_8hpp_source.htm">config.hpp</a>.</p>
 </div><hr/>The documentation for this struct was generated from the following files:<ul>
 <li>lib/<a class="el" href="config_8hpp_source.htm">config.hpp</a></li>
 <li>lib/<a class="el" href="config_8cpp_source.htm">config.cpp</a></li>

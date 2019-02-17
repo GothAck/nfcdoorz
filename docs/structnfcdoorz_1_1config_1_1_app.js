@@ -1,6 +1,7 @@
 var structnfcdoorz_1_1config_1_1_app =
 [
-    [ "decode", "structnfcdoorz_1_1config_1_1_app.htm#a9dedfcfcae6d5e3f97b1958912a57355", null ],
+    [ "decode", "structnfcdoorz_1_1config_1_1_app.htm#ab08c575998a321916b8f665d0f2edcad", null ],
+    [ "encode", "structnfcdoorz_1_1config_1_1_app.htm#ade50f82046b09beb518bf71526e63923", null ],
     [ "operator MifareDESFireAID", "structnfcdoorz_1_1config_1_1_app.htm#aab60e75dc9fb96b0ee23ba8f6d3f8b0d", null ],
     [ "aid", "structnfcdoorz_1_1config_1_1_app.htm#af91ac81e53ea36a5e3f5b172477d3265", null ],
     [ "files", "structnfcdoorz_1_1config_1_1_app.htm#a4563280ae91b75f0dac593ecf457d2e4", null ],

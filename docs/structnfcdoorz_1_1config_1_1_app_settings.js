@@ -1,6 +1,7 @@
 var structnfcdoorz_1_1config_1_1_app_settings =
 [
-    [ "decode", "structnfcdoorz_1_1config_1_1_app_settings.htm#a21d18a77d125d8843b8a40350941fe91", null ],
+    [ "decode", "structnfcdoorz_1_1config_1_1_app_settings.htm#a541105d91381c2185558dd994a8ab17d", null ],
+    [ "encode", "structnfcdoorz_1_1config_1_1_app_settings.htm#a533afa612a7636ed611cc95e27bd6b20", null ],
     [ "get_lib_value", "structnfcdoorz_1_1config_1_1_app_settings.htm#af73de91540c0211ea6dc989d6f726abd", null ],
     [ "accesskey", "structnfcdoorz_1_1config_1_1_app_settings.htm#a204f2e6c772188827af786d81ac83e51", null ],
     [ "allow_master_key_chg", "structnfcdoorz_1_1config_1_1_app_settings.htm#a47eca41252fab7e92d4215fee1d794bb", null ],

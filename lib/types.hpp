@@ -39,7 +39,8 @@ public:
 template<typename TVariant, size_t I = std::variant_size_v<TVariant>-1>
 struct GetVariant {
   static constexpr TVariant convertNode(
-    const YAML::Node &node, decltype(std::variant_alternative_t<I, TVariant>::type) type
+    const YAML::Node &node,
+    decltype(std::variant_alternative_t<I, TVariant>::type) type
     ) {
     if (type == std::variant_alternative_t<I, TVariant>::type) {
       return node.as<std::variant_alternative_t<I, TVariant>>();

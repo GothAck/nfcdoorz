@@ -58,6 +58,7 @@ public:
 
   struct Node {
     virtual void decode(const YAML::Node&) = 0;
+    virtual YAML::Node encode() = 0;
   };
 
   struct Key : Node {
@@ -67,10 +68,10 @@ public:
 
     virtual uint8_t *begin() = 0;
     virtual uint8_t *end() = 0;
-    void decode(const YAML::Node &node) {
-      if (node["id"]) CONVERT_NODE(id, int);
-      if (node["name"]) CONVERT_NODE(name);
-    }
+    virtual YAML::Node encode() override;
+    virtual YAML::Node encodeType(const std::string_view &type);
+    virtual void decode(const YAML::Node &node) override;
+
   };
 
   struct KeyDES : Key, nfc::KeyDES {
@@ -80,20 +81,8 @@ public:
     uint8_t *end() override {
       return data.end();
     };
-    void decode(const YAML::Node &node) {
-      CONVERT_NODE(diversify);
-      nfcdoorz::config::decodePath.push_back(type.data());
-      Key::decode(node);
-      nfcdoorz::config::decodePath.push_back("data");
-      auto _data = node["data"].as<std::vector<int>>();
-      if (_data.size() != data.size())
-        throw ValidationException("data array length incorrect", std::to_string(data.size()));
-      std::transform(_data.begin(), _data.end(), data.begin(), [](int c) -> uint8_t {
-        return c;
-      });
-      nfcdoorz::config::decodePath.pop_back();
-      nfcdoorz::config::decodePath.pop_back();
-    }
+    virtual YAML::Node encode() override;
+    virtual void decode(const YAML::Node &node) override;
   };
 
   struct Key3DES : Key, nfc::Key3DES {
@@ -103,20 +92,8 @@ public:
     uint8_t *end() override {
       return data.end();
     };
-    void decode(const YAML::Node &node) {
-      CONVERT_NODE(diversify);
-      nfcdoorz::config::decodePath.push_back(type.data());
-      Key::decode(node);
-      nfcdoorz::config::decodePath.push_back("data");
-      auto _data = node["data"].as<std::vector<int>>();
-      if (_data.size() != data.size())
-        throw ValidationException("data array length incorrect", std::to_string(data.size()));
-      std::transform(_data.begin(), _data.end(), data.begin(), [](int c) -> uint8_t {
-        return c;
-      });
-      nfcdoorz::config::decodePath.pop_back();
-      nfcdoorz::config::decodePath.pop_back();
-    }
+    virtual YAML::Node encode() override;
+    virtual void decode(const YAML::Node &node) override;
   };
 
   struct Key3k3DES : Key, nfc::Key3k3DES {
@@ -126,20 +103,8 @@ public:
     uint8_t *end() override {
       return data.end();
     };
-    void decode(const YAML::Node &node) {
-      CONVERT_NODE(diversify);
-      nfcdoorz::config::decodePath.push_back(type.data());
-      Key::decode(node);
-      nfcdoorz::config::decodePath.push_back("data");
-      auto _data = node["data"].as<std::vector<int>>();
-      if (_data.size() != data.size())
-        throw ValidationException("data array length incorrect", std::to_string(data.size()));
-      std::transform(_data.begin(), _data.end(), data.begin(), [](int c) -> uint8_t {
-        return c;
-      });
-      nfcdoorz::config::decodePath.pop_back();
-      nfcdoorz::config::decodePath.pop_back();
-    }
+    virtual YAML::Node encode() override;
+    virtual void decode(const YAML::Node &node) override;
   };
 
   struct KeyAES : Key, nfc::KeyAES {
@@ -149,20 +114,8 @@ public:
     uint8_t *end() override {
       return data.end();
     };
-    void decode(const YAML::Node &node) {
-      CONVERT_NODE(diversify);
-      nfcdoorz::config::decodePath.push_back(type.data());
-      Key::decode(node);
-      nfcdoorz::config::decodePath.push_back("data");
-      auto _data = node["data"].as<std::vector<int>>();
-      if (_data.size() != data.size())
-        throw ValidationException("data array length incorrect", std::to_string(data.size()));
-      std::transform(_data.begin(), _data.end(), data.begin(), [](int c) -> uint8_t {
-        return c;
-      });
-      nfcdoorz::config::decodePath.pop_back();
-      nfcdoorz::config::decodePath.pop_back();
-    }
+    virtual YAML::Node encode() override;
+    virtual void decode(const YAML::Node &node) override;
   };
 
   typedef std::variant<KeyDES, Key3DES, Key3k3DES, KeyAES> KeyType_t;
@@ -173,22 +126,16 @@ public:
 
   struct PICC : Node {
     constexpr static const char *node_name = "picc";
-    void decode(const YAML::Node &node) {
-      key = GetVariant<decltype(key)>::convertNodeByTypeString(node["key"]);
-    }
+    virtual YAML::Node encode() override;
+    virtual void decode(const YAML::Node &node) override;
     KeyType_t key;
   };
   OSTREAM(PICC);
 
   struct AppSettings : Node {
     constexpr static const char *node_name = "settings";
-    void decode(const YAML::Node &node) {
-      CONVERT_NODE(accesskey);
-      CONVERT_NODE(frozen);
-      CONVERT_NODE(req_auth_fileops);
-      CONVERT_NODE(req_auth_dir);
-      CONVERT_NODE(allow_master_key_chg);
-    }
+    virtual YAML::Node encode() override;
+    virtual void decode(const YAML::Node &node) override;
     uint8_t get_lib_value() {
       uint8_t ret = 0;
       ret |= accesskey << 4;
@@ -208,12 +155,8 @@ public:
 
   struct AccessRights : Node {
     constexpr static const char *node_name = "access_rights";
-    void decode(const YAML::Node &node) {
-      CONVERT_NODE(read, int);
-      CONVERT_NODE(write, int);
-      CONVERT_NODE(read_write, int);
-      CONVERT_NODE(change_access_rights, int);
-    }
+    virtual YAML::Node encode() override;
+    virtual void decode(const YAML::Node &node) override;
     uint8_t read;
     uint8_t write;
     uint8_t read_write;
@@ -253,24 +196,29 @@ public:
         return FileCommSettings::ENCIPHERED;
       return FileCommSettings::PLAIN;
     };
+    static std::string typeFileCommSettingsToStr(const FileCommSettings &type) {
+      switch (type) {
+      case FileCommSettings::PLAIN:
+        return "plain";
+      case FileCommSettings::MACED:
+        return "maced";
+      case FileCommSettings::ENCIPHERED:
+        return "enciphered";
+      }
+      return "unknown";
+    };
 
-    void decode(const YAML::Node &node) {
-      CONVERT_NODE(id, int);
-      CONVERT_NODE(name);
-
-      communication_settings = typeStrToFileCommSettings(node["communication_settings"].as<std::string>());
-      if (node["access_rights"]) CONVERT_NODE(access_rights);
-    }
+    virtual YAML::Node encode() override;
+    virtual YAML::Node encodeType(std::string_view type);
+    virtual void decode(const YAML::Node &node) override;
   };
 
   struct FileStdData : File {
     constexpr static const std::string_view type = "std_data";
     uint8_t size = 0;
 
-    void decode(const YAML::Node &node) {
-      File::decode(node);
-      CONVERT_NODE(size, int);
-    }
+    virtual YAML::Node encode() override;
+    virtual void decode(const YAML::Node &node) override;
 
     bool create(nfc::DESFireTagInterface &card);
   };
@@ -282,13 +230,8 @@ public:
     uint32_t value;
     uint8_t limited_credit_enable;
 
-    void decode(const YAML::Node &node) {
-      File::decode(node);
-      CONVERT_NODE(lower_limit);
-      CONVERT_NODE(upper_limit);
-      CONVERT_NODE(value);
-      CONVERT_NODE(limited_credit_enable, uint16_t);
-    }
+    virtual YAML::Node encode() override;
+    virtual void decode(const YAML::Node &node) override;
 
     bool create(nfc::DESFireTagInterface &card);
   };
@@ -298,11 +241,8 @@ public:
     uint32_t record_size;
     uint32_t max_number_of_records;
 
-    void decode(const YAML::Node &node) {
-      File::decode(node);
-      CONVERT_NODE(record_size, int);
-      CONVERT_NODE(max_number_of_records, int);
-    }
+    virtual YAML::Node encode() override;
+    virtual void decode(const YAML::Node &node) override;
 
     bool create(nfc::DESFireTagInterface &card);
   };
@@ -312,11 +252,8 @@ public:
     uint32_t record_size;
     uint32_t max_number_of_records;
 
-    void decode(const YAML::Node &node) {
-      File::decode(node);
-      CONVERT_NODE(record_size, int);
-      CONVERT_NODE(max_number_of_records, int);
-    }
+    virtual YAML::Node encode() override;
+    virtual void decode(const YAML::Node &node) override;
     bool create(nfc::DESFireTagInterface &card);
   };
 
@@ -324,10 +261,8 @@ public:
     constexpr static const std::string_view type = "backup_data";
     uint32_t size;
 
-    void decode(const YAML::Node &node) {
-      File::decode(node);
-      CONVERT_NODE(size, int);
-    }
+    virtual YAML::Node encode() override;
+    virtual void decode(const YAML::Node &node) override;
     bool create(nfc::DESFireTagInterface &card);
   };
 
@@ -343,26 +278,8 @@ public:
 
   struct App : Node {
     constexpr static const char *node_name = "app";
-    void decode(const YAML::Node &node) {
-      decodePath.push_back("aid");
-      auto int_aid = node["aid"].as<std::array<int, 3>>();
-      std::transform(int_aid.begin(), int_aid.end(), aid.begin(), [](int c) -> uint8_t {
-        return c;
-      });
-      decodePath.pop_back();
-      CONVERT_NODE(name);
-      CONVERT_NODE(settings);
-      CONVERT_ITER_VARIANT(keys, "keys")
-      if (keys.size()) {
-        auto key0 = keys[0].index();
-        if (!all_of(keys.begin(), keys.end(), [key0](KeyType_t &key) {
-          return key.index() == key0;
-        })) {
-          throw ValidationException("All keys in an application must have same type");
-        }
-      }
-      CONVERT_ITER_VARIANT(files, "files");
-    }
+    virtual YAML::Node encode() override;
+    virtual void decode(const YAML::Node &node) override;
     operator MifareDESFireAID();
     AppID_t aid = { 0, 0, 0 };
     std::string name;
@@ -373,10 +290,8 @@ public:
   OSTREAM(App);
 
   struct Config : Node {
-    void decode(const YAML::Node &node) {
-      CONVERT_NODE(picc);
-      CONVERT_ITER_NFC(apps, "apps", vector, App);
-    }
+    virtual YAML::Node encode() override;
+    virtual void decode(const YAML::Node &node) override;
     constexpr static const char *node_name = "config";
     PICC picc;
     std::vector<App> apps;
@@ -384,6 +299,7 @@ public:
     static Config load(std::map<std::string, docopt::value> args);
     static Config load(std::string filename);
     static Config parse(std::string content);
+    std::string stringify();
   };
   OSTREAM(Config);
 }
@@ -396,6 +312,12 @@ namespace YAML {
       rhs.decode(node); \
       nfcdoorz::config::decodePath.pop_back(); \
       return true; \
+    } \
+    static YAML::Node encode(nfcdoorz::config::CLASS rhs) { \
+      nfcdoorz::config::decodePath.push_back(nfcdoorz::config::CLASS::node_name); \
+      auto node = rhs.encode(); \
+      nfcdoorz::config::decodePath.pop_back(); \
+      return node; \
     } \
   }
   Y_CONVERT(AccessRights);
