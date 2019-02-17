@@ -173,7 +173,6 @@ int main(int argc, const char *argv[]) {
   ->registerHandler(
     ipc::api::Calls::CreateAuthenticatorCall,
     [&args](auto self, const ipc::api::CallT &msg, auto reply, uvw::PipeHandle &pipe) -> auto {
-    using PromT = promise<unique_ptr<ipc::api::ReplyT>>;
 
     LOG_DEBUG << "handle CreateAuthenticatorCall";
     auto call = msg.msg.AsCreateAuthenticatorCall();
@@ -182,7 +181,7 @@ int main(int argc, const char *argv[]) {
       throw exception();
     }
 
-    PromT prom;
+    auto prom = make_shared<promise<decltype(reply)>>();
     reply->msg.Set(ipc::api::CreateAuthenticatorReplyT());
     auto s = reply->msg.AsCreateAuthenticatorReply();
 
@@ -204,14 +203,16 @@ int main(int argc, const char *argv[]) {
 
       self->sendEvent(eventUnion, pipe);
     });
-    proc->run();
 
-    // if (pending) {
     s->status = true;
-    // }
-    prom.set_value(move(reply));
 
-    return prom.get_future();
+    auto future = prom->get_future();
+
+    proc->run([prom, reply](proc::Proc &) {
+        prom->set_value(reply);
+    });
+
+    return future;
   }
     );
 

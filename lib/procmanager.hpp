@@ -94,7 +94,7 @@ public:
     ~Proc();
     void setPreExec(std::function<bool()> cb);
     void kill(int signum);
-    bool run();
+    bool run(std::optional<std::function<void(Proc &)>> callback = std::nullopt);
     bool isRunning();
     void remove();
     const std::string &getName() const;

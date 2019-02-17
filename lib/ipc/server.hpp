@@ -49,7 +49,7 @@ public:
       using APIRepliesEnum = std::remove_pointer_t<decltype(std::declval<APIReply>().msg_type())>;
       using APIEventsEnum = std::remove_pointer_t<decltype(std::declval<APIReply>().event_type())>;
       using APIReplyT = typename APIReply::NativeTableType;
-      using APIReplyTPtr = std::unique_ptr<APIReplyT>;
+      using APIReplyTPtr = std::shared_ptr<APIReplyT>;
       using APIEventsUnion = decltype(APIReplyT::event);
 
       using MessageHandlerFuture_t = std::function<
@@ -67,14 +67,14 @@ public:
       shared_ptr_self registerHandler(APICallsEnum type, MessageHandler_t handler) {
         handlers[type] = [handler](shared_ptr_self self, APICallT t, APIReplyTPtr r, uvw::PipeHandle &p) {
                            std::promise<APIReplyTPtr> prom;
-                           prom.set_value(std::move(handler(self, t, std::move(r), p)));
+                           prom.set_value(handler(self, t, r, p));
                            return prom.get_future();
                          };
         return getptr();
       }
 
       void sendEvent(APIEventsUnion &event, uvw::PipeHandle &pipe) {
-        APIReplyTPtr reply = std::make_unique<APIReplyT>();
+        APIReplyTPtr reply = std::make_shared<APIReplyT>();
         reply->event = event;
 
         flatbuffers::FlatBufferBuilder builder(1024);
@@ -143,7 +143,7 @@ protected:
         auto msg_type = call.msg.type;
 
         if (handlers.count(msg_type)) {
-          auto reply = std::make_unique<APIReplyT>();
+          auto reply = std::make_shared<APIReplyT>();
           auto future = std::make_shared<std::future<APIReplyTPtr>>(
             handlers[msg_type] (
               getptr(),

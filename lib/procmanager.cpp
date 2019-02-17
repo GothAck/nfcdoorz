@@ -113,7 +113,7 @@ namespace nfcdoorz::manager::proc {
     _preExec = cb;
   }
 
-  bool Proc::run() {
+  bool Proc::run(optional<function<void(Proc &)>> callback) {
     if (_handle) {
       return false;
     }
@@ -161,8 +161,7 @@ namespace nfcdoorz::manager::proc {
       exited();
     });
 
-    _procManager.idle->once<uvw::IdleEvent>([this, handle, args](uvw::IdleEvent &, uvw::IdleHandle &) {
-      LOG_INFO << "Idle run";
+    _procManager.idle->once<uvw::IdleEvent>([this, handle, args, callback](uvw::IdleEvent &, uvw::IdleHandle &) {
       const char **args_char = new const char *[args.size() + 2];
       args_char[0] = _exec.c_str();
       args_char[args.size() + 1] = nullptr;
@@ -170,12 +169,14 @@ namespace nfcdoorz::manager::proc {
         args_char[i + 1] = args.at(i).c_str();
       }
       handle->spawn(_exec.c_str(), (char **) args_char);
-      LOG_INFO << "PID: !!! " << handle->pid();
       if (_procManager.registerPid) {
         auto fn = *_procManager.registerPid;
         fn(*this);
       }
       _running = true;
+      if (callback) {
+          (*callback)(*this);
+      }
     });
     return true;
   }
