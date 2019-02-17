@@ -1,0 +1,10 @@
+<map id="nfcdoorz::ipc::IpcBase" name="nfcdoorz::ipc::IpcBase">
+<area shape="rect" id="node2" href="$classnfcdoorz_1_1ipc_1_1_ipc_client.htm" title="nfcdoorz::ipc::IpcClient\l\&lt; ipc::api::Server \&gt;" alt="" coords="447,5,605,47"/>
+<area shape="rect" id="node4" href="$classnfcdoorz_1_1ipc_1_1_ipc_client.htm" title="nfcdoorz::ipc::IpcClient\l\&lt; ipc::policy::Server \&gt;" alt="" coords="447,76,605,117"/>
+<area shape="rect" id="node6" href="$classnfcdoorz_1_1ipc_1_1_ipc_client.htm" title="nfcdoorz::ipc::IpcClient\l\&lt; APIServer \&gt;" alt="" coords="447,152,605,193"/>
+<area shape="rect" id="node7" href="$classnfcdoorz_1_1ipc_1_1_ipc_client_base.htm" title="nfcdoorz::ipc::IpcClientBase" alt="" coords="209,61,395,87"/>
+<area shape="rect" id="node8" href="$classnfcdoorz_1_1ipc_1_1_ipc_server_base.htm" title="nfcdoorz::ipc::IpcServerBase" alt="" coords="207,263,397,290"/>
+<area shape="rect" id="node9" href="$classnfcdoorz_1_1ipc_1_1_ipc_server_multi.htm" title="nfcdoorz::ipc::IpcServer\lMulti\&lt; APIServers \&gt;" alt="" coords="445,235,607,276"/>
+<area shape="rect" id="node3" href="$structnfcdoorz_1_1ipc_1_1_ipc_client_a_p_i.htm" title="nfcdoorz::ipc::IpcClientAPI" alt="" coords="655,13,833,39"/>
+<area shape="rect" id="node5" href="$structnfcdoorz_1_1ipc_1_1_ipc_client_policy.htm" title="nfcdoorz::ipc::IpcClient\lPolicy" alt="" coords="665,76,823,117"/>
+</map>

@@ -1,0 +1,26 @@
+var dir_97aefd0d527b934f1d99a682da8fe6a9 =
+[
+    [ "apps", "dir_3b9919df4a807d4b688612dce4e942a3.htm", "dir_3b9919df4a807d4b688612dce4e942a3" ],
+    [ "ipc", "dir_eea5a30af1860202cf994ad4b8d0af6a.htm", "dir_eea5a30af1860202cf994ad4b8d0af6a" ],
+    [ "manager", "dir_88fb04c33e500caecdaea3c5056d7e0c.htm", "dir_88fb04c33e500caecdaea3c5056d7e0c" ],
+    [ "adapter.cpp", "adapter_8cpp_source.htm", null ],
+    [ "adapter.hpp", "adapter_8hpp_source.htm", null ],
+    [ "config.cpp", "config_8cpp_source.htm", null ],
+    [ "config.hpp", "config_8hpp_source.htm", null ],
+    [ "indent.hpp", "indent_8hpp_source.htm", null ],
+    [ "keys.cpp", "keys_8cpp_source.htm", null ],
+    [ "keys.hpp", "keys_8hpp_source.htm", null ],
+    [ "logging.cpp", "logging_8cpp_source.htm", null ],
+    [ "logging.hpp", "logging_8hpp_source.htm", null ],
+    [ "nfc.cpp", "nfc_8cpp_source.htm", null ],
+    [ "nfc.hpp", "nfc_8hpp_source.htm", null ],
+    [ "procmanager.cpp", "procmanager_8cpp_source.htm", null ],
+    [ "procmanager.hpp", "procmanager_8hpp_source.htm", null ],
+    [ "seasocks-plog.hpp", "seasocks-plog_8hpp_source.htm", null ],
+    [ "signals.c", "signals_8c_source.htm", null ],
+    [ "signals.h", "signals_8h_source.htm", null ],
+    [ "tag.cpp", "tag_8cpp_source.htm", null ],
+    [ "tag.hpp", "tag_8hpp_source.htm", null ],
+    [ "types.cpp", "types_8cpp_source.htm", null ],
+    [ "types.hpp", "types_8hpp_source.htm", null ]
+];

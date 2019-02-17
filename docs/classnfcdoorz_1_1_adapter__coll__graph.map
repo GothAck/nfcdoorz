@@ -1,0 +1,8 @@
+<map id="nfcdoorz::Adapter" name="nfcdoorz::Adapter">
+<area shape="rect" id="node2" href="$structnfcdoorz_1_1config_1_1_config.htm" title="nfcdoorz::config::Config" alt="" coords="101,178,262,205"/>
+<area shape="rect" id="node3" href="$structnfcdoorz_1_1config_1_1_node.htm" title="nfcdoorz::config::Node" alt="" coords="5,5,160,32"/>
+<area shape="rect" id="node4" href="$structnfcdoorz_1_1config_1_1_p_i_c_c.htm" title="nfcdoorz::config::PICC" alt="" coords="105,81,261,108"/>
+<area shape="rect" id="node5" href="$classnfcdoorz_1_1nfc_1_1_d_e_s_fire_tag_interface.htm" title="nfcdoorz::nfc::DESFireTag\lInterface" alt="" coords="287,171,465,212"/>
+<area shape="rect" id="node6" href="$classnfcdoorz_1_1nfc_1_1_tag_interface.htm" title="nfcdoorz::nfc::TagInterface" alt="" coords="287,81,465,108"/>
+<area shape="rect" id="node7" href="$classnfcdoorz_1_1nfc_1_1_tag.htm" title="nfcdoorz::nfc::Tag" alt="" coords="489,178,617,205"/>
+</map>

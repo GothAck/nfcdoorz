@@ -1,0 +1,8 @@
+<map id="nfcdoorz::config::File" name="nfcdoorz::config::File">
+<area shape="rect" id="node3" href="$structnfcdoorz_1_1config_1_1_file_backup_data.htm" title="nfcdoorz::config::FileBackupData" alt="" coords="400,5,616,32"/>
+<area shape="rect" id="node4" href="$structnfcdoorz_1_1config_1_1_file_cyclic_record.htm" title="nfcdoorz::config::FileCyclic\lRecord" alt="" coords="417,57,599,98"/>
+<area shape="rect" id="node5" href="$structnfcdoorz_1_1config_1_1_file_linear_record.htm" title="nfcdoorz::config::FileLinear\lRecord" alt="" coords="419,122,597,163"/>
+<area shape="rect" id="node6" href="$structnfcdoorz_1_1config_1_1_file_std_data.htm" title="nfcdoorz::config::FileStdData" alt="" coords="412,188,604,215"/>
+<area shape="rect" id="node7" href="$structnfcdoorz_1_1config_1_1_file_value.htm" title="nfcdoorz::config::FileValue" alt="" coords="419,239,597,265"/>
+<area shape="rect" id="node2" href="$structnfcdoorz_1_1config_1_1_node.htm" title="nfcdoorz::config::Node" alt="" coords="5,129,160,156"/>
+</map>

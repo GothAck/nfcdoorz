@@ -1,6 +1,8 @@
 export ROOT_PATH = $(CURDIR)
 SOURCE_EXCLUDES = ./external ./test/stub '*/node_modules/*' ./microcontroller ./old
 SOURCES = $(shell find . \( $(patsubst %,-path % -o,$(SOURCE_EXCLUDES)) -false \) -prune -type f -o \( -name '*.cpp' -o -name '*.c' -o -name '*.c++' \) -printf '%P\n')
+HEADERS = $(shell find . \( $(patsubst %,-path % -o,$(SOURCE_EXCLUDES)) -false \) -prune -type f -o \( -name '*.hpp' -o -name '*.h' -o -name '*.h++' \) -printf '%P\n')
+MARKDOWNS = $(shell find . \( $(patsubst %,-path % -o,$(SOURCE_EXCLUDES)) -false \) -prune -type f -o \( -name '*.md' \) -printf '%P\n')
 export OBJECTS = $(foreach f,$(basename $(SOURCES)),build/$(f).o)
 export NON_MAIN_OBJECTS = $(filter-out build/test/%,$(filter-out build/apps/%, $(filter-out build/util/%, $(OBJECTS))))
 STRIPPED = $(foreach f,$(basename $(SOURCES)),build/stripped/$(f))
@@ -35,6 +37,10 @@ C_FLAGS = $(DEP_C_FLAGS) -pipe \
 CPP_FLAGS = -fconcepts -std=c++2a
 
 all: $(APPS_BIN)
+
+docs: Doxyfile $(SOURCES) $(HEADERS) $(MARKDOWNS)
+	@echo "[doxygen]"
+	@doxygen Doxyfile
 
 uncrustify:
 	@echo "[uncrustify]"
