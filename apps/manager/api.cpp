@@ -5,9 +5,6 @@
 #include <optional>
 
 #include <kj/debug.h>
-#include <capnp/ez-rpc.h>
-#include <capnp/message.h>
-#include <capnp/compat/json.h>
 
 #include <uvw.hpp>
 

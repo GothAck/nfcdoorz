@@ -7,8 +7,6 @@
 
 #include <kj/debug.h>
 #include <kj/async.h>
-#include <capnp/ez-rpc.h>
-#include <capnp/message.h>
 
 #include <uvw.hpp>
 
