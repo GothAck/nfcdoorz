@@ -1,7 +1,7 @@
 ![logo](logo.png "Logo")
 # NFC-Doorz: NFC Mifare DESFire EV1 authenticated access control system
 
-This repo is not the current version of the RFID system. The version under development can be found in https://github.com/jschrempp/MN_Access  Once released we will move that master repo here.
+This repo is not the current version of the RFID system. The version under development can be found in https://github.com/jschrempp/MN_ACL  Once released we will move that master repo here.
 
 
 
